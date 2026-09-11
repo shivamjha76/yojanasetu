@@ -1,4 +1,4 @@
-﻿<div align="center">
+<div align="center">
 
 # 🌉 योजनासेतु • YOJANASETU
 ### *“Know what you qualify for. Know why. Know what to do next.”*
@@ -17,7 +17,41 @@
 
 **YojanaSetu** is an enterprise-grade, citizen-first, and offline-resilient digital public infrastructure (DPI) platform that bridges over 1.4 billion Indian citizens directly to verified Central and State Government welfare schemes — completely eliminating intermediaries and bureaucratic friction.
 
-[✨ Live Demo](#-quick-start) • [📖 Architecture](#-system-architecture) • [💡 Core Innovations](#-problem-statement-1-innovations) • [📱 Offline First & PWA](#-offline-first-rural-architecture) • [🧪 Test Suite](#-verification--testing)
+[🖼️ Screenshots](#-visual-showcase--platform-preview) • [✨ Live Demo](#-quick-start) • [📖 Architecture](#-system-architecture) • [💡 Core Innovations](#-problem-statement-1-innovations) • [📱 Offline First & PWA](#-offline-first-rural-architecture) • [🧪 Test Suite](#-verification--testing)
+
+</div>
+
+---
+
+## 🖼️ Visual Showcase • Platform Preview
+
+<div align="center">
+
+### 1. Welfare Schemes Discovery & Multilingual Catalog
+*Explore 15+ central & state welfare schemes with real-time category filters, instant search, and official benefit metrics.*
+
+<img src="./docs/screenshots/01_schemes_discovery.png" alt="YojanaSetu Schemes Discovery" width="850"/>
+
+<br/><br/>
+
+### 2. Deterministic 5-Step Eligibility Profiler
+*Citizen-first intuitive onboarding measuring age, landholding, income brackets, and priority demographics with zero friction.*
+
+<img src="./docs/screenshots/02_eligibility_wizard.png" alt="YojanaSetu Eligibility Wizard" width="850"/>
+
+<br/><br/>
+
+### 3. Explainable Results: "Why You Qualify" & Document Readiness
+*100% transparent proofs with mathematical criteria checkmarks, benefit disbursement estimates, and direct official portal routes.*
+
+<img src="./docs/screenshots/03_results_explainability.png" alt="YojanaSetu Explainable Results" width="850"/>
+
+<br/><br/>
+
+### 4. Jan Seva Kendra / CSC Offline Pathway
+*Geo-mapped directory of Common Services Centers empowering citizens in rural and semi-urban Bharat to complete offline biometric eKYC.*
+
+<img src="./docs/screenshots/04_csc_locator.png" alt="YojanaSetu CSC Locator" width="850"/>
 
 </div>
 
