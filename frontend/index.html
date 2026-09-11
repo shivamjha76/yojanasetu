@@ -1,15 +1,32 @@
 <!doctype html>
-<html lang="hi">
+<html lang="hi" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/setu-logo.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>योजनासेतु (YojanaSetu) - सरकारी योजनाओं का सीधा लाभ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="description" content="योजनासेतु (YojanaSetu) - 100% प्रत्यक्ष नागरिक डिजिटल वेलफेयर सेतु। 15+ केंद्रीय और राज्य सरकारी योजनाओं की सटीक पात्रता जानें, आवश्यक दस्तावेज देखें और बिना किसी बिचौलिए के सीधे आवेदन करें।" />
+    <meta name="keywords" content="योजनासेतु, YojanaSetu, सरकारी योजनाएं, PM Kisan, Ayushman Bharat, पात्रता, Government Schemes, Direct Benefit Transfer" />
+    
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="योजनासेतु (YojanaSetu) - सरकारी योजनाओं का सीधा लाभ" />
+    <meta property="og:description" content="Know what you qualify for. Know why. Know what to do next. 100% deterministic, zero-hallucination citizen welfare bridge." />
+    <meta property="og:image" content="/setu-logo.svg" />
+
+    <title>योजनासेतु (YojanaSetu) - 100% प्रत्यक्ष सरकारी योजनाओं का लाभ</title>
+    
+    <!-- Preconnect Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   </head>
-  <body>
+  <body class="bg-background text-foreground antialiased min-h-screen overflow-x-hidden selection:bg-primary/20 selection:text-primary">
+    <!-- Screen reader skip link for accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-white focus:rounded-xl focus:shadow-lg focus:outline-none">
+      सामग्री पर जाएं (Skip to main content)
+    </a>
+    
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

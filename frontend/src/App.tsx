@@ -117,11 +117,11 @@ const MainContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-200">
+    <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-200 overflow-x-hidden">
       <Header currentView={currentView} onNavigate={setCurrentView} />
 
       {currentView === "wizard" ? (
-        <main className="flex-1 py-8 bg-muted/20">
+        <main id="main-content" className="flex-1 py-8 bg-muted/20">
           <WizardContainer
             initialData={wizardInitialProfile}
             onSubmit={(_profile) => {}}
@@ -133,7 +133,7 @@ const MainContent: React.FC = () => {
           />
         </main>
       ) : currentView === "schemes" ? (
-        <main className="flex-1">
+        <main id="main-content" className="flex-1">
           <SchemesExplorePage
             onSelectScheme={handleOpenSchemeDetail}
             onStartWizard={() => setCurrentView("wizard")}
@@ -141,7 +141,7 @@ const MainContent: React.FC = () => {
           />
         </main>
       ) : currentView === "scheme_detail" ? (
-        <main className="flex-1">
+        <main id="main-content" className="flex-1">
           <SchemeDetailPage
             scheme={selectedScheme || SAMPLE_SCHEME}
             onBack={() => setCurrentView("schemes")}
@@ -153,7 +153,7 @@ const MainContent: React.FC = () => {
           />
         </main>
       ) : currentView === "csc" ? (
-        <main className="flex-1">
+        <main id="main-content" className="flex-1">
           <CscLocator
             onSelectScheme={handleOpenSchemeDetail}
             onCheckEligibility={() => {
@@ -163,7 +163,7 @@ const MainContent: React.FC = () => {
           />
         </main>
       ) : (
-        <>
+        <main id="main-content" className="flex-1">
           {/* Step 33 & 34: Hero Section with OmniSearchBar */}
           <HeroSection
             onStartWizard={() => setCurrentView("wizard")}
@@ -185,8 +185,8 @@ const MainContent: React.FC = () => {
           {/* Step 37: Visual 3-Step "How YojanaSetu Works" Explainer */}
           <HowItWorks onStartWizard={() => setCurrentView("wizard")} />
 
-          <main className="flex-1 container mx-auto px-4 sm:px-8 py-12 max-w-6xl">
-        {/* Step 31 & 32 Showcase Grid */}
+          <section className="flex-1 container mx-auto px-4 sm:px-8 py-12 max-w-6xl">
+            {/* Step 31 & 32 Showcase Grid */}
         <div className="mb-12">
           <div className="flex items-center space-x-2 mb-6">
             <span className="text-xl">🌟</span>
@@ -321,9 +321,9 @@ const MainContent: React.FC = () => {
             </AccordionItem>
           </Accordion>
         </div>
-      </main>
-    </>
-  )}
+          </section>
+        </main>
+      )}
 
       {/* Quick Scheme Preview Modal */}
       <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
