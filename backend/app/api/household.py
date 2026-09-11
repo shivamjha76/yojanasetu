@@ -118,8 +118,8 @@ def evaluate_household_claim(payload: HouseholdClaimRequest):
     
     members_breakdown: List[MemberEligibilitySummary] = []
     
-    # Track scheme_id -> list of (member, EligibilityResult)
-    scheme_to_qualifying_members: Dict[str, List[tuple[FamilyMember, EligibilityResult]]] = {}
+    # Track scheme_id -> list of (member, EligibilityResult, scheme)
+    scheme_to_qualifying_members: Dict[str, List[tuple]] = {}
 
     total_annual_cash_value = 0
     total_health_cover_value = 0
@@ -170,7 +170,12 @@ def evaluate_household_claim(payload: HouseholdClaimRequest):
         if not matches:
             continue
         
-        sample_scheme = matches[0][2]
+        # Robustly extract scheme object from match entry
+        first_match = matches[0]
+        sample_scheme = first_match[2] if len(first_match) > 2 else scheme_service.get_by_id(scheme_id)
+        if not sample_scheme:
+            continue
+
         qualifying_names = [m[0].name for m in matches]
         val = _extract_approx_annual_value(sample_scheme.id, sample_scheme.benefit_amount_text, sample_scheme.benefit_type)
         

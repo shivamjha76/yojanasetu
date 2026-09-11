@@ -74,6 +74,9 @@ function buildEvidence(rule: Rule, userVal: any, isMatched: boolean): RuleMatchE
     if (isMatched) {
       evidenceHi = `${prefixHi}आपकी आयु ${userVal} वर्ष है (नियम: ${rule.description_hi || `${rule.operator} ${targetStrHi}`})`;
       evidenceEn = `${prefixEn}Your age is ${userVal} (Required: ${rule.description_en || `${rule.operator} ${targetStrEn}`})`;
+    } else if (userVal === null || userVal === undefined) {
+      evidenceHi = `${prefixHi}आयु की जानकारी उपलब्ध नहीं है (आवश्यक: ${rule.description_hi || `${rule.operator} ${targetStrHi}`})`;
+      evidenceEn = `${prefixEn}Age detail not provided (Required: ${rule.description_en || `${rule.operator} ${targetStrEn}`})`;
     } else {
       evidenceHi = `${prefixHi}आपकी आयु ${userVal} वर्ष है, जो कि आवश्यक सीमा (${rule.description_hi || `${rule.operator} ${targetStrHi}`}) में नहीं आती`;
       evidenceEn = `${prefixEn}Your age is ${userVal}, which does not satisfy the requirement (${rule.description_en || `${rule.operator} ${targetStrEn}`})`;
@@ -94,6 +97,9 @@ function buildEvidence(rule: Rule, userVal: any, isMatched: boolean): RuleMatchE
     if (isMatched) {
       evidenceHi = `${prefixHi}पारिवारिक वार्षिक आय ${incDispHi} है (सीमा: ${rule.description_hi || `${rule.operator} ${targetStrHi}`})`;
       evidenceEn = `${prefixEn}Annual income is ${incDispEn} (Limit: ${rule.description_en || `${rule.operator} ${targetStrEn}`})`;
+    } else if (userVal === null || userVal === undefined) {
+      evidenceHi = `${prefixHi}वार्षिक आय का विवरण दर्ज नहीं है (योजना की सीमा: ${targetStrHi})`;
+      evidenceEn = `${prefixEn}Annual income not provided (Scheme limit: ${targetStrEn})`;
     } else {
       evidenceHi = `${prefixHi}आपकी वार्षिक आय ${incDispHi} निर्धारित आय सीमा (${rule.description_hi || `${rule.operator} ${targetStrHi}`}) से अधिक है`;
       evidenceEn = `${prefixEn}Annual income ${incDispEn} exceeds the maximum limit (${rule.description_en || `${rule.operator} ${targetStrEn}`})`;

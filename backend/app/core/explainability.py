@@ -57,6 +57,9 @@ def build_evidence(rule: Rule, user_val: Any, is_matched: bool) -> RuleMatchEvid
         if is_matched:
             evidence_hi = f"{prefix_hi}आपकी आयु {user_val} वर्ष है (नियम: {rule.description_hi or f'{rule.operator} {target_str}'})"
             evidence_en = f"{prefix_en}Your age is {user_val} (Required: {rule.description_en or f'{rule.operator} {target_str}'})"
+        elif user_val is None:
+            evidence_hi = f"{prefix_hi}आयु की जानकारी उपलब्ध नहीं है (आवश्यक: {rule.description_hi or f'आयु {rule.operator} {target_str}'})"
+            evidence_en = f"{prefix_en}Age detail not provided (Required: {rule.description_en or f'age {rule.operator} {target_str}'})"
         else:
             evidence_hi = f"{prefix_hi}आपकी आयु {user_val} वर्ष है, जबकि योजना के लिए {rule.description_hi or f'आयु {rule.operator} {target_str}'} आवश्यक है।"
             evidence_en = f"{prefix_en}Your age is {user_val}, but the scheme requires {rule.description_en or f'age {rule.operator} {target_str}'}."
@@ -65,6 +68,9 @@ def build_evidence(rule: Rule, user_val: Any, is_matched: bool) -> RuleMatchEvid
         if is_matched:
             evidence_hi = f"{prefix_hi}आपकी पारिवारिक वार्षिक आय {user_str} है (अधिकतम सीमा: {target_str})"
             evidence_en = f"{prefix_en}Your annual family income is {user_str} (Limit: {target_str})"
+        elif user_val is None:
+            evidence_hi = f"{prefix_hi}वार्षिक आय का विवरण दर्ज नहीं है (योजना की सीमा: {target_str})"
+            evidence_en = f"{prefix_en}Annual income not provided (Scheme limit: {target_str})"
         else:
             evidence_hi = f"{prefix_hi}आपकी पारिवारिक वार्षिक आय {user_str} है, जो इस योजना की अधिकतम सीमा {target_str} से अधिक है।"
             evidence_en = f"{prefix_en}Your annual family income is {user_str}, which exceeds the scheme's limit of {target_str}."

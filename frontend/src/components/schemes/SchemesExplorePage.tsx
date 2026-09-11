@@ -14,6 +14,7 @@ import {
   Sprout,
   Users,
   Shield,
+  Coins,
   MoreHorizontal,
   ChevronDown,
   RotateCcw,
@@ -101,6 +102,12 @@ export const SchemesExplorePage: React.FC<SchemesExplorePageProps> = ({
       icon: <Shield className="w-4 h-4" />,
     },
     {
+      id: "business",
+      labelEn: "Business & Loans",
+      labelHi: "व्यापार व ऋण",
+      icon: <Coins className="w-4 h-4" />,
+    },
+    {
       id: "others",
       labelEn: "Others",
       labelHi: "अन्य",
@@ -135,7 +142,7 @@ export const SchemesExplorePage: React.FC<SchemesExplorePageProps> = ({
         healthcare: "health",
         women_child: "women_child",
         housing_urban: "housing",
-        business_msme_loans: "others",
+        business_msme_loans: "business",
         skills_employment: "employment",
         social_security_pensions: "social_security",
       };
@@ -178,7 +185,8 @@ export const SchemesExplorePage: React.FC<SchemesExplorePageProps> = ({
         if (selectedCategory === "agriculture" && s.category !== "agriculture") return false;
         if (selectedCategory === "women_child" && s.category !== "women_child") return false;
         if (selectedCategory === "social_security" && s.category !== "social_security_pensions") return false;
-        if (selectedCategory === "others" && !["business_msme_loans", "other"].includes(s.category)) {
+        if (selectedCategory === "business" && s.category !== "business_msme_loans") return false;
+        if (selectedCategory === "others" && !["other", "general"].includes(s.category)) {
           return false;
         }
       }

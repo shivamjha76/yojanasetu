@@ -30,6 +30,10 @@ def list_schemes(
         default=None,
         description="Search query across scheme names, summaries, or ministries in Hindi or English",
     ),
+    search: Optional[str] = Query(
+        default=None,
+        description="Alternative alias for search query",
+    ),
     category: Optional[str] = Query(
         default=None,
         description="Filter by scheme category (e.g. 'agriculture', 'education_scholarships', 'healthcare')",
@@ -54,8 +58,9 @@ def list_schemes(
         description="Number of schemes to skip for pagination",
     ),
 ):
+    effective_query = q or search
     schemes, total = scheme_service.search(
-        query=q,
+        query=effective_query,
         category=category,
         state=state,
         level=level,
