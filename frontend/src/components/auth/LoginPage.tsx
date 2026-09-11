@@ -13,17 +13,25 @@ const INDIAN_STATES = [
 interface LoginPageProps {
   onSuccess?: () => void;
   onBackToHome?: () => void;
+  initialMode?: "login" | "register";
 }
 
 export const LoginPage: React.FC<LoginPageProps> = ({
   onSuccess = () => {},
   onBackToHome = () => {},
+  initialMode = "login",
 }) => {
   const { login, register } = useAuth();
   const { language } = useApp();
   const isHindi = language === "hi";
 
-  const [mode, setMode] = useState<"login" | "register">("login");
+  const [mode, setMode] = useState<"login" | "register">(initialMode);
+
+  React.useEffect(() => {
+    if (initialMode) {
+      setMode(initialMode);
+    }
+  }, [initialMode]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");

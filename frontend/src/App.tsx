@@ -102,9 +102,10 @@ const MainContent: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-200 overflow-x-hidden">
       <Header currentView={currentView} onNavigate={setCurrentView} />
 
-      {currentView === "login" ? (
-        <main id="main-content" className="flex-1">
+      {currentView === "login" || currentView === "register" ? (
+        <main id="main-content" className="flex-1 bg-[#FEFEFD]">
           <LoginPage
+            initialMode={currentView === "register" ? "register" : "login"}
             onSuccess={() => {
               setCurrentView("wizard");
               window.scrollTo({ top: 0, behavior: "smooth" });
@@ -186,8 +187,8 @@ const MainContent: React.FC = () => {
         }}
       />
 
-      {/* Footer is only displayed on non-landing views */}
-      {currentView !== "home" && <Footer />}
+      {/* Footer is only displayed on non-landing views, excluding auth pages */}
+      {currentView !== "home" && currentView !== "login" && currentView !== "register" && <Footer />}
 
       {/* Global Citizen Authentication Modal (Sign In / Register) */}
       <AuthModal />
