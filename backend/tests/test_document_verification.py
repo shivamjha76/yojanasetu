@@ -116,3 +116,57 @@ def test_verify_document_empty_file():
     response = client.post("/api/documents/verify", files=files, data=data)
     assert response.status_code == 400
     assert "empty" in response.json()["detail"].lower()
+
+
+def test_verify_cross_document_name_mismatch():
+    """Verify that uploading a document belonging to a different applicant triggers 'mismatch' status."""
+    import json
+    fake_image_bytes = b"fake_pan_card_content_belonging_to_other_person"
+    files = {
+        "file": ("pan_card_mismatch_other_person.jpg", io.BytesIO(fake_image_bytes), "image/jpeg")
+    }
+    # Prior document was verified for 'Ramesh Verma'
+    prior_data = {
+        "citizen_name": "Ramesh Verma",
+        "document_type_detected": "Aadhaar Card",
+        "date_of_birth": "1980-05-12",
+    }
+    data = {
+        "scheme_id": "pm-kisan",
+        "document_type": "pan_card",
+        "language": "hi",
+        "previous_extracted_data": json.dumps(prior_data),
+    }
+    response = client.post("/api/documents/verify", files=files, data=data)
+    assert response.status_code == 200
+    res = response.json()
+    assert res["status"] == "mismatch"
+    assert res["is_eligible"] is False
+    assert res["is_consistent_with_previous"] is False
+    assert "नाम" in res["title_hi"] or "name" in res["title_en"].lower()
+    assert res["mismatch_details"] is not None
+
+
+def test_verify_cross_document_consistency_match():
+    """Verify that consistent names between sequential documents maintain verified status."""
+    import json
+    fake_image_bytes = b"fake_pan_card_content_matching_person"
+    files = {
+        "file": ("pan_card_authentic.jpg", io.BytesIO(fake_image_bytes), "image/jpeg")
+    }
+    prior_data = {
+        "citizen_name": "राम कुमार / Ram Kumar",
+        "document_type_detected": "Aadhaar Card",
+    }
+    data = {
+        "scheme_id": "pm-kisan",
+        "document_type": "pan_card",
+        "language": "hi",
+        "previous_extracted_data": json.dumps(prior_data),
+    }
+    response = client.post("/api/documents/verify", files=files, data=data)
+    assert response.status_code == 200
+    res = response.json()
+    assert res["status"] == "verified"
+    assert res["is_eligible"] is True
+    assert res["is_consistent_with_previous"] is True

@@ -63,6 +63,32 @@ def init_db() -> None:
         """)
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_saved_schemes_user ON saved_schemes(user_id);")
 
+        # 3. Family / Beneficiary members table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS family_members (
+                id TEXT PRIMARY KEY,
+                user_id TEXT NOT NULL,
+                name TEXT NOT NULL,
+                relationship TEXT NOT NULL,
+                age INTEGER NOT NULL,
+                gender TEXT NOT NULL,
+                state TEXT,
+                district TEXT,
+                area_type TEXT DEFAULT 'urban',
+                occupation TEXT NOT NULL,
+                category TEXT NOT NULL,
+                annual_income REAL DEFAULT 0,
+                marital_status TEXT,
+                is_differently_abled INTEGER DEFAULT 0,
+                ration_card_type TEXT DEFAULT 'none',
+                land_holding_acres REAL DEFAULT 0,
+                created_at TEXT NOT NULL,
+                updated_at TEXT NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            );
+        """)
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_family_members_user ON family_members(user_id);")
+
         conn.commit()
 
 
@@ -239,3 +265,142 @@ def get_saved_schemes(user_id: str) -> List[str]:
         )
         rows = cursor.fetchall()
         return [row["scheme_id"] for row in rows]
+
+
+def _format_family_member_row(row: sqlite3.Row) -> Dict[str, Any]:
+    """Convert a family_members row to a clean dict with boolean types."""
+    d = dict(row)
+    d["is_differently_abled"] = bool(d.get("is_differently_abled", 0))
+    d["annual_income"] = float(d.get("annual_income", 0.0) or 0.0)
+    d["land_holding_acres"] = float(d.get("land_holding_acres", 0.0) or 0.0)
+    return d
+
+
+def add_family_member(user_id: str, member_data: Dict[str, Any]) -> Dict[str, Any]:
+    """Add a new family/beneficiary member for a user."""
+    member_id = str(uuid.uuid4())
+    now = datetime.now(timezone.utc).isoformat()
+
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            INSERT INTO family_members (
+                id, user_id, name, relationship, age, gender, state, district,
+                area_type, occupation, category, annual_income, marital_status,
+                is_differently_abled, ration_card_type, land_holding_acres,
+                created_at, updated_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                member_id,
+                user_id,
+                member_data["name"].strip(),
+                member_data["relationship"].strip().lower(),
+                int(member_data["age"]),
+                member_data["gender"].strip().lower(),
+                member_data.get("state"),
+                member_data.get("district"),
+                member_data.get("area_type", "urban"),
+                member_data["occupation"].strip().lower(),
+                member_data["category"].strip().lower(),
+                float(member_data.get("annual_income", 0.0) or 0.0),
+                member_data.get("marital_status"),
+                1 if member_data.get("is_differently_abled") else 0,
+                member_data.get("ration_card_type", "none"),
+                float(member_data.get("land_holding_acres", 0.0) or 0.0),
+                now,
+                now,
+            ),
+        )
+        conn.commit()
+
+    return get_family_member(user_id, member_id) or {}
+
+
+def get_family_members(user_id: str) -> List[Dict[str, Any]]:
+    """Retrieve all family members saved by a user."""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT * FROM family_members WHERE user_id = ? ORDER BY created_at ASC",
+            (user_id,),
+        )
+        rows = cursor.fetchall()
+        return [_format_family_member_row(r) for r in rows]
+
+
+def get_family_member(user_id: str, member_id: str) -> Optional[Dict[str, Any]]:
+    """Retrieve a single family member belonging to a user."""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT * FROM family_members WHERE user_id = ? AND id = ?",
+            (user_id, member_id),
+        )
+        row = cursor.fetchone()
+        if row:
+            return _format_family_member_row(row)
+    return None
+
+
+def update_family_member(
+    user_id: str, member_id: str, member_data: Dict[str, Any]
+) -> Optional[Dict[str, Any]]:
+    """Update an existing family member."""
+    existing = get_family_member(user_id, member_id)
+    if not existing:
+        return None
+
+    now = datetime.now(timezone.utc).isoformat()
+    # Merge existing with updates
+    merged = {**existing, **{k: v for k, v in member_data.items() if v is not None}}
+
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            UPDATE family_members
+            SET name = ?, relationship = ?, age = ?, gender = ?, state = ?,
+                district = ?, area_type = ?, occupation = ?, category = ?,
+                annual_income = ?, marital_status = ?, is_differently_abled = ?,
+                ration_card_type = ?, land_holding_acres = ?, updated_at = ?
+            WHERE user_id = ? AND id = ?
+            """,
+            (
+                merged["name"].strip(),
+                merged["relationship"].strip().lower(),
+                int(merged["age"]),
+                merged["gender"].strip().lower(),
+                merged.get("state"),
+                merged.get("district"),
+                merged.get("area_type", "urban"),
+                merged["occupation"].strip().lower(),
+                merged["category"].strip().lower(),
+                float(merged.get("annual_income", 0.0) or 0.0),
+                merged.get("marital_status"),
+                1 if merged.get("is_differently_abled") else 0,
+                merged.get("ration_card_type", "none"),
+                float(merged.get("land_holding_acres", 0.0) or 0.0),
+                now,
+                user_id,
+                member_id,
+            ),
+        )
+        conn.commit()
+
+    return get_family_member(user_id, member_id)
+
+
+def delete_family_member(user_id: str, member_id: str) -> bool:
+    """Delete a family member belonging to a user."""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "DELETE FROM family_members WHERE user_id = ? AND id = ?",
+            (user_id, member_id),
+        )
+        conn.commit()
+        return cursor.rowcount > 0
+

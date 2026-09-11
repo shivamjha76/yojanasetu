@@ -38,6 +38,7 @@ async def verify_scheme_document(
     document_type: str = Form(..., description="Document requirement ID (e.g. 'aadhaar', 'income_certificate')"),
     document_name: Optional[str] = Form(None, description="Human readable document title"),
     language: Optional[str] = Form("hi", description="Citizen interface language ('hi' or 'en')"),
+    previous_extracted_data: Optional[str] = Form(None, description="JSON string of previously verified document data for consistency checks"),
 ) -> DocumentVerifyResponse:
     # 1. Validate Scheme
     scheme = scheme_repo.get_by_id(scheme_id)
@@ -87,7 +88,16 @@ async def verify_scheme_document(
         f"Verifying document '{document_type}' ({resolved_doc_name}) for scheme '{scheme.id}' (File: {file.filename}, Size: {len(file_bytes)} bytes)"
     )
 
-    # 6. Execute AI Verification
+    # 6. Parse Previous Extracted Data for Cross-Document Consistency
+    parsed_prior_data = None
+    if previous_extracted_data:
+        try:
+            import json
+            parsed_prior_data = json.loads(previous_extracted_data)
+        except Exception as err:
+            logger.warning(f"Failed to parse previous_extracted_data JSON: {err}")
+
+    # 7. Execute AI Verification
     try:
         raw_result = await ai_service.verify_document_async(
             file_bytes=file_bytes,
@@ -97,6 +107,7 @@ async def verify_scheme_document(
             scheme_name=scheme_display_name,
             scheme_rules=rules_data,
             filename=file.filename,
+            previous_extracted_data=parsed_prior_data,
         )
 
         return DocumentVerifyResponse(**raw_result)

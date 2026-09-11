@@ -131,11 +131,20 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   const isHindi = language === "hi";
 
   const [currentStep, setCurrentStep] = useState<number>(1);
-  const [formData, setFormData] = useState<CitizenProfile>(() => ({
-    ...DEFAULT_PROFILE,
-    ...(user?.citizen_details || {}),
-    ...initialData,
-  }));
+  const [formData, setFormData] = useState<CitizenProfile>(() => {
+    let draft: Partial<CitizenProfile> = {};
+    try {
+      const raw = localStorage.getItem("yojanasetu_draft_profile");
+      if (raw) draft = JSON.parse(raw);
+    } catch {}
+
+    return {
+      ...DEFAULT_PROFILE,
+      ...draft,
+      ...(user?.citizen_details || {}),
+      ...initialData,
+    };
+  });
 
   useEffect(() => {
     if (user?.citizen_details && !initialData) {
@@ -189,6 +198,14 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
   const handleNext = () => {
     if (currentStep < 5) {
+      // Save draft / progress on each step so data is never lost
+      if (isAuthenticated) {
+        saveCitizenDetails(formData).catch(() => {});
+      } else {
+        try {
+          localStorage.setItem("yojanasetu_draft_profile", JSON.stringify(formData));
+        } catch {}
+      }
       setCurrentStep((prev) => prev + 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -204,6 +221,9 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   const handleReset = () => {
     setFormData(DEFAULT_PROFILE);
     setCurrentStep(1);
+    try {
+      localStorage.removeItem("yojanasetu_draft_profile");
+    } catch {}
   };
 
   const handleSubmit = async () => {
@@ -213,6 +233,9 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         // Automatically save citizen profile under "My Details" in their account!
         await saveCitizenDetails(formData).catch(() => {});
       }
+      try {
+        localStorage.setItem("yojanasetu_draft_profile", JSON.stringify(formData));
+      } catch {}
       const res = await api.checkEligibility(formData);
       setEvaluationResult(res);
       onSubmit(formData);

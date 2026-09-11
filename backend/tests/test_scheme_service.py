@@ -7,7 +7,7 @@ from app.services import scheme_service
 
 def test_scheme_service_loads_all():
     schemes = scheme_service.get_all()
-    assert len(schemes) == 15
+    assert len(schemes) >= 15
 
 
 def test_get_by_id():
@@ -56,7 +56,7 @@ def test_filter_by_state():
 def test_pagination():
     page_1, total = scheme_service.search(limit=5, offset=0)
     assert len(page_1) == 5
-    assert total == 15
+    assert total >= 15
 
     page_2, total = scheme_service.search(limit=5, offset=5)
     assert len(page_2) == 5

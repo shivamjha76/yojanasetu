@@ -181,6 +181,9 @@ const MainContent: React.FC = () => {
   const navigateTo = useCallback(
     (view: string, schemeId?: string, replace = false) => {
       setCurrentView(view);
+      if (schemeId) {
+        loadSchemeById(schemeId);
+      }
       try {
         sessionStorage.setItem("yojanasetu_current_view", view);
         if (schemeId) {
@@ -198,7 +201,7 @@ const MainContent: React.FC = () => {
       }
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    []
+    [loadSchemeById]
   );
 
   // On mount: load scheme if on scheme_detail route, and sync URL

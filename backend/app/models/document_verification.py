@@ -38,8 +38,8 @@ class ExtractedDocData(BaseModel):
 
 
 class DocumentVerifyResponse(BaseModel):
-    status: Literal["verified", "rejected", "unclear_image", "wrong_document"] = Field(
-        ..., description="Verification status: verified (green tick), rejected (red tick), unclear_image (retry), or wrong_document"
+    status: Literal["verified", "rejected", "unclear_image", "wrong_document", "mismatch"] = Field(
+        ..., description="Verification status: verified (green tick), rejected (red tick), unclear_image (retry), wrong_document, or mismatch"
     )
     is_eligible: bool = Field(
         ..., description="Whether citizen is eligible based on this document's criteria"
@@ -59,4 +59,10 @@ class DocumentVerifyResponse(BaseModel):
     )
     suggestion_en: Optional[str] = Field(
         default=None, description="Actionable next steps or recommendation in English"
+    )
+    is_consistent_with_previous: Optional[bool] = Field(
+        default=True, description="Whether extracted details match prior uploaded documents (e.g. name, DOB)"
+    )
+    mismatch_details: Optional[str] = Field(
+        default=None, description="Explanation of specific mismatch across documents"
     )

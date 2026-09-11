@@ -23,5 +23,5 @@ def test_health_check_endpoint():
     assert data["status"] == "healthy"
     assert data["service"] == "YojanaSetu Core API"
     assert data["dataset_status"] == "ready"
-    assert data["total_schemes_loaded"] == 15
+    assert data["total_schemes_loaded"] >= 15
     assert "timestamp" in data

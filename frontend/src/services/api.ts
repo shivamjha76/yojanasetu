@@ -6,7 +6,15 @@
  */
 
 import { Scheme, CitizenProfile, EligibilityResult, CscCenter } from "@/types/schema";
-import { User, AuthResponse, LoginCredentials, RegisterData, SavedSchemesResponse } from "@/types/auth";
+import {
+  User,
+  AuthResponse,
+  LoginCredentials,
+  RegisterData,
+  SavedSchemesResponse,
+  FamilyMember,
+  FamilyMemberInput,
+} from "@/types/auth";
 import { ALL_SCHEMES, evaluateAllSchemes } from "./ruleEngine";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api";
@@ -48,6 +56,95 @@ const CATEGORY_MAP: Record<string, { name_en: string; name_hi: string; icon: str
 
 const LOCAL_STORAGE_SAVED_KEY = "yojanasetu_offline_saved_schemes";
 const LOCAL_STORAGE_USER_KEY = "yojanasetu_offline_user";
+const LOCAL_STORAGE_MEMBERS_KEY = "yojanasetu_offline_family_members";
+const LOCAL_STORAGE_USERS_STORE_KEY = "yojanasetu_users_store";
+const LOCAL_STORAGE_DRAFT_PROFILE_KEY = "yojanasetu_draft_profile";
+
+export interface OfflineStoredAccount {
+  user: User;
+  password?: string;
+  savedSchemeIds: string[];
+  familyMembers: FamilyMember[];
+}
+
+function normalizeEmail(email?: string): string {
+  return (email || "").trim().toLowerCase();
+}
+
+function getUsersStore(): Record<string, OfflineStoredAccount> {
+  try {
+    const raw = localStorage.getItem(LOCAL_STORAGE_USERS_STORE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveUsersStore(store: Record<string, OfflineStoredAccount>) {
+  try {
+    localStorage.setItem(LOCAL_STORAGE_USERS_STORE_KEY, JSON.stringify(store));
+  } catch {
+    // ignore
+  }
+}
+
+function getStoredAccountForEmail(email: string): OfflineStoredAccount | null {
+  const norm = normalizeEmail(email);
+  if (!norm) return null;
+  const store = getUsersStore();
+  if (store[norm]) return store[norm];
+
+  // Check if existing LOCAL_STORAGE_USER_KEY matches or has details
+  try {
+    const rawUser = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
+    if (rawUser) {
+      const u: User = JSON.parse(rawUser);
+      if (normalizeEmail(u.email) === norm || !u.email) {
+        const acc: OfflineStoredAccount = {
+          user: { ...u, email: norm },
+          savedSchemeIds: getLocalSavedSchemes(),
+          familyMembers: getLocalFamilyMembers(),
+        };
+        store[norm] = acc;
+        saveUsersStore(store);
+        return acc;
+      }
+    }
+  } catch {}
+
+  return null;
+}
+
+function upsertStoredAccount(account: OfflineStoredAccount) {
+  const norm = normalizeEmail(account.user.email);
+  if (!norm) return;
+  const store = getUsersStore();
+  const existing = store[norm];
+
+  // Cleanly merge so citizen_details, savedSchemeIds, or familyMembers are NEVER lost
+  const mergedDetails =
+    account.user.citizen_details && Object.keys(account.user.citizen_details).length > 0
+      ? { ...(existing?.user.citizen_details || {}), ...account.user.citizen_details }
+      : existing?.user.citizen_details || null;
+
+  const mergedUser: User = {
+    ...account.user,
+    citizen_details: mergedDetails,
+  };
+
+  store[norm] = {
+    user: mergedUser,
+    password: account.password ?? existing?.password,
+    savedSchemeIds: account.savedSchemeIds ?? existing?.savedSchemeIds ?? [],
+    familyMembers: account.familyMembers ?? existing?.familyMembers ?? [],
+  };
+  saveUsersStore(store);
+
+  // Keep LOCAL_STORAGE_USER_KEY synchronized
+  try {
+    localStorage.setItem(LOCAL_STORAGE_USER_KEY, JSON.stringify(mergedUser));
+  } catch {}
+}
 
 function getLocalSavedSchemes(): string[] {
   try {
@@ -61,6 +158,23 @@ function getLocalSavedSchemes(): string[] {
 function saveLocalSavedSchemes(ids: string[]) {
   try {
     localStorage.setItem(LOCAL_STORAGE_SAVED_KEY, JSON.stringify(ids));
+  } catch {
+    // ignore
+  }
+}
+
+function getLocalFamilyMembers(): FamilyMember[] {
+  try {
+    const raw = localStorage.getItem(LOCAL_STORAGE_MEMBERS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveLocalFamilyMembers(members: FamilyMember[]) {
+  try {
+    localStorage.setItem(LOCAL_STORAGE_MEMBERS_KEY, JSON.stringify(members));
   } catch {
     // ignore
   }
@@ -460,6 +574,9 @@ export const api = {
 
   /** Register a new citizen account */
   async register(data: RegisterData): Promise<AuthResponse> {
+    const normEmail = normalizeEmail(data.email);
+    let backendAuth: AuthResponse | null = null;
+
     if (canUseBackend()) {
       try {
         const controller = new AbortController();
@@ -471,9 +588,12 @@ export const api = {
           signal: controller.signal,
         });
         clearTimeout(timeoutId);
-        if (res.ok) return await res.json();
-        const err = await res.json().catch(() => ({ detail: "Registration failed" }));
-        throw new Error(err.detail || "Registration failed");
+        if (res.ok) {
+          backendAuth = await res.json();
+        } else {
+          const err = await res.json().catch(() => ({ detail: "Registration failed" }));
+          throw new Error(err.detail || "Registration failed");
+        }
       } catch (err: any) {
         if (err.message && !err.message.includes("Failed to fetch") && !err.message.includes("NetworkError")) {
           throw err;
@@ -481,25 +601,58 @@ export const api = {
       }
     }
 
-    // Offline/Local mock registration
-    const localUser: User = {
-      id: `offline-${Date.now()}`,
-      email: data.email,
+    const existingAcc = getStoredAccountForEmail(normEmail);
+    let draftDetails: Partial<CitizenProfile> | null = null;
+    try {
+      const draftRaw = localStorage.getItem(LOCAL_STORAGE_DRAFT_PROFILE_KEY);
+      if (draftRaw) draftDetails = JSON.parse(draftRaw);
+    } catch {}
+
+    const user: User = backendAuth ? backendAuth.user : {
+      id: existingAcc?.user.id || `offline-${Date.now()}`,
+      email: normEmail,
       full_name: data.full_name,
       phone: data.phone,
       state: data.state,
-      created_at: new Date().toISOString(),
+      citizen_details: existingAcc?.user.citizen_details || draftDetails || null,
+      created_at: existingAcc?.user.created_at || new Date().toISOString(),
     };
-    localStorage.setItem(LOCAL_STORAGE_USER_KEY, JSON.stringify(localUser));
-    return {
-      access_token: `offline-token-${Date.now()}`,
-      token_type: "bearer",
-      user: localUser,
-    };
+
+    // If backend succeeded and we had existing/draft citizen details, sync to backend
+    if (backendAuth) {
+      const detailsToSync = existingAcc?.user.citizen_details || draftDetails;
+      if (detailsToSync && Object.keys(detailsToSync).length > 0 && !backendAuth.user.citizen_details) {
+        try {
+          const updated = await api.saveCitizenDetails(backendAuth.access_token, detailsToSync);
+          user.citizen_details = updated.citizen_details;
+        } catch {}
+      }
+    }
+
+    upsertStoredAccount({
+      user,
+      password: data.password,
+      savedSchemeIds: existingAcc?.savedSchemeIds || [],
+      familyMembers: existingAcc?.familyMembers || [],
+    });
+
+    saveLocalSavedSchemes(existingAcc?.savedSchemeIds || []);
+    saveLocalFamilyMembers(existingAcc?.familyMembers || []);
+
+    return backendAuth
+      ? { ...backendAuth, user }
+      : {
+          access_token: `offline-token-${user.id}`,
+          token_type: "bearer",
+          user,
+        };
   },
 
   /** Citizen login */
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
+    const normEmail = normalizeEmail(credentials.email);
+    let backendAuth: AuthResponse | null = null;
+
     if (canUseBackend()) {
       try {
         const controller = new AbortController();
@@ -511,9 +664,12 @@ export const api = {
           signal: controller.signal,
         });
         clearTimeout(timeoutId);
-        if (res.ok) return await res.json();
-        const err = await res.json().catch(() => ({ detail: "Login failed" }));
-        throw new Error(err.detail || "Invalid email or password");
+        if (res.ok) {
+          backendAuth = await res.json();
+        } else {
+          const err = await res.json().catch(() => ({ detail: "Login failed" }));
+          throw new Error(err.detail || "Invalid email or password");
+        }
       } catch (err: any) {
         if (err.message && !err.message.includes("Failed to fetch") && !err.message.includes("NetworkError")) {
           throw err;
@@ -521,19 +677,70 @@ export const api = {
       }
     }
 
-    // Offline/Local mock login
-    const localUser: User = {
-      id: `offline-${Date.now()}`,
-      email: credentials.email,
-      full_name: credentials.email.split("@")[0] || "Citizen",
-      created_at: new Date().toISOString(),
-    };
-    localStorage.setItem(LOCAL_STORAGE_USER_KEY, JSON.stringify(localUser));
-    return {
-      access_token: `offline-token-${Date.now()}`,
-      token_type: "bearer",
-      user: localUser,
-    };
+    const storedAcc = getStoredAccountForEmail(normEmail);
+    let draftDetails: Partial<CitizenProfile> | null = null;
+    try {
+      const draftRaw = localStorage.getItem(LOCAL_STORAGE_DRAFT_PROFILE_KEY);
+      if (draftRaw) draftDetails = JSON.parse(draftRaw);
+    } catch {}
+
+    let user: User;
+
+    if (backendAuth) {
+      user = backendAuth.user;
+      // If backend user has no citizen_details, but locally we had saved details or draft:
+      const localDetails = storedAcc?.user.citizen_details || draftDetails;
+      if (
+        (!user.citizen_details || Object.keys(user.citizen_details).length === 0) &&
+        localDetails &&
+        Object.keys(localDetails).length > 0
+      ) {
+        try {
+          const updated = await api.saveCitizenDetails(backendAuth.access_token, localDetails);
+          user = updated;
+        } catch {
+          user.citizen_details = localDetails;
+        }
+      }
+    } else {
+      // Offline / Local mock login
+      if (storedAcc) {
+        user = {
+          ...storedAcc.user,
+          email: normEmail,
+          // CRITICAL: NEVER erase saved details when logging in after logout!
+          citizen_details: storedAcc.user.citizen_details || draftDetails || null,
+        };
+      } else {
+        user = {
+          id: `offline-${Date.now()}`,
+          email: normEmail,
+          full_name: normEmail.split("@")[0] || "Citizen",
+          citizen_details: draftDetails || null,
+          created_at: new Date().toISOString(),
+        };
+      }
+    }
+
+    // Persist active user and sync to store
+    upsertStoredAccount({
+      user,
+      password: credentials.password,
+      savedSchemeIds: storedAcc?.savedSchemeIds || [],
+      familyMembers: storedAcc?.familyMembers || [],
+    });
+
+    // Populate active local storage keys
+    saveLocalSavedSchemes(storedAcc?.savedSchemeIds || []);
+    saveLocalFamilyMembers(storedAcc?.familyMembers || []);
+
+    return backendAuth
+      ? { ...backendAuth, user }
+      : {
+          access_token: `offline-token-${user.id}`,
+          token_type: "bearer",
+          user,
+        };
   },
 
   /** Get profile of authenticated citizen */
@@ -547,7 +754,23 @@ export const api = {
           signal: controller.signal,
         });
         clearTimeout(timeoutId);
-        if (res.ok) return await res.json();
+        if (res.ok) {
+          const backendUser: User = await res.json();
+          const acc = getStoredAccountForEmail(backendUser.email);
+          if (
+            (!backendUser.citizen_details || Object.keys(backendUser.citizen_details).length === 0) &&
+            acc?.user.citizen_details
+          ) {
+            backendUser.citizen_details = acc.user.citizen_details;
+            api.saveCitizenDetails(token, acc.user.citizen_details).catch(() => {});
+          }
+          localStorage.setItem(LOCAL_STORAGE_USER_KEY, JSON.stringify(backendUser));
+          if (acc) {
+            acc.user = backendUser;
+            upsertStoredAccount(acc);
+          }
+          return backendUser;
+        }
       } catch {
         // Fallback to locally stored user
       }
@@ -555,13 +778,22 @@ export const api = {
 
     const stored = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
     if (stored) {
-      return JSON.parse(stored);
+      const localUser: User = JSON.parse(stored);
+      if (localUser.email) {
+        const acc = getStoredAccountForEmail(localUser.email);
+        if (acc?.user.citizen_details && !localUser.citizen_details) {
+          localUser.citizen_details = acc.user.citizen_details;
+          localStorage.setItem(LOCAL_STORAGE_USER_KEY, JSON.stringify(localUser));
+        }
+      }
+      return localUser;
     }
     throw new Error("Session expired");
   },
 
   /** Update citizen profile */
   async updateProfile(token: string, data: Partial<User>): Promise<User> {
+    let updatedUser: User | null = null;
     if (canUseBackend()) {
       try {
         const res = await fetch(`${API_BASE_URL}/auth/profile`, {
@@ -572,7 +804,7 @@ export const api = {
           },
           body: JSON.stringify(data),
         });
-        if (res.ok) return await res.json();
+        if (res.ok) updatedUser = await res.json();
       } catch {
         // Fallback
       }
@@ -580,13 +812,24 @@ export const api = {
 
     const stored = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
     const existing = stored ? JSON.parse(stored) : {};
-    const updated = { ...existing, ...data };
+    const updated: User = updatedUser || { ...existing, ...data };
     localStorage.setItem(LOCAL_STORAGE_USER_KEY, JSON.stringify(updated));
+
+    if (updated.email) {
+      const acc = getStoredAccountForEmail(updated.email);
+      upsertStoredAccount({
+        user: updated,
+        savedSchemeIds: acc?.savedSchemeIds || getLocalSavedSchemes(),
+        familyMembers: acc?.familyMembers || getLocalFamilyMembers(),
+      });
+    }
+
     return updated;
   },
 
   /** Save or update citizen questionnaire details (My Details) */
   async saveCitizenDetails(token: string, details: Partial<CitizenProfile>): Promise<User> {
+    let updatedUser: User | null = null;
     if (canUseBackend()) {
       try {
         const res = await fetch(`${API_BASE_URL}/auth/citizen-details`, {
@@ -598,9 +841,7 @@ export const api = {
           body: JSON.stringify(details),
         });
         if (res.ok) {
-          const user = await res.json();
-          localStorage.setItem(LOCAL_STORAGE_USER_KEY, JSON.stringify(user));
-          return user;
+          updatedUser = await res.json();
         }
       } catch {
         // Fallback
@@ -608,13 +849,36 @@ export const api = {
     }
 
     const stored = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
-    const existing = stored ? JSON.parse(stored) : {};
-    const updated = {
-      ...existing,
-      citizen_details: { ...(existing.citizen_details || {}), ...details },
+    const existing: User = stored ? JSON.parse(stored) : {};
+    const mergedDetails = {
+      ...(existing.citizen_details || {}),
+      ...(updatedUser?.citizen_details || {}),
+      ...details,
     };
-    localStorage.setItem(LOCAL_STORAGE_USER_KEY, JSON.stringify(updated));
-    return updated;
+
+    const finalUser: User = {
+      ...(updatedUser || existing),
+      citizen_details: mergedDetails,
+    };
+
+    localStorage.setItem(LOCAL_STORAGE_USER_KEY, JSON.stringify(finalUser));
+
+    // Also update draft profile
+    try {
+      localStorage.setItem(LOCAL_STORAGE_DRAFT_PROFILE_KEY, JSON.stringify(mergedDetails));
+    } catch {}
+
+    // Persist into user store
+    if (finalUser.email) {
+      const acc = getStoredAccountForEmail(finalUser.email);
+      upsertStoredAccount({
+        user: finalUser,
+        savedSchemeIds: acc?.savedSchemeIds || getLocalSavedSchemes(),
+        familyMembers: acc?.familyMembers || getLocalFamilyMembers(),
+      });
+    }
+
+    return finalUser;
   },
 
   /** Get list of saved scheme IDs */
@@ -628,11 +892,44 @@ export const api = {
           signal: controller.signal,
         });
         clearTimeout(timeoutId);
-        if (res.ok) return await res.json();
+        if (res.ok) {
+          const data = await res.json();
+          saveLocalSavedSchemes(data.scheme_ids || []);
+          try {
+            const rawUser = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
+            if (rawUser) {
+              const u = JSON.parse(rawUser);
+              if (u.email) {
+                const acc = getStoredAccountForEmail(u.email);
+                if (acc) {
+                  acc.savedSchemeIds = data.scheme_ids || [];
+                  upsertStoredAccount(acc);
+                }
+              }
+            }
+          } catch {}
+          return data;
+        }
       } catch {
         // Fallback
       }
     }
+
+    try {
+      const rawUser = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
+      if (rawUser) {
+        const u = JSON.parse(rawUser);
+        if (u.email) {
+          const acc = getStoredAccountForEmail(u.email);
+          if (acc?.savedSchemeIds) {
+            return {
+              total: acc.savedSchemeIds.length,
+              scheme_ids: acc.savedSchemeIds,
+            };
+          }
+        }
+      }
+    } catch {}
 
     const ids = getLocalSavedSchemes();
     return {
@@ -649,7 +946,9 @@ export const api = {
           method: "POST",
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (res.ok) return await res.json();
+        if (res.ok) {
+          // ok
+        }
       } catch {
         // Fallback
       }
@@ -660,6 +959,21 @@ export const api = {
       ids.push(schemeId);
       saveLocalSavedSchemes(ids);
     }
+
+    try {
+      const rawUser = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
+      if (rawUser) {
+        const u = JSON.parse(rawUser);
+        if (u.email) {
+          const acc = getStoredAccountForEmail(u.email);
+          if (acc) {
+            acc.savedSchemeIds = ids;
+            upsertStoredAccount(acc);
+          }
+        }
+      }
+    } catch {}
+
     return { success: true, saved: true };
   },
 
@@ -671,7 +985,9 @@ export const api = {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (res.ok) return await res.json();
+        if (res.ok) {
+          // ok
+        }
       } catch {
         // Fallback
       }
@@ -680,7 +996,324 @@ export const api = {
     let ids = getLocalSavedSchemes();
     ids = ids.filter((id) => id !== schemeId);
     saveLocalSavedSchemes(ids);
+
+    try {
+      const rawUser = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
+      if (rawUser) {
+        const u = JSON.parse(rawUser);
+        if (u.email) {
+          const acc = getStoredAccountForEmail(u.email);
+          if (acc) {
+            acc.savedSchemeIds = ids;
+            upsertStoredAccount(acc);
+          }
+        }
+      }
+    } catch {}
+
     return { success: true, removed: true };
+  },
+
+  // ========================================================
+  // Family & Beneficiary Members Methods
+  // ========================================================
+
+  /** Fetch all family members saved by current citizen */
+  async getFamilyMembers(token: string): Promise<FamilyMember[]> {
+    if (canUseBackend()) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000);
+        const res = await fetch(`${API_BASE_URL}/auth/members`, {
+          headers: { Authorization: `Bearer ${token}` },
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+        if (res.ok) {
+          const members = await res.json();
+          saveLocalFamilyMembers(members);
+          try {
+            const rawUser = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
+            if (rawUser) {
+              const u = JSON.parse(rawUser);
+              if (u.email) {
+                const acc = getStoredAccountForEmail(u.email);
+                if (acc) {
+                  acc.familyMembers = members;
+                  upsertStoredAccount(acc);
+                }
+              }
+            }
+          } catch {}
+          return members;
+        }
+      } catch {
+        // Fallback to local storage
+      }
+    }
+
+    try {
+      const rawUser = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
+      if (rawUser) {
+        const u = JSON.parse(rawUser);
+        if (u.email) {
+          const acc = getStoredAccountForEmail(u.email);
+          if (acc?.familyMembers) {
+            return acc.familyMembers;
+          }
+        }
+      }
+    } catch {}
+
+    return getLocalFamilyMembers();
+  },
+
+  /** Add a new family member (father, mother, brother, sister, etc.) */
+  async addFamilyMember(token: string, member: FamilyMemberInput): Promise<FamilyMember> {
+    if (canUseBackend()) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/auth/members`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(member),
+        });
+        if (res.ok) {
+          const created: FamilyMember = await res.json();
+          const current = getLocalFamilyMembers();
+          const updatedList = [...current, created];
+          saveLocalFamilyMembers(updatedList);
+          try {
+            const rawUser = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
+            if (rawUser) {
+              const u = JSON.parse(rawUser);
+              if (u.email) {
+                const acc = getStoredAccountForEmail(u.email);
+                if (acc) {
+                  acc.familyMembers = updatedList;
+                  upsertStoredAccount(acc);
+                }
+              }
+            }
+          } catch {}
+          return created;
+        }
+      } catch {
+        // Fallback
+      }
+    }
+
+    const localCreated: FamilyMember = {
+      id: `local-member-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+      user_id: "current-user",
+      name: member.name,
+      relationship: member.relationship,
+      age: member.age,
+      gender: member.gender,
+      state: member.state,
+      district: member.district,
+      area_type: member.area_type || "urban",
+      occupation: member.occupation,
+      category: member.category,
+      annual_income: member.annual_income || 0,
+      marital_status: member.marital_status,
+      is_differently_abled: Boolean(member.is_differently_abled),
+      ration_card_type: member.ration_card_type || "none",
+      land_holding_acres: member.land_holding_acres || 0,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    const current = getLocalFamilyMembers();
+    const updatedList = [...current, localCreated];
+    saveLocalFamilyMembers(updatedList);
+
+    try {
+      const rawUser = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
+      if (rawUser) {
+        const u = JSON.parse(rawUser);
+        if (u.email) {
+          const acc = getStoredAccountForEmail(u.email);
+          if (acc) {
+            acc.familyMembers = updatedList;
+            upsertStoredAccount(acc);
+          }
+        }
+      }
+    } catch {}
+
+    return localCreated;
+  },
+
+  /** Update an existing family member */
+  async updateFamilyMember(
+    token: string,
+    memberId: string,
+    data: Partial<FamilyMemberInput>
+  ): Promise<FamilyMember> {
+    if (canUseBackend()) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/auth/members/${encodeURIComponent(memberId)}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(data),
+        });
+        if (res.ok) {
+          const updated: FamilyMember = await res.json();
+          const current = getLocalFamilyMembers().map((m) => (m.id === memberId ? updated : m));
+          saveLocalFamilyMembers(current);
+          try {
+            const rawUser = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
+            if (rawUser) {
+              const u = JSON.parse(rawUser);
+              if (u.email) {
+                const acc = getStoredAccountForEmail(u.email);
+                if (acc) {
+                  acc.familyMembers = current;
+                  upsertStoredAccount(acc);
+                }
+              }
+            }
+          } catch {}
+          return updated;
+        }
+      } catch {
+        // Fallback
+      }
+    }
+
+    const current = getLocalFamilyMembers();
+    let updatedMember: FamilyMember | null = null;
+    const updatedList = current.map((m) => {
+      if (m.id === memberId) {
+        updatedMember = {
+          ...m,
+          ...data,
+          updated_at: new Date().toISOString(),
+        } as FamilyMember;
+        return updatedMember;
+      }
+      return m;
+    });
+    saveLocalFamilyMembers(updatedList);
+    if (!updatedMember) throw new Error("Member not found");
+
+    try {
+      const rawUser = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
+      if (rawUser) {
+        const u = JSON.parse(rawUser);
+        if (u.email) {
+          const acc = getStoredAccountForEmail(u.email);
+          if (acc) {
+            acc.familyMembers = updatedList;
+            upsertStoredAccount(acc);
+          }
+        }
+      }
+    } catch {}
+
+    return updatedMember;
+  },
+
+  /** Delete a family member */
+  async deleteFamilyMember(token: string, memberId: string): Promise<{ success: boolean; deleted_id?: string }> {
+    if (canUseBackend()) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/auth/members/${encodeURIComponent(memberId)}`, {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.ok) {
+          const current = getLocalFamilyMembers().filter((m) => m.id !== memberId);
+          saveLocalFamilyMembers(current);
+          try {
+            const rawUser = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
+            if (rawUser) {
+              const u = JSON.parse(rawUser);
+              if (u.email) {
+                const acc = getStoredAccountForEmail(u.email);
+                if (acc) {
+                  acc.familyMembers = current;
+                  upsertStoredAccount(acc);
+                }
+              }
+            }
+          } catch {}
+          return await res.json();
+        }
+      } catch {
+        // Fallback
+      }
+    }
+
+    const current = getLocalFamilyMembers().filter((m) => m.id !== memberId);
+    saveLocalFamilyMembers(current);
+
+    try {
+      const rawUser = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
+      if (rawUser) {
+        const u = JSON.parse(rawUser);
+        if (u.email) {
+          const acc = getStoredAccountForEmail(u.email);
+          if (acc) {
+            acc.familyMembers = current;
+            upsertStoredAccount(acc);
+          }
+        }
+      }
+    } catch {}
+
+    return { success: true, deleted_id: memberId };
+  },
+
+  /** Evaluate schemes specifically for a family member */
+  async getFamilyMemberEligibility(token: string, memberId: string) {
+    if (canUseBackend()) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/auth/members/${encodeURIComponent(memberId)}/eligibility`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.ok) return await res.json();
+      } catch {
+        // Fallback
+      }
+    }
+
+    // Local evaluation fallback
+    const member = getLocalFamilyMembers().find((m) => m.id === memberId);
+    if (!member) throw new Error("Member not found");
+
+    const profile: CitizenProfile = {
+      age: member.age,
+      gender: member.gender as any,
+      state: member.state || "Delhi",
+      district: member.district,
+      area_type: (member.area_type as any) || "urban",
+      occupation: member.occupation as any,
+      category: member.category as any,
+      annual_income: member.annual_income || 0,
+      marital_status: member.marital_status as any,
+      is_differently_abled: Boolean(member.is_differently_abled),
+      ration_card_type: (member.ration_card_type as any) || "none",
+      land_holding_acres: member.land_holding_acres || 0,
+    };
+
+    const result = evaluateAllSchemes(profile, true);
+    return {
+      member_id: member.id,
+      member_name: member.name,
+      relationship: member.relationship,
+      total_schemes_evaluated: result.total_schemes_evaluated,
+      eligible_count: result.eligible_count,
+      ineligible_count: result.ineligible_count,
+      eligible_schemes: result.eligible_schemes,
+      ineligible_schemes: result.ineligible_schemes,
+    };
   },
 
   /** Upload and verify citizen document against scheme criteria */
@@ -689,7 +1322,8 @@ export const api = {
     schemeId: string,
     documentType: string,
     documentName?: string,
-    language: string = "hi"
+    language: string = "hi",
+    previousExtractedData?: Record<string, unknown> | null
   ): Promise<DocumentVerifyApiResponse> {
     const formData = new FormData();
     formData.append("file", file);
@@ -697,6 +1331,9 @@ export const api = {
     formData.append("document_type", documentType);
     if (documentName) formData.append("document_name", documentName);
     formData.append("language", language);
+    if (previousExtractedData) {
+      formData.append("previous_extracted_data", JSON.stringify(previousExtractedData));
+    }
 
     try {
       const res = await fetch(`${API_BASE_URL}/documents/verify`, {
@@ -727,13 +1364,34 @@ export const api = {
         };
       }
 
+      if (previousExtractedData && (fn.includes("mismatch") || fn.includes("other") || fn.includes("wrong_name"))) {
+        const priorName = (previousExtractedData.citizen_name as string) || "पूर्व आवेदक / Previous Applicant";
+        return {
+          status: "mismatch",
+          is_eligible: false,
+          confidence_score: 0.95,
+          extracted_data: {
+            citizen_name: "सुरेश कुमार वर्मा / Suresh Kumar Verma",
+            document_number_masked: "XXXX-XXXX-9912",
+          },
+          is_consistent_with_previous: false,
+          mismatch_details: `Prior Name: ${priorName} vs Current Name: सुरेश कुमार वर्मा`,
+          title_hi: "दस्तावेज़ों में नाम मेल नहीं खा रहा",
+          title_en: "Cross-Document Name Mismatch",
+          reason_hi: `इस दस्तावेज़ में दर्ज नाम पूर्व सत्यापित दस्तावेज़ के नाम (${priorName}) से भिन्न है।`,
+          reason_en: `The name on this document does not match the name (${priorName}) from earlier documents.`,
+          suggestion_hi: "कृपया सुनिश्चित करें कि सभी दस्तावेज़ एक ही आवेदक के अपलोड किए गए हैं।",
+          suggestion_en: "Please ensure all uploaded documents belong to the same applicant.",
+        };
+      }
+
       if (fn.includes("reject") || fn.includes("fail") || fn.includes("high") || fn.includes("ineligible")) {
         return {
           status: "rejected",
           is_eligible: false,
           confidence_score: 0.95,
           extracted_data: {
-            citizen_name: "आवेदक नागरिक / Applicant Citizen",
+            citizen_name: (previousExtractedData?.citizen_name as string) || "आवेदक नागरिक / Applicant Citizen",
             document_number_masked: "XXXX-XXXX-8921",
             annual_income: 360000,
           },
@@ -746,18 +1404,18 @@ export const api = {
         };
       }
 
-      if (fn.includes("wrong") || fn.includes("fake") || fn.includes("random")) {
+      if (fn.includes("wrong") || fn.includes("fake") || fn.includes("random") || fn.includes("selfie")) {
         return {
           status: "wrong_document",
           is_eligible: false,
-          confidence_score: 0.90,
+          confidence_score: 0.94,
           extracted_data: {},
-          title_hi: "गलत दस्तावेज़ अपलोड हुआ",
-          title_en: "Incorrect Document Uploaded",
-          reason_hi: "अपलोड की गई फाइल अपेक्षित दस्तावेज़ से मेल नहीं खाती है।",
-          reason_en: "The uploaded file does not match the expected document requirement.",
+          title_hi: "मान्य सरकारी दस्तावेज़ नहीं मिला",
+          title_en: "Invalid Document Structure",
+          reason_hi: "अपलोड की गई फाइल में अपेक्षित आधिकारिक प्रारूप या सरकारी मुहर नहीं पाई गई।",
+          reason_en: "The uploaded file does not match the expected official government format.",
           suggestion_hi: "कृपया सही दस्तावेज़ का चयन करके दोबारा अपलोड करें।",
-          suggestion_en: "Please select the correct document and re-upload.",
+          suggestion_en: "Please select the authentic document and re-upload.",
         };
       }
 
@@ -767,12 +1425,13 @@ export const api = {
         is_eligible: true,
         confidence_score: 0.98,
         extracted_data: {
-          citizen_name: "सत्यापित नागरिक / Verified Citizen",
+          citizen_name: (previousExtractedData?.citizen_name as string) || "सत्यापित नागरिक / Verified Citizen",
           document_number_masked: "XXXX-XXXX-4589",
           annual_income: 120000,
           valid_until: "2028-03-31",
           issuing_authority: "सक्षम सरकारी प्राधिकारी / Competent Authority",
         },
+        is_consistent_with_previous: true,
         title_hi: "सफलतापूर्वक सत्यापित",
         title_en: "Successfully Verified",
         reason_hi: "दस्तावेज़ के सभी आवश्यक विवरण मान्य हैं और योजना के मापदंड पूरे हैं।",
@@ -785,7 +1444,7 @@ export const api = {
 };
 
 export interface DocumentVerifyApiResponse {
-  status: "verified" | "rejected" | "unclear_image" | "wrong_document";
+  status: "verified" | "rejected" | "unclear_image" | "wrong_document" | "mismatch";
   is_eligible: boolean;
   confidence_score: number;
   extracted_data: {
@@ -805,4 +1464,7 @@ export interface DocumentVerifyApiResponse {
   reason_en: string;
   suggestion_hi?: string | null;
   suggestion_en?: string | null;
+  is_consistent_with_previous?: boolean;
+  mismatch_details?: string | null;
 }
+

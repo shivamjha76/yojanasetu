@@ -7,6 +7,7 @@ import {
   Menu,
   X,
   User as UserIcon,
+  Users as UsersIcon,
   LogOut,
   Bookmark,
   Check,
@@ -16,7 +17,7 @@ import { MyDetailsModal } from "../profile/MyDetailsModal";
 
 interface HeaderProps {
   currentView?: string;
-  onNavigate?: (view: string) => void;
+  onNavigate?: (view: string, schemeId?: string) => void;
 }
 
 // Top 5 additional Indian languages
@@ -33,11 +34,12 @@ export const Header: React.FC<HeaderProps> = ({
   onNavigate = () => {},
 }) => {
   const { language, setLanguage, toggleLanguage } = useApp();
-  const { user, isAuthenticated, logout, savedSchemeIds } = useAuth();
+  const { user, isAuthenticated, logout, savedSchemeIds, familyMembers } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isMyDetailsOpen, setIsMyDetailsOpen] = useState(false);
+  const [myDetailsTab, setMyDetailsTab] = useState<"profile" | "members">("profile");
   const [showMoreLanguages, setShowMoreLanguages] = useState(false);
   const [selectedOtherLang, setSelectedOtherLang] = useState<string | null>(null);
   const [langToast, setLangToast] = useState<string | null>(null);
@@ -305,6 +307,7 @@ export const Header: React.FC<HeaderProps> = ({
                   {/* My Details Link */}
                   <button
                     onClick={() => {
+                      setMyDetailsTab("profile");
                       setIsUserDropdownOpen(false);
                       setIsMyDetailsOpen(true);
                     }}
@@ -314,7 +317,11 @@ export const Header: React.FC<HeaderProps> = ({
                       <UserIcon className="w-3.5 h-3.5 text-[#1D5F49]" />
                       <span>{isHindi ? "मेरे विवरण (My Details)" : "My Details"}</span>
                     </span>
-                    {user.citizen_details ? (
+                    {user.citizen_details &&
+                    Object.keys(user.citizen_details).length > 0 &&
+                    (user.citizen_details.age !== undefined ||
+                      user.citizen_details.occupation !== undefined ||
+                      user.citizen_details.state !== undefined) ? (
                       <span className="px-1.5 py-0.5 rounded-full bg-emerald-100 text-[10px] font-bold text-emerald-800">
                         {isHindi ? "सहेजे गए" : "Saved"}
                       </span>
@@ -323,6 +330,24 @@ export const Header: React.FC<HeaderProps> = ({
                         {isHindi ? "भरें" : "New"}
                       </span>
                     )}
+                  </button>
+
+                  {/* Add Members Link */}
+                  <button
+                    onClick={() => {
+                      setMyDetailsTab("members");
+                      setIsUserDropdownOpen(false);
+                      setIsMyDetailsOpen(true);
+                    }}
+                    className="w-full text-left px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 flex items-center justify-between cursor-pointer"
+                  >
+                    <span className="flex items-center gap-2">
+                      <UsersIcon className="w-3.5 h-3.5 text-[#1D5F49]" />
+                      <span>{isHindi ? "परिवार एवं सदस्य (Add Members)" : "Add Members"}</span>
+                    </span>
+                    <span className="px-1.5 py-0.5 rounded-full bg-emerald-100 text-[10px] font-bold text-emerald-800">
+                      {familyMembers.length > 0 ? `${familyMembers.length} ${isHindi ? "सदस्य" : "members"}` : (isHindi ? "जोड़ें" : "Add")}
+                    </span>
                   </button>
 
                   <button
@@ -400,20 +425,53 @@ export const Header: React.FC<HeaderProps> = ({
       {isMobileMenuOpen && (
         <div className="md:hidden border-t border-gray-100 bg-[#FEFEFD] px-6 py-4 space-y-3">
           {isAuthenticated && user && (
-            <div className="p-3 bg-gray-50 rounded-xl flex items-center justify-between">
-              <div>
-                <p className="text-xs font-bold text-gray-900">{user.full_name}</p>
-                <p className="text-[11px] text-gray-500">{user.email}</p>
+            <div className="p-3 bg-gray-50 rounded-xl space-y-2">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-bold text-gray-900">{user.full_name}</p>
+                  <p className="text-[11px] text-gray-500">{user.email}</p>
+                </div>
+                <button
+                  onClick={() => {
+                    logout();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="text-xs text-rose-600 font-semibold cursor-pointer"
+                >
+                  {isHindi ? "लॉग आउट" : "Sign Out"}
+                </button>
               </div>
-              <button
-                onClick={() => {
-                  logout();
-                  setIsMobileMenuOpen(false);
-                }}
-                className="text-xs text-rose-600 font-semibold"
-              >
-                {isHindi ? "लॉग आउट" : "Sign Out"}
-              </button>
+
+              <div className="grid grid-cols-2 gap-2 pt-1 border-t border-gray-200">
+                <button
+                  onClick={() => {
+                    setMyDetailsTab("profile");
+                    setIsMobileMenuOpen(false);
+                    setIsMyDetailsOpen(true);
+                  }}
+                  className="py-1.5 px-2.5 rounded-lg bg-white border border-gray-200 text-xs font-semibold text-gray-700 flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <UserIcon className="w-3.5 h-3.5 text-[#1D5F49]" />
+                  <span>{isHindi ? "मेरे विवरण" : "My Details"}</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setMyDetailsTab("members");
+                    setIsMobileMenuOpen(false);
+                    setIsMyDetailsOpen(true);
+                  }}
+                  className="py-1.5 px-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs font-semibold text-[#0D684E] flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <UsersIcon className="w-3.5 h-3.5 text-[#0D684E]" />
+                  <span>{isHindi ? "सदस्य जोड़ें" : "Add Members"}</span>
+                  {familyMembers.length > 0 && (
+                    <span className="w-4 h-4 rounded-full bg-[#0D684E] text-white text-[10px] flex items-center justify-center">
+                      {familyMembers.length}
+                    </span>
+                  )}
+                </button>
+              </div>
             </div>
           )}
 
@@ -628,6 +686,7 @@ export const Header: React.FC<HeaderProps> = ({
       <MyDetailsModal
         isOpen={isMyDetailsOpen}
         onClose={() => setIsMyDetailsOpen(false)}
+        initialTab={myDetailsTab}
         onEditDetails={() => {
           setIsMyDetailsOpen(false);
           onNavigate("wizard");
@@ -635,6 +694,10 @@ export const Header: React.FC<HeaderProps> = ({
         onCheckEligibility={() => {
           setIsMyDetailsOpen(false);
           onNavigate("wizard");
+        }}
+        onSelectScheme={(schemeId) => {
+          setIsMyDetailsOpen(false);
+          onNavigate("scheme_detail", schemeId);
         }}
       />
     </header>

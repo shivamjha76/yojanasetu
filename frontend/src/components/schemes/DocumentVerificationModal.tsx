@@ -24,7 +24,7 @@ import { getLocalizedAuthority } from "@/utils/schemeLocalization";
 import { api } from "@/services/api";
 
 export interface DocVerificationState {
-  status: "idle" | "uploading" | "verified" | "rejected" | "unclear_image" | "wrong_document";
+  status: "idle" | "uploading" | "verified" | "rejected" | "unclear_image" | "wrong_document" | "mismatch";
   fileName?: string;
   fileSize?: string;
   extractedData?: {
@@ -40,6 +40,8 @@ export interface DocVerificationState {
   title?: string;
   reason?: string;
   suggestion?: string;
+  isConsistent?: boolean;
+  mismatchDetails?: string;
 }
 
 interface DocumentVerificationModalProps {
@@ -81,6 +83,12 @@ export const DocumentVerificationModal: React.FC<DocumentVerificationModalProps>
       ? Math.round((verifiedMandatoryCount / totalMandatory) * 100)
       : 0;
 
+  // Find any previously verified document to establish consistency baseline
+  const primaryVerifiedDoc = Object.values(docStates).find(
+    (s) => s.status === "verified" && s.extractedData?.citizen_name
+  );
+  const baselineApplicantData = primaryVerifiedDoc?.extractedData || null;
+
   useEffect(() => {
     if (onVerificationComplete) {
       onVerificationComplete(isAllMandatoryVerified);
@@ -114,19 +122,20 @@ export const DocumentVerificationModal: React.FC<DocumentVerificationModalProps>
         fileSize: `${(file.size / 1024).toFixed(0)} KB`,
         title: isHindi ? "AI जांच जारी है..." : "AI Verification in Progress...",
         reason: isHindi
-          ? "दस्तावेज़ की प्रामाणिकता और पात्रता शर्तों की जांच की जा रही है।"
-          : "Scanning document authenticity and cross-referencing criteria.",
+          ? "दस्तावेज़ की प्रामाणिकता, प्रारूप और अन्य दस्तावेज़ों से नाम का मिलान किया जा रहा है।"
+          : "Scanning document authenticity, structure, and cross-matching identity.",
       },
     }));
 
     try {
-      // 2. Call backend verification API
+      // 2. Call backend verification API with previous document context
       const result = await api.verifyDocument(
         file,
         scheme.id,
         docId,
         docName,
-        language
+        language,
+        baselineApplicantData as Record<string, unknown> | null
       );
 
       // 3. Update document state with AI response
@@ -140,6 +149,8 @@ export const DocumentVerificationModal: React.FC<DocumentVerificationModalProps>
           title: isHindi ? result.title_hi : result.title_en,
           reason: isHindi ? result.reason_hi : result.reason_en,
           suggestion: isHindi ? result.suggestion_hi || undefined : result.suggestion_en || undefined,
+          isConsistent: result.is_consistent_with_previous,
+          mismatchDetails: result.mismatch_details || undefined,
         },
       }));
     } catch {
@@ -232,15 +243,21 @@ export const DocumentVerificationModal: React.FC<DocumentVerificationModalProps>
         {/* ======================================================== */}
         {/* 2. PROGRESS & READINESS BANNER                           */}
         {/* ======================================================== */}
-        <div className="bg-[#EAF7F0] border-b border-[#BFE8CF] px-5 py-3.5 sm:px-6 shrink-0 flex items-center justify-between gap-4">
+        <div className="bg-[#EAF7F0] border-b border-[#BFE8CF] px-5 py-3.5 sm:px-6 shrink-0 flex items-center justify-between gap-4 flex-wrap">
           <div>
-            <div className="text-xs sm:text-sm font-bold text-gray-900 flex items-center gap-1.5">
+            <div className="text-xs sm:text-sm font-bold text-gray-900 flex items-center gap-1.5 flex-wrap">
               <ShieldCheck className="w-4 h-4 text-[#0D684E]" />
               <span>
                 {isHindi
                   ? `सत्यापन प्रगति: ${totalMandatory} में से ${verifiedMandatoryCount} अनिवार्य दस्तावेज़ तैयार`
                   : `Readiness: ${verifiedMandatoryCount} of ${totalMandatory} Mandatory Docs Verified`}
               </span>
+              {baselineApplicantData?.citizen_name && (
+                <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-200/80 text-emerald-900 border border-emerald-300">
+                  <UserCheck className="w-3 h-3 text-emerald-700" />
+                  <span>{baselineApplicantData.citizen_name}</span>
+                </span>
+              )}
             </div>
             <div className="text-[11px] text-gray-600 mt-0.5">
               {isAllMandatoryVerified
@@ -248,8 +265,8 @@ export const DocumentVerificationModal: React.FC<DocumentVerificationModalProps>
                   ? "शानदार! सभी आवश्यक दस्तावेज़ सत्यापित हो चुके हैं।"
                   : "Excellent! All mandatory documents are verified."
                 : isHindi
-                ? "कृपया नीचे दिए गए प्रत्येक अनिवार्य दस्तावेज़ को अपलोड करें।"
-                : "Please upload each required document below for instant AI verification."}
+                ? "कृपया नीचे दिए गए प्रत्येक अनिवार्य दस्तावेज़ को अपलोड करें। AI सभी दस्तावेज़ों में नाम की समानता भी जांचेगा।"
+                : "Please upload each required document below. AI will verify authenticity and match applicant identity."}
             </div>
           </div>
 
@@ -316,7 +333,8 @@ export const DocumentVerificationModal: React.FC<DocumentVerificationModalProps>
             documents.map((doc, idx) => {
               const state = docStates[doc.id] || { status: "idle" };
               const isVerified = state.status === "verified";
-              const isRejected = state.status === "rejected";
+              const isMismatch = state.status === "mismatch";
+              const isRejected = state.status === "rejected" || isMismatch;
               const isUnclear = state.status === "unclear_image" || state.status === "wrong_document";
               const isUploading = state.status === "uploading";
               const isDragOver = dragOverDocId === doc.id;
@@ -336,6 +354,8 @@ export const DocumentVerificationModal: React.FC<DocumentVerificationModalProps>
                       ? "border-emerald-500 bg-emerald-50/70 scale-[1.01]"
                       : isVerified
                       ? "bg-[#EAF7F0]/70 border-emerald-300 shadow-2xs"
+                      : isMismatch
+                      ? "bg-purple-50/80 border-purple-300 shadow-2xs"
                       : isRejected
                       ? "bg-rose-50/80 border-rose-300 shadow-2xs"
                       : isUnclear
@@ -362,6 +382,10 @@ export const DocumentVerificationModal: React.FC<DocumentVerificationModalProps>
                       {isVerified ? (
                         <div className="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-xs">
                           <CheckCircle2 className="w-5 h-5 stroke-[2.5]" />
+                        </div>
+                      ) : isMismatch ? (
+                        <div className="w-9 h-9 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-xs">
+                          <AlertCircle className="w-5 h-5 stroke-[2.5]" />
                         </div>
                       ) : isRejected ? (
                         <div className="w-9 h-9 rounded-full bg-rose-600 text-white flex items-center justify-center shadow-xs">
@@ -474,8 +498,31 @@ export const DocumentVerificationModal: React.FC<DocumentVerificationModalProps>
                         </div>
                       )}
 
-                      {/* Ineligible / Rejected Result Details */}
-                      {isRejected && (
+                      {/* Cross-Document Name Mismatch Details */}
+                      {isMismatch && (
+                        <div className="mt-3 p-3 rounded-xl bg-purple-100/90 border border-purple-200 text-xs text-purple-950 space-y-1.5">
+                          <div className="font-bold flex items-center gap-1.5 text-purple-900">
+                            <AlertCircle className="w-4 h-4 text-purple-700" />
+                            <span>{state.title || (isHindi ? "दस्तावेज़ों में नाम भिन्न है" : "Name Mismatch Across Documents")}</span>
+                          </div>
+                          <p className="leading-relaxed text-purple-900 font-medium">
+                            {state.reason || (isHindi ? "इस दस्तावेज़ में दर्ज नाम पूर्व में सत्यापित दस्तावेज़ के नाम से मेल नहीं खा रहा है।" : "The name on this document does not match earlier verified documents.")}
+                          </p>
+                          {state.mismatchDetails && (
+                            <div className="px-2.5 py-1 rounded-lg bg-white/90 border border-purple-200 text-[11px] font-mono text-purple-800">
+                              ⚠️ {state.mismatchDetails}
+                            </div>
+                          )}
+                          {state.suggestion && (
+                            <p className="text-[11px] text-purple-700 pt-0.5 border-t border-purple-200">
+                              💡 {state.suggestion}
+                            </p>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Ineligible / Rejected Result Details (Standard Rejection) */}
+                      {isRejected && !isMismatch && (
                         <div className="mt-3 p-3 rounded-xl bg-rose-100/90 border border-rose-200 text-xs text-rose-950 space-y-1.5">
                           <div className="font-bold flex items-center gap-1.5 text-rose-900">
                             <XCircle className="w-4 h-4 text-rose-700" />

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { User, LoginCredentials, RegisterData } from "@/types/auth";
+import { User, LoginCredentials, RegisterData, FamilyMember, FamilyMemberInput } from "@/types/auth";
 import { CitizenProfile } from "@/types/schema";
 import { api } from "@/services/api";
 
@@ -11,6 +11,7 @@ interface AuthContextType {
   isAuthModalOpen: boolean;
   authModalMode: "login" | "register";
   savedSchemeIds: string[];
+  familyMembers: FamilyMember[];
   openAuthModal: (mode?: "login" | "register") => void;
   closeAuthModal: () => void;
   login: (credentials: LoginCredentials) => Promise<void>;
@@ -19,6 +20,10 @@ interface AuthContextType {
   toggleSaveScheme: (schemeId: string) => Promise<boolean>;
   isSchemeSaved: (schemeId: string) => boolean;
   saveCitizenDetails: (details: Partial<CitizenProfile>) => Promise<void>;
+  loadFamilyMembers: () => Promise<void>;
+  addFamilyMember: (member: FamilyMemberInput) => Promise<FamilyMember>;
+  updateFamilyMember: (id: string, member: Partial<FamilyMemberInput>) => Promise<FamilyMember>;
+  deleteFamilyMember: (id: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -34,23 +39,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [authModalMode, setAuthModalMode] = useState<"login" | "register">("login");
   const [savedSchemeIds, setSavedSchemeIds] = useState<string[]>([]);
+  const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([]);
 
-  // Load user profile and saved schemes if token is present
+  // Load user profile, saved schemes, and family members if token is present
   const loadUserData = useCallback(async (authToken: string) => {
     try {
       setIsLoading(true);
-      const [profile, saved] = await Promise.all([
+      const [profile, saved, members] = await Promise.all([
         api.getMe(authToken),
         api.getSavedSchemes(authToken).catch(() => ({ total: 0, scheme_ids: [] })),
+        api.getFamilyMembers(authToken).catch(() => []),
       ]);
       setUser(profile);
       setSavedSchemeIds(saved.scheme_ids || []);
+      setFamilyMembers(members || []);
     } catch {
       // Token is invalid or expired
       localStorage.removeItem(TOKEN_KEY);
       setToken(null);
       setUser(null);
       setSavedSchemeIds([]);
+      setFamilyMembers([]);
     } finally {
       setIsLoading(false);
     }
@@ -79,12 +88,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setToken(res.access_token);
     setUser(res.user);
     setIsAuthModalOpen(false);
-    // Refresh saved schemes
+
+    // Refresh saved schemes and family members
     try {
-      const saved = await api.getSavedSchemes(res.access_token);
+      const [saved, members] = await Promise.all([
+        api.getSavedSchemes(res.access_token).catch(() => ({ total: 0, scheme_ids: [] })),
+        api.getFamilyMembers(res.access_token).catch(() => []),
+      ]);
       setSavedSchemeIds(saved.scheme_ids || []);
+      setFamilyMembers(members || []);
     } catch {
       setSavedSchemeIds([]);
+      setFamilyMembers([]);
+    }
+
+    // If citizen_details is missing or empty, check if draft profile exists to auto-attach
+    if (!res.user.citizen_details || Object.keys(res.user.citizen_details).length === 0) {
+      try {
+        const draftRaw = localStorage.getItem("yojanasetu_draft_profile");
+        if (draftRaw) {
+          const draft = JSON.parse(draftRaw);
+          if (draft && (draft.age || draft.occupation)) {
+            const updated = await api.saveCitizenDetails(res.access_token, draft);
+            setUser(updated);
+          }
+        }
+      } catch {}
     }
   };
 
@@ -95,13 +124,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(res.user);
     setIsAuthModalOpen(false);
     setSavedSchemeIds([]);
+    setFamilyMembers([]);
+
+    // If draft profile exists, auto-attach to newly registered citizen
+    try {
+      const draftRaw = localStorage.getItem("yojanasetu_draft_profile");
+      if (draftRaw) {
+        const draft = JSON.parse(draftRaw);
+        if (draft && (draft.age || draft.occupation)) {
+          const updated = await api.saveCitizenDetails(res.access_token, draft);
+          setUser(updated);
+        }
+      }
+    } catch {}
   };
 
   const logout = () => {
     localStorage.removeItem(TOKEN_KEY);
+    // Clear active session keys while leaving user account store in localStorage completely intact
+    localStorage.removeItem("yojanasetu_offline_user");
+    localStorage.removeItem("yojanasetu_offline_saved_schemes");
+    localStorage.removeItem("yojanasetu_offline_family_members");
     setToken(null);
     setUser(null);
     setSavedSchemeIds([]);
+    setFamilyMembers([]);
   };
 
   const toggleSaveScheme = async (schemeId: string): Promise<boolean> => {
@@ -136,6 +183,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const loadFamilyMembers = async () => {
+    if (!token) return;
+    try {
+      const members = await api.getFamilyMembers(token);
+      setFamilyMembers(members || []);
+    } catch (err) {
+      console.error("Failed to load family members:", err);
+    }
+  };
+
+  const addFamilyMember = async (member: FamilyMemberInput): Promise<FamilyMember> => {
+    const authToken = token || "offline-token";
+    const created = await api.addFamilyMember(authToken, member);
+    setFamilyMembers((prev) => [...prev, created]);
+    return created;
+  };
+
+  const updateFamilyMember = async (
+    id: string,
+    member: Partial<FamilyMemberInput>
+  ): Promise<FamilyMember> => {
+    const authToken = token || "offline-token";
+    const updated = await api.updateFamilyMember(authToken, id, member);
+    setFamilyMembers((prev) => prev.map((m) => (m.id === id ? updated : m)));
+    return updated;
+  };
+
+  const deleteFamilyMember = async (id: string): Promise<void> => {
+    const authToken = token || "offline-token";
+    await api.deleteFamilyMember(authToken, id);
+    setFamilyMembers((prev) => prev.filter((m) => m.id !== id));
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -146,6 +226,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isAuthModalOpen,
         authModalMode,
         savedSchemeIds,
+        familyMembers,
         openAuthModal,
         closeAuthModal,
         login,
@@ -154,6 +235,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         toggleSaveScheme,
         isSchemeSaved,
         saveCitizenDetails,
+        loadFamilyMembers,
+        addFamilyMember,
+        updateFamilyMember,
+        deleteFamilyMember,
       }}
     >
       {children}

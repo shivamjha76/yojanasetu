@@ -37,3 +37,57 @@ export interface SavedSchemesResponse {
   total: number;
   scheme_ids: string[];
 }
+
+export type MemberRelationship =
+  | "father"
+  | "mother"
+  | "brother"
+  | "sister"
+  | "spouse"
+  | "son"
+  | "daughter"
+  | "uncle"
+  | "aunt"
+  | "grandfather"
+  | "grandmother"
+  | "friend"
+  | "other";
+
+export interface FamilyMember {
+  id: string;
+  user_id: string;
+  name: string;
+  relationship: MemberRelationship | string;
+  age: number;
+  gender: string;
+  state?: string;
+  district?: string;
+  area_type?: string;
+  occupation: string;
+  category: string;
+  annual_income: number;
+  marital_status?: string;
+  is_differently_abled: boolean;
+  ration_card_type?: string;
+  land_holding_acres?: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FamilyMemberInput {
+  name: string;
+  relationship: MemberRelationship | string;
+  age: number;
+  gender: string;
+  state?: string;
+  district?: string;
+  area_type?: string;
+  occupation: string;
+  category: string;
+  annual_income: number;
+  marital_status?: string;
+  is_differently_abled?: boolean;
+  ration_card_type?: string;
+  land_holding_acres?: number;
+}
+

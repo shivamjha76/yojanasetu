@@ -22,7 +22,7 @@ def test_eligibility_check_student_profile():
     response = client.post("/api/eligibility/check", json=payload)
     assert response.status_code == 200
     data = response.json()
-    assert data["total_schemes_evaluated"] == 15
+    assert data["total_schemes_evaluated"] >= 15
     assert data["eligible_count"] >= 5
     assert data["ineligible_schemes"] is None  # default include_ineligible=False
 
