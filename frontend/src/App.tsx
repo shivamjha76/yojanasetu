@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/home/HeroSection";
 import { CategoryGrid } from "@/components/home/CategoryGrid";
 import { TrendingSchemes } from "@/components/home/TrendingSchemes";
+import { HowItWorks } from "@/components/home/HowItWorks";
 import { SchemeCard } from "@/components/schemes/SchemeCard";
 import { DocumentChecklist } from "@/components/schemes/DocumentChecklist";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -128,6 +129,9 @@ const MainContent: React.FC = () => {
         onViewDetails={handleSelectScheme}
         onExploreAll={() => setCurrentView("schemes")}
       />
+
+      {/* Step 37: Visual 3-Step "How YojanaSetu Works" Explainer */}
+      <HowItWorks onStartWizard={() => setCurrentView("wizard")} />
 
       <main className="flex-1 container mx-auto px-4 sm:px-8 py-12 max-w-6xl">
         {/* Step 31 & 32 Showcase Grid */}
