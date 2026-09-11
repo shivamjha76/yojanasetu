@@ -194,13 +194,15 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
-          {/* Primary CTA Button: Get Started */}
-          <button
-            onClick={() => onNavigate("wizard")}
-            className="bg-[#1D5F49] hover:bg-[#174E3C] text-white px-5 py-2.5 rounded-xl text-[14px] font-semibold shadow-2xs hover:shadow-xs transition-all duration-150 active:scale-95 cursor-pointer"
-          >
-            {isHindi ? "शुरू करें" : "Get Started"}
-          </button>
+          {/* Primary CTA Button: Get Started (Shown ONLY on Landing Page) */}
+          {currentView === "home" && (
+            <button
+              onClick={() => onNavigate("wizard")}
+              className="bg-[#1D5F49] hover:bg-[#174E3C] text-white px-5 py-2.5 rounded-xl text-[14px] font-semibold shadow-2xs hover:shadow-xs transition-all duration-150 active:scale-95 cursor-pointer"
+            >
+              {isHindi ? "शुरू करें" : "Get Started"}
+            </button>
+          )}
         </div>
 
         {/* Mobile Menu Hamburger */}
@@ -284,15 +286,18 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             )}
 
-            <button
-              onClick={() => {
-                onNavigate("wizard");
-                setIsMobileMenuOpen(false);
-              }}
-              className="w-full bg-[#1D5F49] text-white py-2.5 rounded-xl font-semibold text-sm shadow-xs cursor-pointer"
-            >
-              {isHindi ? "शुरू करें" : "Get Started"}
-            </button>
+            {/* Primary CTA Button: Get Started (Shown ONLY on Landing Page) */}
+            {currentView === "home" && (
+              <button
+                onClick={() => {
+                  onNavigate("wizard");
+                  setIsMobileMenuOpen(false);
+                }}
+                className="w-full bg-[#1D5F49] text-white py-2.5 rounded-xl font-semibold text-sm shadow-xs cursor-pointer"
+              >
+                {isHindi ? "शुरू करें" : "Get Started"}
+              </button>
+            )}
           </div>
         </div>
       )}

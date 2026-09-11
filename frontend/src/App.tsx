@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { AppProvider, useApp } from "@/context/AppContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { Header } from "@/components/layout/Header";
@@ -62,67 +62,203 @@ const SAMPLE_SCHEME: Scheme = {
   faqs: [],
 };
 
+// URL route helpers for refresh & browser history support
+const getViewFromLocation = (): { view: string; schemeId?: string } => {
+  if (typeof window === "undefined") return { view: "home" };
+
+  const path = window.location.pathname.toLowerCase().replace(/\/+$/, "") || "/";
+  const hash = window.location.hash.toLowerCase().replace(/^#\/?/, "");
+
+  // 1. Check scheme detail route: /scheme/:id or /schemes/:id (except /schemes)
+  const schemeMatch = path.match(/^\/schemes?\/([a-z0-9\-_]+)$/);
+  if (schemeMatch && schemeMatch[1] && schemeMatch[1] !== "explore") {
+    return { view: "scheme_detail", schemeId: schemeMatch[1] };
+  }
+
+  // 2. Check query param: ?scheme=...
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const schemeParam = params.get("scheme");
+    if (schemeParam) {
+      return { view: "scheme_detail", schemeId: schemeParam };
+    }
+  } catch {}
+
+  // 3. Match pathname directly
+  if (path === "/schemes") return { view: "schemes" };
+  if (path === "/csc") return { view: "csc" };
+  if (path === "/wizard") return { view: "wizard" };
+  if (path === "/login") return { view: "login" };
+  if (path === "/register") return { view: "register" };
+
+  // 4. Match hash if present
+  if (hash === "schemes") return { view: "schemes" };
+  if (hash === "csc") return { view: "csc" };
+  if (hash === "wizard") return { view: "wizard" };
+  if (hash === "login") return { view: "login" };
+  if (hash === "register") return { view: "register" };
+
+  // 5. Fallback: check sessionStorage
+  try {
+    const savedView = sessionStorage.getItem("yojanasetu_current_view");
+    const savedSchemeId = sessionStorage.getItem("yojanasetu_selected_scheme_id");
+    if (savedView && ["schemes", "csc", "wizard", "login", "register", "scheme_detail"].includes(savedView)) {
+      if (savedView === "scheme_detail" && savedSchemeId) {
+        return { view: "scheme_detail", schemeId: savedSchemeId };
+      }
+      return { view: savedView };
+    }
+  } catch {}
+
+  return { view: "home" };
+};
+
+const getPathForView = (view: string, schemeId?: string): string => {
+  switch (view) {
+    case "schemes":
+      return "/schemes";
+    case "csc":
+      return "/csc";
+    case "wizard":
+      return "/wizard";
+    case "login":
+      return "/login";
+    case "register":
+      return "/register";
+    case "scheme_detail":
+      return schemeId ? `/scheme/${schemeId}` : "/schemes";
+    case "home":
+    default:
+      return "/";
+  }
+};
+
 const MainContent: React.FC = () => {
   const { setIsAssistantOpen, language } = useApp();
   const isHindi = language === "hi";
-  const [currentView, setCurrentView] = useState("home");
+
+  const initialRoute = useMemo(() => getViewFromLocation(), []);
+  const [currentView, setCurrentView] = useState<string>(initialRoute.view);
   const [previousView, setPreviousView] = useState<string>("schemes");
   const [selectedScheme, setSelectedScheme] = useState<Scheme | null>(null);
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [wizardInitialProfile, setWizardInitialProfile] = useState<Partial<CitizenProfile> | undefined>(undefined);
 
-  // Handle scheme selection: opens dedicated SchemeDetailPage
-  const handleOpenSchemeDetail = async (schemeId: string) => {
+  // Helper to load scheme by id
+  const loadSchemeById = useCallback(async (schemeId: string) => {
     try {
       const scheme = await api.getSchemeById(schemeId);
-      setSelectedScheme(scheme);
-    } catch {
-      const found =
-        ALL_SCHEMES.find((s) => s.id === schemeId) ||
-        ALL_SCHEMES.find(
-          (s) =>
-            s.id.toLowerCase().includes(schemeId.toLowerCase()) ||
-            schemeId.toLowerCase().includes(s.id.toLowerCase())
-        );
-      if (found) {
-        setSelectedScheme(found);
-      } else if (schemeId === SAMPLE_SCHEME.id) {
-        setSelectedScheme(SAMPLE_SCHEME);
+      if (scheme) {
+        setSelectedScheme(scheme);
+        sessionStorage.setItem("yojanasetu_selected_scheme_id", schemeId);
+        return scheme;
       }
+    } catch {
+      // fallback to static schemes
     }
+
+    const found =
+      ALL_SCHEMES.find((s) => s.id === schemeId) ||
+      ALL_SCHEMES.find(
+        (s) =>
+          s.id.toLowerCase().includes(schemeId.toLowerCase()) ||
+          schemeId.toLowerCase().includes(s.id.toLowerCase())
+      );
+    if (found) {
+      setSelectedScheme(found);
+      sessionStorage.setItem("yojanasetu_selected_scheme_id", found.id);
+      return found;
+    } else if (schemeId === SAMPLE_SCHEME.id) {
+      setSelectedScheme(SAMPLE_SCHEME);
+      sessionStorage.setItem("yojanasetu_selected_scheme_id", SAMPLE_SCHEME.id);
+      return SAMPLE_SCHEME;
+    }
+    return null;
+  }, []);
+
+  // Central navigation handler synchronizing state, URL path, history, and sessionStorage
+  const navigateTo = useCallback(
+    (view: string, schemeId?: string, replace = false) => {
+      setCurrentView(view);
+      try {
+        sessionStorage.setItem("yojanasetu_current_view", view);
+        if (schemeId) {
+          sessionStorage.setItem("yojanasetu_selected_scheme_id", schemeId);
+        }
+      } catch {}
+
+      const targetPath = getPathForView(view, schemeId);
+      if (window.location.pathname !== targetPath) {
+        if (replace) {
+          window.history.replaceState({ view, schemeId }, "", targetPath);
+        } else {
+          window.history.pushState({ view, schemeId }, "", targetPath);
+        }
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    []
+  );
+
+  // On mount: load scheme if on scheme_detail route, and sync URL
+  useEffect(() => {
+    if (initialRoute.schemeId) {
+      loadSchemeById(initialRoute.schemeId);
+    }
+    const targetPath = getPathForView(initialRoute.view, initialRoute.schemeId);
+    if (window.location.pathname !== targetPath) {
+      window.history.replaceState(
+        { view: initialRoute.view, schemeId: initialRoute.schemeId },
+        "",
+        targetPath
+      );
+    }
+  }, [initialRoute, loadSchemeById]);
+
+  // Listen to browser Back / Forward buttons
+  useEffect(() => {
+    const handlePopState = () => {
+      const loc = getViewFromLocation();
+      setCurrentView(loc.view);
+      if (loc.schemeId) {
+        loadSchemeById(loc.schemeId);
+      }
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [loadSchemeById]);
+
+  // Handle scheme selection: opens dedicated SchemeDetailPage
+  const handleOpenSchemeDetail = async (schemeId: string) => {
+    await loadSchemeById(schemeId);
     setPreviousView(currentView);
-    setCurrentView("scheme_detail");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    navigateTo("scheme_detail", schemeId);
   };
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    setCurrentView("schemes");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    navigateTo("schemes");
   };
 
   // When clicking Get Started: directly open Wizard for 100% friction-free citizen access
   const handleGetStarted = () => {
-    setCurrentView("wizard");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    navigateTo("wizard");
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-200 overflow-x-hidden">
-      <Header currentView={currentView} onNavigate={setCurrentView} />
+      <Header currentView={currentView} onNavigate={navigateTo} />
 
       {currentView === "login" || currentView === "register" ? (
         <main id="main-content" className="flex-1 bg-[#FEFEFD]">
           <LoginPage
             initialMode={currentView === "register" ? "register" : "login"}
             onSuccess={() => {
-              setCurrentView("wizard");
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              navigateTo("wizard");
             }}
             onBackToHome={() => {
-              setCurrentView("home");
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              navigateTo("home");
             }}
           />
         </main>
@@ -133,7 +269,7 @@ const MainContent: React.FC = () => {
             onSubmit={(_profile) => {}}
             onCancel={() => {
               setWizardInitialProfile(undefined);
-              setCurrentView("home");
+              navigateTo("home");
             }}
             onViewSchemeDetail={handleOpenSchemeDetail}
           />
@@ -152,8 +288,8 @@ const MainContent: React.FC = () => {
           <SchemeDetailPage
             scheme={selectedScheme || SAMPLE_SCHEME}
             onBack={() => {
-              setCurrentView(previousView === "wizard" ? "wizard" : "schemes");
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              const target = previousView === "wizard" ? "wizard" : "schemes";
+              navigateTo(target);
             }}
             backLabel={
               previousView === "wizard"
@@ -166,8 +302,7 @@ const MainContent: React.FC = () => {
             }
             onCheckEligibility={handleGetStarted}
             onLocateCsc={() => {
-              setCurrentView("csc");
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              navigateTo("csc");
             }}
           />
         </main>
@@ -184,8 +319,7 @@ const MainContent: React.FC = () => {
             onStartWizard={handleGetStarted}
             onExploreSchemes={() => {
               setSelectedCategoryFilter("all");
-              setCurrentView("schemes");
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              navigateTo("schemes");
             }}
             onOpenAssistant={() => setIsAssistantOpen(true)}
             onSearch={handleSearch}
@@ -203,17 +337,14 @@ const MainContent: React.FC = () => {
           if (prefillProfile) {
             setWizardInitialProfile(prefillProfile);
           }
-          setCurrentView("wizard");
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          navigateTo("wizard");
         }}
         onExploreSchemes={() => {
-          setCurrentView("schemes");
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          navigateTo("schemes");
         }}
         onViewSchemeDetail={handleOpenSchemeDetail}
         onLocateCsc={() => {
-          setCurrentView("csc");
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          navigateTo("csc");
         }}
       />
 
