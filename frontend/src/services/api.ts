@@ -66,6 +66,20 @@ export const api = {
     return res.json();
   },
 
+  /** Fetch all Indian states and UTs */
+  async getStates(): Promise<{ total_states: number; states: Array<{ name: string; has_state_schemes: boolean }> }> {
+    const res = await fetch(`${API_BASE_URL}/metadata/states`);
+    if (!res.ok) throw new Error("Failed to fetch states metadata");
+    return res.json();
+  },
+
+  /** Fetch standard occupations list */
+  async getOccupations(): Promise<{ total_occupations: number; occupations: Array<{ id: string; name_en: string; name_hi: string; icon: string }> }> {
+    const res = await fetch(`${API_BASE_URL}/metadata/occupations`);
+    if (!res.ok) throw new Error("Failed to fetch occupations metadata");
+    return res.json();
+  },
+
   /** Run deterministic eligibility evaluation */
   async checkEligibility(
     profile: CitizenProfile,

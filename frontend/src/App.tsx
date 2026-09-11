@@ -6,6 +6,7 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { CategoryGrid } from "@/components/home/CategoryGrid";
 import { TrendingSchemes } from "@/components/home/TrendingSchemes";
 import { HowItWorks } from "@/components/home/HowItWorks";
+import { WizardContainer } from "@/components/wizard/WizardContainer";
 import { SchemeCard } from "@/components/schemes/SchemeCard";
 import { DocumentChecklist } from "@/components/schemes/DocumentChecklist";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -112,28 +113,48 @@ const MainContent: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-200">
       <Header currentView={currentView} onNavigate={setCurrentView} />
 
-      {/* Step 33 & 34: Hero Section with OmniSearchBar */}
-      <HeroSection
-        onStartWizard={() => setCurrentView("wizard")}
-        onExploreSchemes={() => setCurrentView("schemes")}
-        onOpenAssistant={() => setIsAssistantOpen(true)}
-        onSearch={handleSearch}
-        onSelectScheme={handleSelectScheme}
-      />
+      {currentView === "wizard" ? (
+        <main className="flex-1 py-8 bg-muted/20">
+          <WizardContainer
+            onSubmit={async (profile) => {
+              try {
+                const evalRes = await api.checkEligibility(profile);
+                alert(
+                  isHindi
+                    ? `सफलता! गणितीय नियम इंजन के अनुसार आप ${evalRes.eligible_count} योजनाओं के पात्र हैं!`
+                    : `Success! You qualify for ${evalRes.eligible_count} schemes based on deterministic rules!`
+                );
+              } catch (err) {
+                console.error("Evaluation failed", err);
+              }
+            }}
+            onCancel={() => setCurrentView("home")}
+          />
+        </main>
+      ) : (
+        <>
+          {/* Step 33 & 34: Hero Section with OmniSearchBar */}
+          <HeroSection
+            onStartWizard={() => setCurrentView("wizard")}
+            onExploreSchemes={() => setCurrentView("schemes")}
+            onOpenAssistant={() => setIsAssistantOpen(true)}
+            onSearch={handleSearch}
+            onSelectScheme={handleSelectScheme}
+          />
 
-      {/* Step 35: 8 Welfare Categories Grid */}
-      <CategoryGrid onSelectCategory={handleSelectCategory} />
+          {/* Step 35: 8 Welfare Categories Grid */}
+          <CategoryGrid onSelectCategory={handleSelectCategory} />
 
-      {/* Step 36: Trending & Flagship Schemes Showcase */}
-      <TrendingSchemes
-        onViewDetails={handleSelectScheme}
-        onExploreAll={() => setCurrentView("schemes")}
-      />
+          {/* Step 36: Trending & Flagship Schemes Showcase */}
+          <TrendingSchemes
+            onViewDetails={handleSelectScheme}
+            onExploreAll={() => setCurrentView("schemes")}
+          />
 
-      {/* Step 37: Visual 3-Step "How YojanaSetu Works" Explainer */}
-      <HowItWorks onStartWizard={() => setCurrentView("wizard")} />
+          {/* Step 37: Visual 3-Step "How YojanaSetu Works" Explainer */}
+          <HowItWorks onStartWizard={() => setCurrentView("wizard")} />
 
-      <main className="flex-1 container mx-auto px-4 sm:px-8 py-12 max-w-6xl">
+          <main className="flex-1 container mx-auto px-4 sm:px-8 py-12 max-w-6xl">
         {/* Step 31 & 32 Showcase Grid */}
         <div className="mb-12">
           <div className="flex items-center space-x-2 mb-6">
@@ -270,6 +291,8 @@ const MainContent: React.FC = () => {
           </Accordion>
         </div>
       </main>
+    </>
+  )}
 
       {/* Quick Scheme Preview Modal */}
       <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
