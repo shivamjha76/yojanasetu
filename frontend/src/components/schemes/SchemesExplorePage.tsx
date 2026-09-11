@@ -3,6 +3,7 @@ import { useApp } from "@/context/AppContext";
 import { Scheme } from "@/types/schema";
 import { api } from "@/services/api";
 import { SchemeCard } from "./SchemeCard";
+import { SchemeIngestModal } from "./SchemeIngestModal";
 import {
   Search,
   LayoutGrid,
@@ -16,6 +17,7 @@ import {
   MoreHorizontal,
   ChevronDown,
   RotateCcw,
+  Plus,
 } from "lucide-react";
 
 interface SchemesExplorePageProps {
@@ -46,6 +48,7 @@ export const SchemesExplorePage: React.FC<SchemesExplorePageProps> = ({
   const [submittedSearch, setSubmittedSearch] = useState<string>(initialSearch);
   const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
   const [sortBy, setSortBy] = useState<"relevant" | "alpha">("relevant");
+  const [isIngestModalOpen, setIsIngestModalOpen] = useState<boolean>(false);
 
   // Category sidebar definitions matching reference mockup
   const SIDEBAR_CATEGORIES: SidebarCategory[] = [
@@ -318,6 +321,17 @@ export const SchemesExplorePage: React.FC<SchemesExplorePageProps> = ({
                   </select>
                   <ChevronDown className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
+
+                {/* Ingest Scheme Prose Button */}
+                <button
+                  type="button"
+                  onClick={() => setIsIngestModalOpen(true)}
+                  className="flex items-center space-x-1.5 px-3.5 py-2.5 rounded-2xl bg-emerald-50 text-[#165D51] hover:bg-emerald-100 border border-emerald-200/70 text-xs sm:text-sm font-bold shadow-2xs transition-colors cursor-pointer"
+                  title={isHindi ? "सरकारी गैजेट / गद्य से नई योजना जोड़ें" : "Ingest raw government prose into rules"}
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>{isHindi ? "गैजेट से जोड़ें" : "Ingest Gazette"}</span>
+                </button>
               </div>
 
             </div>
@@ -378,6 +392,16 @@ export const SchemesExplorePage: React.FC<SchemesExplorePageProps> = ({
         </div>
 
       </div>
+
+      {/* Scheme Prose Ingestion Modal */}
+      <SchemeIngestModal
+        isOpen={isIngestModalOpen}
+        onClose={() => setIsIngestModalOpen(false)}
+        onSchemeAdded={(newScheme) => {
+          setSchemes((prev) => [newScheme, ...prev]);
+          setIsIngestModalOpen(false);
+        }}
+      />
     </div>
   );
 };
