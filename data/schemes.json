@@ -1,0 +1,410 @@
+[
+  {
+    "id": "pm-kisan",
+    "name_hi": "प्रधानमंत्री किसान सम्मान निधि (PM-KISAN)",
+    "name_en": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+    "short_summary_hi": "देश के सभी भूमिधारक किसान परिवारों को ₹6,000 प्रति वर्ष की सीधी आर्थिक सहायता।",
+    "short_summary_en": "Direct income support of ₹6,000 per year in 3 equal installments to landholding farmer families.",
+    "detailed_description_hi": "प्रधानमंत्री किसान सम्मान निधि योजना भारत सरकार की एक प्रमुख योजना है जिसके तहत पात्र किसान परिवारों को प्रति वर्ष ₹6,000 की वित्तीय सहायता ₹2,000 की तीन समान किस्तों में सीधे उनके बैंक खातों (DBT) में भेजी जाती है। इसका उद्देश्य किसानों को बीज, खाद व घरेलू जरूरतों के लिए सहायता देना है।",
+    "detailed_description_en": "PM-KISAN is a Central Sector Scheme providing financial assistance of ₹6,000 per year to eligible landholding farmers, payable in three equal four-monthly installments directly into their bank accounts via Direct Benefit Transfer (DBT).",
+    "ministry": "कृषि एवं किसान कल्याण मंत्रालय (Ministry of Agriculture & Farmers Welfare)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "agriculture",
+    "benefit_amount_text": "₹6,000 प्रति वर्ष (₹2,000 की 3 किस्तें)",
+    "benefit_type": "direct_benefit_transfer",
+    "official_portal_url": "https://pmkisan.gov.in/",
+    "rules": [
+      {
+        "field": "occupation",
+        "operator": "==",
+        "value": "farmer",
+        "description_hi": "आवेदक का पेशा किसान होना चाहिए",
+        "description_en": "Applicant must be a farmer"
+      },
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "description_hi": "आयु 18 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Age must be 18 years or above"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड (बैंक खाते से लिंक)",
+        "name_en": "Aadhaar Card (Linked with Bank)",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": "https://myaadhaar.uidai.gov.in/"
+      },
+      {
+        "id": "land_record",
+        "name_hi": "जमीन के कागजात (खसरा/खतौनी)",
+        "name_en": "Land Ownership Record (Khatauni/Khasra)",
+        "is_mandatory": true,
+        "issuing_authority": "राज्य राजस्व विभाग (State Revenue Dept)",
+        "how_to_get_url": "https://bhulekh.gov.in/"
+      },
+      {
+        "id": "bank_passbook",
+        "name_hi": "बैंक पासबुक (Aadhaar & NPCI Seeding जरूरी)",
+        "name_en": "Bank Account Passbook (NPCI Seeded)",
+        "is_mandatory": true,
+        "issuing_authority": "संबंधित बैंक शाखा",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. आधिकारिक पोर्टल pmkisan.gov.in पर जाएं।",
+      "2. 'Farmers Corner' में 'New Farmer Registration' पर क्लिक करें।",
+      "3. अपना आधार नंबर, मोबाइल नंबर दर्ज करें और राज्य का चयन करें।",
+      "4. जमीन की खतौनी का विवरण दर्ज करें और दस्तावेज अपलोड करें।",
+      "5. सबमिट करने के बाद नजदीकी सीएससी या पटवारी/लेखपाल से सत्यापन करवाएं।"
+    ],
+    "application_steps_en": [
+      "1. Visit the official portal at pmkisan.gov.in.",
+      "2. Click on 'New Farmer Registration' in the Farmers Corner.",
+      "3. Enter your Aadhaar number, mobile number, and select your state.",
+      "4. Fill in your land record details and upload necessary documents.",
+      "5. Submit and get verification from your local Patwari/Lekhpal or CSC center."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या e-KYC करवाना अनिवार्य है?",
+        "question_en": "Is e-KYC mandatory for PM-KISAN?",
+        "answer_hi": "हाँ, सभी पंजीकृत किसानों के लिए OTP या बायोमेट्रिक आधारित e-KYC करवाना अनिवार्य है।",
+        "answer_en": "Yes, e-KYC is strictly mandatory for all registered farmers to receive subsequent installments."
+      },
+      {
+        "question_hi": "क्या सरकारी नौकरी वाले किसान इसके लिए पात्र हैं?",
+        "question_en": "Are institutional landholders or govt employees eligible?",
+        "answer_hi": "नहीं, संवैधानिक पद धारक, सरकारी कर्मचारी या ₹10,000 से अधिक मासिक पेंशन पाने वाले अपात्र हैं।",
+        "answer_en": "No, constitutional post holders, govt employees, or pensioners drawing over ₹10,000/month are excluded."
+      }
+    ]
+  },
+  {
+    "id": "ayushman-bharat-pmjay",
+    "name_hi": "आयुष्मान भारत - प्रधानमंत्री जन आरोग्य योजना (AB-PMJAY)",
+    "name_en": "Ayushman Bharat - Pradhan Mantri Jan Arogya Yojana (AB-PMJAY)",
+    "short_summary_hi": "गरीब और वंचित परिवारों को प्रति वर्ष ₹5,00,000 तक का मुफ्त कैशलेस इलाज।",
+    "short_summary_en": "Free cashless health insurance coverage up to ₹5,00,000 per family per year for secondary & tertiary hospitalization.",
+    "detailed_description_hi": "आयुष्मान भारत योजना दुनिया की सबसे बड़ी सरकारी वित्तपोषित स्वास्थ्य बीमा योजना है। यह देश के 12 करोड़ से अधिक गरीब और कमजोर परिवारों (लगभग 55 करोड़ नागरिकों) को सूचीबद्ध सरकारी और निजी अस्पतालों में प्रति परिवार प्रति वर्ष ₹5 लाख तक का कैशलेस इलाज प्रदान करती है।",
+    "detailed_description_en": "Ayushman Bharat PM-JAY provides health coverage of up to ₹5 lakh per family per year for secondary and tertiary care hospitalization to over 12 crore vulnerable and low-income families across empanelled hospitals.",
+    "ministry": "स्वास्थ्य एवं परिवार कल्याण मंत्रालय (Ministry of Health and Family Welfare)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "healthcare",
+    "benefit_amount_text": "₹5,00,000 / वर्ष मुफ्त इलाज",
+    "benefit_type": "health_insurance",
+    "official_portal_url": "https://pmjay.gov.in/",
+    "rules": [
+      {
+        "field": "annual_income",
+        "operator": "<=",
+        "value": 250000,
+        "description_hi": "वार्षिक पारिवारिक आय ₹2.5 लाख या उससे कम होनी चाहिए",
+        "description_en": "Annual family income must be ₹2.5 Lakhs or less"
+      },
+      {
+        "field": "ration_card_type",
+        "operator": "IN",
+        "value": ["bpl", "antyodaya"],
+        "description_hi": "परिवार के पास BPL या अंत्योदय राशन कार्ड होना चाहिए",
+        "description_en": "Family must hold BPL or Antyodaya ration card"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड",
+        "name_en": "Aadhaar Card",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": "https://myaadhaar.uidai.gov.in/"
+      },
+      {
+        "id": "ration_card",
+        "name_hi": "राशन कार्ड (BPL / अंत्योदय / SECC पात्रता)",
+        "name_en": "Ration Card (BPL / Antyodaya / SECC)",
+        "is_mandatory": true,
+        "issuing_authority": "राज्य खाद्य एवं आपूर्ति विभाग",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. आधिकारिक पोर्टल beneficiary.nha.gov.in पर जाएं।",
+      "2. 'Am I Eligible' पर क्लिक करें और अपना मोबाइल नंबर व ओटीपी दर्ज करें।",
+      "3. अपना राज्य चुनें और राशन कार्ड नंबर या आधार से पात्रता खोजें।",
+      "4. नाम मिलने पर ई-केवाईसी पूरी करें और आयुष्मान कार्ड डाउनलोड करें।",
+      "5. किसी भी सूचीबद्ध अस्पताल में जाकर कार्ड दिखाकर मुफ्त इलाज पाएं।"
+    ],
+    "application_steps_en": [
+      "1. Visit the beneficiary portal at beneficiary.nha.gov.in.",
+      "2. Click on 'Am I Eligible' and enter your mobile number and OTP.",
+      "3. Select your state and search using your Ration card or Aadhaar number.",
+      "4. Complete e-KYC and download your Ayushman Golden Card.",
+      "5. Present your card at any empanelled hospital for cashless treatment."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या इसमें पहले से मौजूद बीमारियों का इलाज भी कवर होता है?",
+        "question_en": "Are pre-existing diseases covered from day one?",
+        "answer_hi": "हाँ, पहले से मौजूद सभी बीमारियों का इलाज पहले दिन से ही कवर होता है।",
+        "answer_en": "Yes, all pre-existing conditions are covered from day one of enrollment."
+      }
+    ]
+  },
+  {
+    "id": "pm-mudra-yojana",
+    "name_hi": "प्रधानमंत्री मुद्रा योजना (PMMY)",
+    "name_en": "Pradhan Mantri MUDRA Yojana (PMMY)",
+    "short_summary_hi": "गैर-कॉर्पोरेट और छोटे व्यवसायों को ₹50,000 से ₹10,00,000 तक का बिना गारंटी लोन।",
+    "short_summary_en": "Collateral-free business loans up to ₹10 Lakhs across Shishu, Kishore, and Tarun categories.",
+    "detailed_description_hi": "प्रधानमंत्री मुद्रा योजना (PMMY) सूक्ष्म और छोटे व्यवसायों, दुकानदारों, दस्तकारों और नए उद्यमियों को बिना किसी गारंटी (Collateral-Free) के लोन उपलब्ध कराती है। इसके तहत तीन श्रेणियां हैं: शिशु (₹50,000 तक), किशोर (₹50,000 से ₹5 लाख तक) और तरुण (₹5 लाख से ₹10 लाख तक)।",
+    "detailed_description_en": "PMMY provides collateral-free loans to micro and small enterprises for income-generating activities in manufacturing, processing, trading, or services. Structured in 3 tiers: Shishu (up to ₹50k), Kishore (₹50k to ₹5L), and Tarun (₹5L to ₹10L).",
+    "ministry": "वित्त मंत्रालय (Ministry of Finance)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "business_msme_loans",
+    "benefit_amount_text": "₹50,000 से ₹10,00,000 तक बिना गारंटी लोन",
+    "benefit_type": "loan_subsidy",
+    "official_portal_url": "https://www.mudra.org.in/",
+    "rules": [
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "description_hi": "आवेदक की आयु 18 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Applicant must be at least 18 years old"
+      },
+      {
+        "field": "occupation",
+        "operator": "IN",
+        "value": ["business_self_employed", "unemployed", "artisan_craftsperson", "employed_private", "other"],
+        "description_hi": "आवेदक छोटा व्यापारी, स्वरोजगारी, कारीगर या नया व्यवसाय शुरू करने वाला होना चाहिए",
+        "description_en": "Applicant must be a micro-entrepreneur, artisan, or self-employed individual"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "पहचान प्रमाण (आधार कार्ड / वोटर आईडी)",
+        "name_en": "Identity Proof (Aadhaar / Voter ID)",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI / ECI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "address_proof",
+        "name_hi": "निवास प्रमाण पत्र / बिजली बिल",
+        "name_en": "Address Proof / Utility Bill",
+        "is_mandatory": true,
+        "issuing_authority": "संबंधित विभाग",
+        "how_to_get_url": null
+      },
+      {
+        "id": "business_proof",
+        "name_hi": "व्यवसाय का विवरण / प्रोजेक्ट रिपोर्ट / रजिस्ट्रेशन",
+        "name_en": "Business Proof / Quotation / Project Report",
+        "is_mandatory": true,
+        "issuing_authority": "उद्यम आधार या संबंधित स्थानीय संस्था",
+        "how_to_get_url": "https://udyamregistration.gov.in/"
+      },
+      {
+        "id": "bank_statement",
+        "name_hi": "पिछले 6 महीने का बैंक स्टेटमेंट",
+        "name_en": "Last 6 Months Bank Statement",
+        "is_mandatory": true,
+        "issuing_authority": "बैंक शाखा",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. अपने नजदीकी बैंक शाखा, ग्रामीण बैंक या NBFC में संपर्क करें या udyamimitra.in पर ऑनलाइन आवेदन करें।",
+      "2. मुद्रा लोन आवेदन फॉर्म (शिशु, किशोर या तरुण) भरें।",
+      "3. अपने व्यवसाय की योजना (कोटेशन/प्रोजेक्ट रिपोर्ट) और जरूरी कागजात संलग्न करें।",
+      "4. बैंक द्वारा सत्यापन के बाद लोन राशि आपके खाते में स्वीकृत कर दी जाती है।"
+    ],
+    "application_steps_en": [
+      "1. Apply online via udyamimitra.in or visit any commercial bank, RRB, or MFI.",
+      "2. Fill out the MUDRA application form corresponding to your category.",
+      "3. Submit business quotations, KYC documents, and project details.",
+      "4. After bank appraisal, the loan is disbursed with a MUDRA Debit Card."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या मुद्रा लोन के लिए किसी गारंटी या गिरवी की जरूरत होती है?",
+        "question_en": "Is collateral security required for MUDRA loans?",
+        "answer_hi": "नहीं, मुद्रा योजना के तहत किसी भी संपत्ति या गारंटी की आवश्यकता नहीं होती है।",
+        "answer_en": "No, MUDRA loans do not require any collateral security or third-party guarantee."
+      }
+    ]
+  },
+  {
+    "id": "sukanya-samriddhi-yojana",
+    "name_hi": "सुकन्या समृद्धि योजना (SSY)",
+    "name_en": "Sukanya Samriddhi Yojana (SSY)",
+    "short_summary_hi": "बेटियों के उच्च शिक्षा और विवाह के लिए 8.2% ब्याज दर और 100% टैक्स छूट वाली बचत योजना।",
+    "short_summary_en": "Small savings scheme for girl child offering 8.2% interest and complete tax exemption under 80C.",
+    "detailed_description_hi": "सुकन्या समृद्धि योजना 'बेटी बचाओ, बेटी पढ़ाओ' अभियान के अंतर्गत बालिकाओं के भविष्य को सुरक्षित करने के लिए शुरू की गई एक सरकारी बचत योजना है। इसमें 10 वर्ष से कम आयु की बेटी के नाम पर न्यूनतम ₹250 से खाता खोला जा सकता है। यह योजना 8.2% की उच्चतम ब्याज दर और EEE (Exempt-Exempt-Exempt) टैक्स छूट प्रदान करती है।",
+    "detailed_description_en": "A Government of India-backed savings scheme targeted at parents of girl children under 10 years of age. It offers an attractive 8.2% sovereign interest rate with triple tax benefits (EEE status) under Section 80C.",
+    "ministry": "महिला एवं बाल विकास मंत्रालय / वित्त मंत्रालय",
+    "level": "central",
+    "applicable_state": null,
+    "category": "women_child",
+    "benefit_amount_text": "8.2% वार्षिक ब्याज + 100% टैक्स छूट",
+    "benefit_type": "direct_benefit_transfer",
+    "official_portal_url": "https://www.indiapost.gov.in/",
+    "rules": [
+      {
+        "field": "gender",
+        "operator": "IN",
+        "value": ["female", "all"],
+        "description_hi": "योजना केवल बालिकाओं (लड़कियों) के नाम पर लागू है",
+        "description_en": "Scheme is specifically for female child beneficiaries"
+      },
+      {
+        "field": "age",
+        "operator": "<=",
+        "value": 10,
+        "description_hi": "बालिका की आयु 10 वर्ष से कम होनी चाहिए (या परिवार में 10 वर्ष से कम की बेटी हो)",
+        "description_en": "Girl child age must be 10 years or younger at account opening"
+      }
+    ],
+    "documents": [
+      {
+        "id": "birth_certificate",
+        "name_hi": "बालिका का जन्म प्रमाण पत्र (Birth Certificate)",
+        "name_en": "Girl Child Birth Certificate",
+        "is_mandatory": true,
+        "issuing_authority": "नगर निगम / रजिस्ट्रार",
+        "how_to_get_url": null
+      },
+      {
+        "id": "guardian_aadhaar",
+        "name_hi": "माता-पिता या अभिभावक का आधार कार्ड व पैन कार्ड",
+        "name_en": "Parent / Guardian Aadhaar & PAN Card",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI / Income Tax Dept",
+        "how_to_get_url": null
+      },
+      {
+        "id": "photograph",
+        "name_hi": "बालिका और अभिभावक की पासपोर्ट साइज फोटो",
+        "name_en": "Passport Size Photographs",
+        "is_mandatory": true,
+        "issuing_authority": "स्वयं",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. नजदीकी डाकघर (Post Office) या किसी भी अधिकृत बैंक शाखा में जाएं।",
+      "2. सुकन्या समृद्धि योजना (SSY) खाता खोलने का फॉर्म भरें।",
+      "3. बेटी का जन्म प्रमाण पत्र और अभिभावक का आधार कार्ड संलग्न करें।",
+      "4. न्यूनतम ₹250 की प्रारंभिक राशि जमा करें और पासबुक प्राप्त करें।"
+    ],
+    "application_steps_en": [
+      "1. Visit the nearest India Post office or authorized public/private commercial bank.",
+      "2. Fill out the SSY account opening form.",
+      "3. Attach girl child birth certificate and parent/guardian KYC documents.",
+      "4. Deposit initial opening amount (minimum ₹250) and collect passbook."
+    ],
+    "faqs": [
+      {
+        "question_hi": "एक परिवार में कितनी बेटियों के खाते खोले जा सकते हैं?",
+        "question_en": "How many accounts can be opened per family?",
+        "answer_hi": "एक परिवार में अधिकतम दो बेटियों के खाते खोले जा सकते हैं (जुड़वां के मामले में तीन)।",
+        "answer_en": "Maximum of two accounts per family (or three in case of twin girls as second birth)."
+      }
+    ]
+  },
+  {
+    "id": "pm-awas-yojana-urban-gramin",
+    "name_hi": "प्रधानमंत्री आवास योजना (PMAY)",
+    "name_en": "Pradhan Mantri Awas Yojana (PMAY)",
+    "short_summary_hi": "बेघर एवं कच्चे मकानों में रहने वाले परिवारों को पक्का मकान बनाने के लिए ₹1.20 लाख से ₹2.5 लाख तक की आर्थिक सहायता।",
+    "short_summary_en": "Financial assistance of ₹1.20 Lakh to ₹2.5 Lakh to homeless and kutcha house dwellers to construct a pucca house.",
+    "detailed_description_hi": "प्रधानमंत्री आवास योजना भारत सरकार की एक महत्वाकांक्षी पहल है जिसका उद्देश्य सभी पात्र बेघर और कच्चे घरों में रहने वाले ग्रामीण व शहरी परिवारों को बुनियादी सुविधाओं (शौचालय, बिजली, पानी) से युक्त पक्के मकान उपलब्ध कराना है। ग्रामीण क्षेत्रों में ₹1.20 लाख (मैदानी) और ₹1.30 लाख (पहाड़ी) तथा शहरी क्षेत्रों में ब्याज सब्सिडी (CLSS) प्रदान की जाती है।",
+    "detailed_description_en": "PMAY aims to provide housing for all by assisting eligible rural (PMAY-G) and urban (PMAY-U) families without a pucca house with direct financial grants and credit-linked interest subsidies.",
+    "ministry": "आवासन और शहरी कार्य मंत्रालय / ग्रामीण विकास मंत्रालय",
+    "level": "central",
+    "applicable_state": null,
+    "category": "housing_urban",
+    "benefit_amount_text": "₹1,20,000 से ₹2,50,000 पक्का मकान सहायता",
+    "benefit_type": "housing_grant",
+    "official_portal_url": "https://pmaymis.gov.in/",
+    "rules": [
+      {
+        "field": "annual_income",
+        "operator": "<=",
+        "value": 300000,
+        "description_hi": "वार्षिक पारिवारिक आय EWS श्रेणी (₹3 लाख तक) के अंतर्गत होनी चाहिए",
+        "description_en": "Annual family income must be within EWS bracket (up to ₹3 Lakhs)"
+      },
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "description_hi": "परिवार का मुखिया 18 वर्ष या उससे अधिक आयु का होना चाहिए",
+        "description_en": "Head of household must be 18 years or older"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड (परिवार के सभी सदस्यों का)",
+        "name_en": "Aadhaar Cards of all household members",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "income_certificate",
+        "name_hi": "आय प्रमाण पत्र",
+        "name_en": "Income Certificate",
+        "is_mandatory": true,
+        "issuing_authority": "तहसीलदार / राजस्व अधिकारी",
+        "how_to_get_url": null
+      },
+      {
+        "id": "bank_passbook",
+        "name_hi": "बैंक पासबुक (DBT सक्रिय)",
+        "name_en": "Bank Account Passbook (DBT active)",
+        "is_mandatory": true,
+        "issuing_authority": "बैंक शाखा",
+        "how_to_get_url": null
+      },
+      {
+        "id": "no_pucca_house_affidavit",
+        "name_hi": "पक्का मकान न होने का शपथ पत्र",
+        "name_en": "Affidavit confirming no pucca house ownership in India",
+        "is_mandatory": true,
+        "issuing_authority": "नोटरी / शपथ आयुक्त",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. ग्रामीण क्षेत्रों में ग्राम पंचायत/सचिव के माध्यम से Awaas+ सूची में नाम पंजीकृत करवाएं।",
+      "2. शहरी क्षेत्रों में pmaymis.gov.in पर जाएं या नजदीकी सीएससी (CSC) केंद्र पर आवेदन करें।",
+      "3. अपना आधार विवरण और परिवार के सदस्यों की जानकारी भरें।",
+      "4. सत्यापन (Geo-tagging) के बाद मकान निर्माण के चरणों के अनुसार किस्तें खाते में प्राप्त होती हैं।"
+    ],
+    "application_steps_en": [
+      "1. In rural areas, register via Gram Panchayat Awaas+ survey list.",
+      "2. In urban areas, apply online at pmaymis.gov.in or through the nearest CSC center.",
+      "3. Submit family Aadhaar details, income certificate, and bank information.",
+      "4. After geo-tagging inspection, grant installments are transferred in phases."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या जिनके पास पहले से पक्का मकान है वे आवेदन कर सकते हैं?",
+        "question_en": "Can someone who already owns a pucca house apply?",
+        "answer_hi": "नहीं, परिवार के किसी भी सदस्य के नाम पर देश में कहीं भी पक्का मकान नहीं होना चाहिए।",
+        "answer_en": "No, the beneficiary family should not own a pucca house anywhere in India."
+      }
+    ]
+  }
+]
