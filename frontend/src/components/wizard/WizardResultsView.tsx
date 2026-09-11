@@ -185,7 +185,7 @@ export const WizardResultsView: React.FC<WizardResultsViewProps> = ({
       badge: index === 0 ? "Top Match" : undefined,
       ministryDisplay: isHindi ? "भारत सरकार" : "Government of India",
       summary: isHindi ? scheme.scheme_name_hi : scheme.scheme_name_en,
-      tags: [scheme.category.replace("_", " "), "Direct Support"],
+      tags: [scheme.category.replace(/_/g, " "), "Direct Support"],
       benefitLabel: isHindi ? "सरकारी लाभ" : "Government Benefit",
       benefitAmount: scheme.benefit_amount_text || "As per norms",
     };
@@ -821,7 +821,7 @@ export const WizardResultsView: React.FC<WizardResultsViewProps> = ({
             </button>
           </div>
 
-          {/* Card 3: "Have a question?" Chat with Sarathi */}
+          {/* Card 3: "Have a question?" Chat with Setu Sahayak */}
           <div className="rounded-3xl bg-[#F0F6FE] border border-[#D9E8FC] p-6 text-left">
             <div className="w-9 h-9 rounded-full bg-[#2563EB] text-white flex items-center justify-center font-bold text-sm shadow-2xs">
               <HelpCircle className="w-5 h-5" />
@@ -832,8 +832,8 @@ export const WizardResultsView: React.FC<WizardResultsViewProps> = ({
             </h4>
             <p className="text-xs text-gray-600 mt-1 leading-relaxed">
               {isHindi
-                ? "किसी भी योजना के बारे में अधिक जानकारी के लिए सारथी से पूछें।"
-                : "Ask Sarathi for more information about any scheme."}
+                ? "किसी भी योजना के बारे में अधिक जानकारी के लिए सेतु सहायक से पूछें।"
+                : "Ask Setu Sahayak for more information about any scheme."}
             </p>
 
             <button
@@ -841,7 +841,7 @@ export const WizardResultsView: React.FC<WizardResultsViewProps> = ({
               onClick={() => setIsAssistantOpen(true)}
               className="w-full mt-4 py-2.5 px-4 rounded-xl bg-white hover:bg-blue-50/50 border border-[#2563EB]/40 text-[#2563EB] font-semibold text-xs shadow-2xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
             >
-              <span>{isHindi ? "सारथी से बात करें" : "Chat with Sarathi"}</span>
+              <span>{isHindi ? "सेतु सहायक से बात करें" : "Chat with Setu Sahayak"}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>

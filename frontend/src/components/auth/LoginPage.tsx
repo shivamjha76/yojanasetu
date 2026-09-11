@@ -93,7 +93,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
           <div className="flex justify-center select-none">
             <img
               src="/images/logo_exact_transparent.png"
-              alt="Scheme Sarathi"
+              alt="YojanaSetu"
               className="h-10 w-auto object-contain"
             />
           </div>

@@ -22,6 +22,7 @@ interface SchemesExplorePageProps {
   onSelectScheme?: (schemeId: string) => void;
   onStartWizard?: () => void;
   initialCategory?: string;
+  initialSearch?: string;
 }
 
 interface SidebarCategory {
@@ -34,14 +35,15 @@ interface SidebarCategory {
 export const SchemesExplorePage: React.FC<SchemesExplorePageProps> = ({
   onSelectScheme = () => {},
   initialCategory = "all",
+  initialSearch = "",
 }) => {
   const { language } = useApp();
   const isHindi = language === "hi";
 
   const [schemes, setSchemes] = useState<Scheme[]>([]);
   const [, setIsLoading] = useState<boolean>(true);
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [submittedSearch, setSubmittedSearch] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>(initialSearch);
+  const [submittedSearch, setSubmittedSearch] = useState<string>(initialSearch);
   const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
   const [sortBy, setSortBy] = useState<"relevant" | "alpha">("relevant");
 
@@ -120,6 +122,30 @@ export const SchemesExplorePage: React.FC<SchemesExplorePageProps> = ({
     }
     loadSchemes();
   }, []);
+
+  // Sync category filter and search query when incoming props change
+  useEffect(() => {
+    if (initialCategory) {
+      const categoryMapping: Record<string, string> = {
+        agriculture: "agriculture",
+        education_scholarships: "education",
+        healthcare: "health",
+        women_child: "women_child",
+        housing_urban: "housing",
+        business_msme_loans: "others",
+        skills_employment: "employment",
+        social_security_pensions: "social_security",
+      };
+      setSelectedCategory(categoryMapping[initialCategory] || initialCategory);
+    }
+  }, [initialCategory]);
+
+  useEffect(() => {
+    if (initialSearch !== undefined) {
+      setSearchQuery(initialSearch);
+      setSubmittedSearch(initialSearch);
+    }
+  }, [initialSearch]);
 
   // Filter schemes based on sidebar category & search
   const filteredSchemes = useMemo(() => {

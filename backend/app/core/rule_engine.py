@@ -59,6 +59,12 @@ def evaluate_single_rule(profile: CitizenProfile, rule: Rule) -> Tuple[bool, Any
         elif operator == "<=":
             matched = float(norm_user) <= float(norm_target)
             cond = f"<= {target_val}"
+        elif operator == ">":
+            matched = float(norm_user) > float(norm_target)
+            cond = f"> {target_val}"
+        elif operator == "<":
+            matched = float(norm_user) < float(norm_target)
+            cond = f"< {target_val}"
         elif operator == "==":
             matched = norm_user == norm_target
             cond = f"== {target_val}"

@@ -1,6 +1,7 @@
 import React from "react";
 import { useApp } from "@/context/AppContext";
 import { ArrowRight } from "lucide-react";
+import { OmniSearchBar } from "./OmniSearchBar";
 
 interface HeroSectionProps {
   onStartWizard?: () => void;
@@ -12,6 +13,10 @@ interface HeroSectionProps {
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onStartWizard = () => {},
+  onExploreSchemes = () => {},
+  onOpenAssistant = () => {},
+  onSearch = () => {},
+  onSelectScheme = () => {},
 }) => {
   const { language } = useApp();
   const isHindi = language === "hi";
@@ -57,19 +62,28 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             {/* Subtitle Paragraph */}
             <p className="text-[15px] sm:text-base text-[#525B64] leading-relaxed max-w-md font-normal">
               {isHindi
-                ? "बस अपने बारे में थोड़ा बताएं। Scheme Sarathi आपको उन सभी योजनाओं को खोजने में मदद करता है जिनके आप पात्र हैं और आगे के चरणों में आपका मार्गदर्शन करता है।"
-                : "Just tell us about yourself. Scheme Sarathi helps you find the schemes you may qualify for and guide you on the next steps."}
+                ? "बस अपने बारे में थोड़ा बताएं। योजनासेतु (YojanaSetu) आपको उन सभी योजनाओं को खोजने में मदद करता है जिनके आप पात्र हैं और आगे के चरणों में आपका मार्गदर्शन करता है।"
+                : "Just tell us about yourself. YojanaSetu helps you find the schemes you may qualify for and guide you on the next steps."}
             </p>
 
-            {/* Primary Action Button */}
+            {/* Primary & Secondary Action Buttons */}
             <div className="pt-2 space-y-3">
-              <button
-                onClick={onStartWizard}
-                className="bg-[#1D5F49] hover:bg-[#174E3C] text-white px-7 py-3 rounded-xl font-semibold text-[15px] shadow-sm hover:shadow-md transition-all duration-200 inline-flex items-center space-x-2 active:scale-95 group cursor-pointer"
-              >
-                <span>{isHindi ? "शुरू करें" : "Get Started"}</span>
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </button>
+              <div className="flex flex-wrap items-center gap-3">
+                <button
+                  onClick={onStartWizard}
+                  className="bg-[#1D5F49] hover:bg-[#174E3C] text-white px-7 py-3 rounded-xl font-semibold text-[15px] shadow-sm hover:shadow-md transition-all duration-200 inline-flex items-center space-x-2 active:scale-95 group cursor-pointer"
+                >
+                  <span>{isHindi ? "शुरू करें" : "Get Started"}</span>
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </button>
+
+                <button
+                  onClick={onExploreSchemes}
+                  className="border border-[#CBD5E1] hover:border-[#1D5F49]/40 hover:bg-muted/40 text-[#334155] px-5 py-3 rounded-xl font-medium text-[15px] transition-all duration-200 inline-flex items-center space-x-2 cursor-pointer"
+                >
+                  <span>{isHindi ? "योजनाएं देखें" : "Explore Schemes"}</span>
+                </button>
+              </div>
 
               <div className="text-xs sm:text-[13px] text-[#737C85] font-normal">
                 {isHindi
@@ -90,11 +104,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             >
               <img
                 src="/images/hero_visual_transparent.png"
-                alt="Scheme Sarathi Citizen Assistant finding welfare schemes"
+                alt="YojanaSetu Citizen Assistant finding welfare schemes"
                 className="w-full h-auto object-contain drop-shadow-xs"
               />
             </div>
           </div>
+        </div>
+
+        {/* ======================================================== */}
+        {/* OMNI SEARCH BAR (Live Search, Voice Input, Trending Tags)*/}
+        {/* ======================================================== */}
+        <div className="mt-8 sm:mt-12 max-w-2xl mx-auto">
+          <OmniSearchBar
+            onSearch={onSearch}
+            onSelectScheme={onSelectScheme}
+            onVoiceClick={onOpenAssistant}
+          />
         </div>
 
         {/* ======================================================== */}

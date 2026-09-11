@@ -85,7 +85,7 @@ export const Footer: React.FC = () => {
             <div className="flex items-center select-none">
               <img
                 src="/images/logo_exact_transparent.png"
-                alt="Scheme Sarathi - Government Benefits, Your Guide"
+                alt="YojanaSetu - Government Benefits, Your Bridge"
                 className="h-10 w-auto object-contain"
               />
             </div>

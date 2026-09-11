@@ -47,7 +47,7 @@ export const SchemeDetailPage: React.FC<SchemeDetailPageProps> = ({
             <span>{isHindi ? "वापस जाएं" : "Back to Schemes"}</span>
           </button>
           <span>/</span>
-          <span className="capitalize">{scheme.category.replace("_", " ")}</span>
+          <span className="capitalize">{scheme.category.replace(/_/g, " ")}</span>
           <span>/</span>
           <span className="text-foreground font-medium truncate max-w-[200px]">
             {isHindi ? scheme.name_hi : scheme.name_en}
@@ -60,7 +60,7 @@ export const SchemeDetailPage: React.FC<SchemeDetailPageProps> = ({
             {/* Top Badges */}
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
-                {scheme.category.toUpperCase().replace("_", " ")}
+                {scheme.category.toUpperCase().replace(/_/g, " ")}
               </span>
 
               <Badge variant="outline" className="text-xs font-medium">

@@ -46,7 +46,7 @@ export interface CitizenProfile {
 // -------------------------------------------------------------
 // 2. Rule & Deterministic Evaluation Schema
 // -------------------------------------------------------------
-export type RuleOperator = '>=' | '<=' | '==' | '!=' | 'IN' | 'NOT_IN' | 'BETWEEN';
+export type RuleOperator = '>=' | '<=' | '>' | '<' | '==' | '!=' | 'IN' | 'NOT_IN' | 'BETWEEN';
 
 export interface Rule {
   field: string;
@@ -170,4 +170,9 @@ export interface CscCenter {
   longitude?: number;
   rating: number;
   services: string[];
+  distance?: string;
+  is_open?: boolean;
+  status_text?: string;
+  map_x?: number;
+  map_y?: number;
 }

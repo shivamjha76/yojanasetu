@@ -4,6 +4,9 @@ import { AuthProvider } from "@/context/AuthContext";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/home/HeroSection";
+import { CategoryGrid } from "@/components/home/CategoryGrid";
+import { TrendingSchemes } from "@/components/home/TrendingSchemes";
+import { HowItWorks } from "@/components/home/HowItWorks";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { LoginPage } from "@/components/auth/LoginPage";
 import { WizardContainer } from "@/components/wizard/WizardContainer";
@@ -65,7 +68,8 @@ const MainContent: React.FC = () => {
   const { setIsAssistantOpen } = useApp();
   const [currentView, setCurrentView] = useState("home");
   const [selectedScheme, setSelectedScheme] = useState<Scheme | null>(null);
-  const [selectedCategoryFilter] = useState<string>("all");
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [wizardInitialProfile, setWizardInitialProfile] = useState<Partial<CitizenProfile> | undefined>(undefined);
 
   // Handle scheme selection: opens dedicated SchemeDetailPage
@@ -82,7 +86,25 @@ const MainContent: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleSearch = (_query: string) => {
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setCurrentView("schemes");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // Handle category card click from CategoryGrid: sets category filter and navigates to explore page
+  const handleSelectCategory = (categoryId: string) => {
+    const categoryMapping: Record<string, string> = {
+      agriculture: "agriculture",
+      education_scholarships: "education",
+      healthcare: "health",
+      women_child: "women_child",
+      housing_urban: "housing",
+      business_msme_loans: "others",
+      skills_employment: "employment",
+      social_security_pensions: "social_security",
+    };
+    setSelectedCategoryFilter(categoryMapping[categoryId] || categoryId);
     setCurrentView("schemes");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -129,6 +151,7 @@ const MainContent: React.FC = () => {
             onSelectScheme={handleOpenSchemeDetail}
             onStartWizard={handleGetStarted}
             initialCategory={selectedCategoryFilter}
+            initialSearch={searchQuery}
           />
         </main>
       ) : currentView === "scheme_detail" ? (
@@ -154,11 +177,31 @@ const MainContent: React.FC = () => {
         <main id="main-content" className="flex-1">
           <HeroSection
             onStartWizard={handleGetStarted}
-            onExploreSchemes={() => setCurrentView("schemes")}
+            onExploreSchemes={() => {
+              setSelectedCategoryFilter("all");
+              setCurrentView("schemes");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
             onOpenAssistant={() => setIsAssistantOpen(true)}
             onSearch={handleSearch}
             onSelectScheme={handleOpenSchemeDetail}
           />
+
+          {/* 8 Welfare Categories Grid */}
+          <CategoryGrid onSelectCategory={handleSelectCategory} />
+
+          {/* Trending & Flagship Schemes Showcase */}
+          <TrendingSchemes
+            onViewDetails={handleOpenSchemeDetail}
+            onExploreAll={() => {
+              setSelectedCategoryFilter("all");
+              setCurrentView("schemes");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          />
+
+          {/* 3-Step "How YojanaSetu Works" Process */}
+          <HowItWorks onStartWizard={handleGetStarted} />
         </main>
       )}
 

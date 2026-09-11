@@ -68,6 +68,7 @@ def test_get_occupations():
     assert "student" in occ_ids
     assert "unemployed" in occ_ids
     assert "daily_wage_laborer" in occ_ids
+    assert "artisan_craftsperson" in occ_ids
 
     # Check first item schema
     first = data["occupations"][0]

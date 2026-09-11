@@ -250,6 +250,10 @@ def test_rule_operators_exhaustive():
     # Test operators
     assert evaluate_single_rule(prof, Rule(field="age", operator=">=", value=25))[0] is True
     assert evaluate_single_rule(prof, Rule(field="age", operator="<=", value=25))[0] is True
+    assert evaluate_single_rule(prof, Rule(field="age", operator=">", value=24))[0] is True
+    assert evaluate_single_rule(prof, Rule(field="age", operator=">", value=25))[0] is False
+    assert evaluate_single_rule(prof, Rule(field="age", operator="<", value=26))[0] is True
+    assert evaluate_single_rule(prof, Rule(field="age", operator="<", value=25))[0] is False
     assert evaluate_single_rule(prof, Rule(field="age", operator="==", value=25))[0] is True
     assert evaluate_single_rule(prof, Rule(field="age", operator="!=", value=30))[0] is True
     assert evaluate_single_rule(prof, Rule(field="state", operator="IN", value=["Punjab", "Haryana"]))[0] is True

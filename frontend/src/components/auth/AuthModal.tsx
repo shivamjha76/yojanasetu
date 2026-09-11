@@ -84,7 +84,7 @@ export const AuthModal: React.FC = () => {
                   : isHindi ? "नागरिक लॉग इन" : "Citizen Sign In"}
               </h3>
               <p className="text-xs text-[#525B64]">
-                Scheme Sarathi • {isHindi ? "सरकारी योजना सारथी" : "Your Scheme Guide"}
+                YojanaSetu • {isHindi ? "सरकारी योजना सेतु" : "Citizen Welfare Bridge"}
               </p>
             </div>
           </div>
@@ -282,7 +282,7 @@ export const AuthModal: React.FC = () => {
               </span>
             ) : (
               <span>
-                {isHindi ? "नया खाता बनाना चाहते हैं?" : "New to Scheme Sarathi?"}{" "}
+                {isHindi ? "नया खाता बनाना चाहते हैं?" : "New to YojanaSetu?"}{" "}
                 <button
                   type="button"
                   onClick={() => openAuthModal("register")}

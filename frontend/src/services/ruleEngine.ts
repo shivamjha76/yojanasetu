@@ -157,6 +157,14 @@ export function evaluateSingleRule(
         matched = Number(normUser) <= Number(normTarget);
         cond = `<= ${targetVal}`;
         break;
+      case ">":
+        matched = Number(normUser) > Number(normTarget);
+        cond = `> ${targetVal}`;
+        break;
+      case "<":
+        matched = Number(normUser) < Number(normTarget);
+        cond = `< ${targetVal}`;
+        break;
       case "==":
         matched = normUser === normTarget;
         cond = `== ${targetVal}`;

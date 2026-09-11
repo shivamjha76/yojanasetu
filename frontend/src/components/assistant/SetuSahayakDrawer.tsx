@@ -542,7 +542,7 @@ export const SetuSahayakDrawer: React.FC<SetuSahayakDrawerProps> = ({
                           )}
                           {msg.extractedProfile.occupation && (
                             <span className="px-2 py-0.5 rounded-md bg-background border text-[11px] font-semibold capitalize">
-                              {msg.extractedProfile.occupation.replace("_", " ")}
+                              {msg.extractedProfile.occupation.replace(/_/g, " ")}
                             </span>
                           )}
                           {msg.extractedProfile.state && (

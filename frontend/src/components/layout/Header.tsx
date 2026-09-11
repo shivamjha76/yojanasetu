@@ -25,7 +25,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="container mx-auto px-6 sm:px-12 max-w-7xl h-20 flex items-center justify-between">
         
         {/* ======================================================== */}
-        {/* LEFT: Scheme Sarathi Brand Logo (Exact Reference Match)  */}
+        {/* LEFT: YojanaSetu Brand Logo                              */}
         {/* ======================================================== */}
         <div
           onClick={() => onNavigate("home")}
@@ -33,7 +33,7 @@ export const Header: React.FC<HeaderProps> = ({
         >
           <img
             src="/images/logo_exact_transparent.png"
-            alt="Scheme Sarathi - Government Benefits, Your Guide"
+            alt="YojanaSetu - Government Benefits, Your Bridge"
             className="h-10 sm:h-11 w-auto object-contain transition-transform group-hover:scale-[1.02]"
           />
         </div>

@@ -58,7 +58,7 @@ class Rule(BaseModel):
         ...,
         description="Profile field to test (e.g., 'age', 'annual_income', 'category', 'state', 'occupation')",
     )
-    operator: Literal[">=", "<=", "==", "!=", "IN", "NOT_IN", "BETWEEN"] = Field(
+    operator: Literal[">=", "<=", ">", "<", "==", "!=", "IN", "NOT_IN", "BETWEEN"] = Field(
         ..., description="Deterministic comparison operator"
     )
     value: Any = Field(
@@ -198,6 +198,11 @@ class CscCenter(BaseModel):
     longitude: Optional[float] = None
     rating: float = 4.8
     services: List[str] = Field(default_factory=list)
+    distance: Optional[str] = None
+    is_open: Optional[bool] = True
+    status_text: Optional[str] = "Open Now"
+    map_x: Optional[float] = None
+    map_y: Optional[float] = None
 
 
 class CscSearchResponse(BaseModel):

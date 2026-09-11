@@ -36,8 +36,8 @@ class AIService:
     ):
         self.provider = (provider or settings.llm_provider).lower()
         self.model = model or settings.llm_model
-        self.gemini_api_key = gemini_api_key or settings.gemini_api_key
-        self.openai_api_key = openai_api_key or settings.openai_api_key
+        self.gemini_api_key = gemini_api_key if gemini_api_key is not None else settings.gemini_api_key
+        self.openai_api_key = openai_api_key if openai_api_key is not None else settings.openai_api_key
         self.timeout = timeout or settings.llm_timeout_seconds
 
     def is_configured(self) -> bool:

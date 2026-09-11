@@ -104,6 +104,7 @@ OCCUPATIONS_METADATA = [
     {"id": "business_self_employed", "name_en": "Small Business / Self-Employed", "name_hi": "छोटा व्यापारी / स्वरोजगारी", "icon": "Store"},
     {"id": "homemaker", "name_en": "Homemaker", "name_hi": "गृहणी", "icon": "Smile"},
     {"id": "daily_wage_laborer", "name_en": "Daily Wage Laborer / Artisan", "name_hi": "दैनिक वेतनभोगी / कारीगर / मजदूर", "icon": "Hammer"},
+    {"id": "artisan_craftsperson", "name_en": "Artisan / Craftsperson", "name_hi": "कारीगर / शिल्पकार", "icon": "Wrench"},
     {"id": "other", "name_en": "Other", "name_hi": "अन्य", "icon": "User"},
 ]
 
