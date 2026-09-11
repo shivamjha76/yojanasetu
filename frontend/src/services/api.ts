@@ -4,6 +4,7 @@
  */
 
 import { Scheme, CitizenProfile, EligibilityResult, CscCenter } from "@/types/schema";
+import { User, AuthResponse, LoginCredentials, RegisterData, SavedSchemesResponse } from "@/types/auth";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api";
 
@@ -140,6 +141,90 @@ export const api = {
 
     const res = await fetch(`${API_BASE_URL}/csc/search?${query.toString()}`);
     if (!res.ok) throw new Error("Failed to fetch CSC centers");
+    return res.json();
+  },
+
+  // ========================================================
+  // Authentication & Citizen Account Endpoints
+  // ========================================================
+
+  /** Register a new citizen account */
+  async register(data: RegisterData): Promise<AuthResponse> {
+    const res = await fetch(`${API_BASE_URL}/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ detail: "Registration failed" }));
+      throw new Error(err.detail || "Registration failed");
+    }
+    return res.json();
+  },
+
+  /** Citizen login */
+  async login(credentials: LoginCredentials): Promise<AuthResponse> {
+    const res = await fetch(`${API_BASE_URL}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(credentials),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ detail: "Login failed" }));
+      throw new Error(err.detail || "Invalid email or password");
+    }
+    return res.json();
+  },
+
+  /** Get profile of authenticated citizen */
+  async getMe(token: string): Promise<User> {
+    const res = await fetch(`${API_BASE_URL}/auth/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) throw new Error("Failed to load user profile");
+    return res.json();
+  },
+
+  /** Update citizen profile */
+  async updateProfile(token: string, data: Partial<User>): Promise<User> {
+    const res = await fetch(`${API_BASE_URL}/auth/profile`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error("Failed to update profile");
+    return res.json();
+  },
+
+  /** Get list of saved scheme IDs */
+  async getSavedSchemes(token: string): Promise<SavedSchemesResponse> {
+    const res = await fetch(`${API_BASE_URL}/auth/saved-schemes`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) throw new Error("Failed to load saved schemes");
+    return res.json();
+  },
+
+  /** Bookmark a scheme */
+  async saveScheme(token: string, schemeId: string): Promise<{ success: boolean; saved: boolean }> {
+    const res = await fetch(`${API_BASE_URL}/auth/saved-schemes/${encodeURIComponent(schemeId)}`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) throw new Error("Failed to save scheme");
+    return res.json();
+  },
+
+  /** Remove bookmark for a scheme */
+  async removeSavedScheme(token: string, schemeId: string): Promise<{ success: boolean; removed: boolean }> {
+    const res = await fetch(`${API_BASE_URL}/auth/saved-schemes/${encodeURIComponent(schemeId)}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) throw new Error("Failed to remove saved scheme");
     return res.json();
   },
 };

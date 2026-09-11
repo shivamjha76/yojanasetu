@@ -21,8 +21,10 @@ sdist/
 var/
 wheels/
 *.egg-info/
-.installed.cfg
 *.egg
+*.db
+*.sqlite3
+backend/data/*.db
 
 # Node & Frontend
 node_modules/

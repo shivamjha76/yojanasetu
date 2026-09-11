@@ -38,13 +38,19 @@ app.add_middleware(
 # Locate schemes dataset
 SCHEMES_FILE = Path(__file__).resolve().parent.parent.parent / "data" / "schemes.json"
 
+# Initialize SQLite Database
+from app.db.database import init_db
+init_db()
+
 # Register API Routers
+from app.api.auth import router as auth_router
 from app.api.schemes import router as schemes_router
 from app.api.eligibility import router as eligibility_router
 from app.api.metadata import router as metadata_router
 from app.api.assistant import router as assistant_router
 from app.api.csc import router as csc_router
 
+app.include_router(auth_router, prefix="/api", tags=["Authentication & Citizen Accounts"])
 app.include_router(schemes_router, prefix="/api", tags=["Schemes"])
 app.include_router(eligibility_router, prefix="/api", tags=["Eligibility"])
 app.include_router(metadata_router, prefix="/api", tags=["Metadata"])

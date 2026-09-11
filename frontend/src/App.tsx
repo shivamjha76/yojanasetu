@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { AppProvider, useApp } from "@/context/AppContext";
+import { AuthProvider } from "@/context/AuthContext";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/home/HeroSection";
+import { AuthModal } from "@/components/auth/AuthModal";
 import { WizardContainer } from "@/components/wizard/WizardContainer";
 import { SchemesExplorePage } from "@/components/schemes/SchemesExplorePage";
 import { SchemeDetailPage } from "@/components/schemes/SchemeDetailPage";
@@ -164,6 +166,9 @@ const MainContent: React.FC = () => {
 
       {/* Footer is only displayed on non-landing views */}
       {currentView !== "home" && <Footer />}
+
+      {/* Global Citizen Authentication Modal (Sign In / Register) */}
+      <AuthModal />
     </div>
   );
 };
@@ -171,7 +176,9 @@ const MainContent: React.FC = () => {
 export const App: React.FC = () => {
   return (
     <AppProvider>
-      <MainContent />
+      <AuthProvider>
+        <MainContent />
+      </AuthProvider>
     </AppProvider>
   );
 };
