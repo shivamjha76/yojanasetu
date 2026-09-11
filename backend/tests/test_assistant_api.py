@@ -78,3 +78,50 @@ def test_extract_profile_validation_error():
     payload = {"user_input": "hi"}  # min_length is 3
     response = client.post("/api/assistant/extract-profile", json=payload)
     assert response.status_code == 422
+
+
+def test_explain_scheme_hindi():
+    """Verify scheme explainer answers questions about PM-Kisan in Hindi."""
+    payload = {
+        "scheme_id": "pm-kisan",
+        "user_question": "मुझे योजना के तहत कितने पैसे और कैसे मिलेंगे?",
+        "language": "hi",
+    }
+    response = client.post("/api/assistant/explain-scheme", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+
+    assert data["success"] is True
+    assert data["scheme_id"] == "pm-kisan"
+    assert "https://pmkisan.gov.in" in data["official_portal_url"]
+    assert "₹6,000" in data["benefit_highlight"]
+    assert len(data["answer"]) > 10
+
+
+def test_explain_scheme_english():
+    """Verify scheme explainer answers questions in English."""
+    payload = {
+        "scheme_id": "ayushman-bharat-pmjay",
+        "user_question": "What is the insurance coverage limit under this scheme?",
+        "language": "en",
+    }
+    response = client.post("/api/assistant/explain-scheme", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+
+    assert data["success"] is True
+    assert data["scheme_id"] == "ayushman-bharat-pmjay"
+    assert "5,00,000" in data["benefit_highlight"]
+    assert len(data["answer"]) > 10
+
+
+def test_explain_scheme_not_found():
+    """Non-existent scheme returns 404 Not Found."""
+    payload = {
+        "scheme_id": "non-existent-scheme-999",
+        "user_question": "How do I apply?",
+        "language": "en",
+    }
+    response = client.post("/api/assistant/explain-scheme", json=payload)
+    assert response.status_code == 404
+

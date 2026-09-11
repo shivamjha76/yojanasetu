@@ -243,6 +243,18 @@ class AIService:
         Uses regex and heuristics to extract citizen profiles from Hindi/English inputs.
         """
         if not json_mode:
+            if "Verified Scheme Facts:" in prompt:
+                if "उत्तर हिंदी में" in prompt:
+                    return (
+                        "यह योजना पात्र नागरिकों को वित्तीय और सामाजिक सुरक्षा प्रदान करती है। "
+                        "आप आवश्यक दस्तावेजों (जैसे आधार कार्ड और बैंक पासबुक) के साथ आधिकारिक पोर्टल पर सीधा आवेदन कर सकते हैं।"
+                    )
+                else:
+                    return (
+                        "This welfare scheme provides financial and social assistance to eligible citizens. "
+                        "You can apply directly through the official portal using your required identity documents."
+                    )
+
             return (
                 "योजनासेतु सहायक: मैं आपकी सरकारी योजनाओं की जानकारी और पात्रता समझने में मदद कर सकता हूँ। "
                 "कृपया अपनी आयु, राज्य, और व्यवसाय बताएं।"
@@ -251,12 +263,16 @@ class AIService:
         # Basic heuristic extraction for fallback testing
         text = prompt.lower()
 
-        # Age detection (e.g. "35 saal", "age 40", "22 वर्ष")
-        age_match = re.search(r"(\d{1,2})\s*(?:saal|year|वर्ष|sal)", text)
+        # Age detection (e.g. "35 saal", "age 40", "22 वर्ष", "20 years old", "28 साल")
+        age_match = (
+            re.search(r"(?:umar|age|उम्र|आयु)\s*(?:is|hai|:)?\s*(\d{1,2})", text)
+            or re.search(r"(\d{1,2})\s*(?:saal|year|वर्ष|sal|साल)", text)
+            or re.search(r"(\d{1,2})\s*years?\s*old", text)
+        )
         age = int(age_match.group(1)) if age_match else 30
 
         # Gender detection
-        gender = "female" if any(w in text for w in ["aurat", "mahila", "female", "woman", "ladki", "महिला", "स्त्री"]) else "male"
+        gender = "female" if any(w in text for w in ["aurat", "mahila", "female", "woman", "ladki", "girl", "महिला", "स्त्री"]) else "male"
 
         # State detection
         state = "All India"
@@ -269,6 +285,11 @@ class AIService:
             "Delhi": [r"\bdelhi\b", r"\bdl\b", "दिल्ली"],
             "Gujarat": [r"\bgujarat\b", r"\bgj\b", "गुजरात"],
             "Jharkhand": [r"\bjharkhand\b", r"\bjh\b", "झारखंड"],
+            "Chhattisgarh": [r"\bchhattisgarh\b", "छत्तीसगढ़"],
+            "Uttarakhand": [r"\buttarakhand\b", "उत्तराखंड"],
+            "Punjab": [r"\bpunjab\b", "पंजाब"],
+            "Haryana": [r"\bharyana\b", "हरियाणा"],
+            "West Bengal": [r"\bwest bengal\b", "पश्चिम बंगाल"],
         }
         for st, patterns in state_aliases.items():
             if any(re.search(pat, text) for pat in patterns):
@@ -281,12 +302,27 @@ class AIService:
             occupation = "farmer"
         elif any(w in text for w in ["student", "padhai", "college", "छात्र", "विद्यार्थी"]):
             occupation = "student"
-        elif any(w in text for w in ["ghar sambhalti", "ghar", "homemaker", "housewife", "गृहणी", "घर संभालती", "घर"]):
+        elif any(w in text for w in ["ghar sambhalti", "ghar", "homemaker", "housewife", "गृहणी", "घर संभालती"]):
             occupation = "homemaker"
-        elif any(w in text for w in ["vendor", "thela", "dukan", "रेहड़ी", "पटरी", "मजदूर"]):
+        elif any(w in text for w in ["company", "private company", "private job", "निजी"]):
+            occupation = "employed_private"
+        elif any(w in text for w in ["dukan", "shopkeeper", "vyapar", "business", "दुकान", "व्यापार"]):
+            occupation = "business_self_employed"
+        elif any(w in text for w in ["vendor", "thela", "रेहड़ी", "पटरी", "मजदूर", "daily wage"]):
             occupation = "daily_wage_laborer"
         elif any(w in text for w in ["berojgar", "unemployed", "job search", "बेरोजगार"]):
             occupation = "unemployed"
+
+        # Category detection
+        category = "general"
+        if re.search(r"\b(sc|अनुसूचित जाति)\b", text):
+            category = "sc"
+        elif re.search(r"\b(st|अनुसूचित जनजाति)\b", text):
+            category = "st"
+        elif re.search(r"\b(obc|ओबीसी|पिछड़ा)\b", text):
+            category = "obc"
+        elif re.search(r"\b(ews)\b", text):
+            category = "ews"
 
         # Income detection
         income = 120000.0
@@ -297,16 +333,28 @@ class AIService:
                 income = val * 100000.0
             elif "hazar" in text or "हजार" in text:
                 income = val * 1000.0
+                if "mahine" in text or "monthly" in text or "per month" in text:
+                    income *= 12
+
+        # Differently abled detection
+        is_divyang = any(w in text for w in ["divyang", "disability", "disabled", "handicapped", "विकलांग", "दिव्यांग"])
+
+        # Ration card detection
+        ration_card = "none"
+        if "antyodaya" in text or "अंत्योदय" in text:
+            ration_card = "antyodaya"
+        elif "bpl" in text or "गरीब" in text or "बीपीएल" in text:
+            ration_card = "bpl"
 
         profile = {
             "age": age,
             "gender": gender,
             "state": state,
             "occupation": occupation,
-            "category": "general",
+            "category": category,
             "annual_income": income,
-            "is_differently_abled": ("divyang" in text or "disability" in text or "विकलांग" in text),
-            "ration_card_type": "bpl" if ("bpl" in text or "गरीब" in text) else "apl",
+            "is_differently_abled": is_divyang,
+            "ration_card_type": ration_card,
         }
 
         return json.dumps(profile, ensure_ascii=False)

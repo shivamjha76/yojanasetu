@@ -131,3 +131,65 @@ async def extract_profile_from_text(request: ProfileExtractRequest):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to process citizen statement: {str(e)}",
         )
+
+
+class SchemeExplainRequest(BaseModel):
+    scheme_id: str = Field(..., description="ID of the scheme to explain (e.g. 'pm-kisan')")
+    user_question: str = Field(..., min_length=3, max_length=1000, description="Citizen query regarding the scheme")
+    language: str = Field(default="hi", description="Language of explanation ('hi' or 'en')")
+
+
+class SchemeExplainResponse(BaseModel):
+    success: bool = True
+    scheme_id: str
+    scheme_name: str
+    official_portal_url: str
+    benefit_highlight: str
+    answer: str
+
+
+@router.post(
+    "/assistant/explain-scheme",
+    response_model=SchemeExplainResponse,
+    summary="Answer citizen questions grounded strictly on verified scheme facts",
+)
+async def explain_scheme(request: SchemeExplainRequest):
+    """
+    Answers questions about a specific scheme using verified facts from official registry.
+    Prevents hallucination by strictly grounding the LLM in scheme records.
+    """
+    from app.services.scheme_service import scheme_service
+    from app.core.prompts import SCHEME_EXPLAINER_SYSTEM_PROMPT, build_scheme_explainer_prompt
+
+    scheme = scheme_service.get_by_id(request.scheme_id)
+    if not scheme:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Scheme with ID '{request.scheme_id}' was not found in verified registry.",
+        )
+
+    lang = "en" if request.language.lower() == "en" else "hi"
+    scheme_dict = scheme.model_dump()
+    prompt = build_scheme_explainer_prompt(
+        scheme_data=scheme_dict,
+        user_question=request.user_question,
+        language=lang,
+    )
+
+    answer = await ai_service.generate_async(
+        prompt=prompt,
+        system_instruction=SCHEME_EXPLAINER_SYSTEM_PROMPT,
+        json_mode=False,
+    )
+
+    scheme_name = scheme.name_hi if lang == "hi" else scheme.name_en
+
+    return SchemeExplainResponse(
+        success=True,
+        scheme_id=scheme.id,
+        scheme_name=scheme_name,
+        official_portal_url=scheme.official_portal_url,
+        benefit_highlight=scheme.benefit_amount_text,
+        answer=answer.strip(),
+    )
+
