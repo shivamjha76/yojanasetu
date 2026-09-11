@@ -406,5 +406,491 @@
         "answer_en": "No, the beneficiary family should not own a pucca house anywhere in India."
       }
     ]
+  },
+  {
+    "id": "post-matric-scholarship-sc-st-obc",
+    "name_hi": "पोस्ट मैट्रिक छात्रवृत्ति योजना (Post-Matric Scholarship)",
+    "name_en": "Post-Matric Scholarship Scheme for SC/ST/OBC Students",
+    "short_summary_hi": "10वीं के बाद उच्च शिक्षा प्राप्त कर रहे विद्यार्थियों को 100% ट्यूशन फीस प्रतिपूर्ति और मासिक भत्ता।",
+    "short_summary_en": "Full tuition fee reimbursement and maintenance allowance for SC/ST/OBC students pursuing post-matric studies.",
+    "detailed_description_hi": "यह योजना 10वीं कक्षा (मैट्रिक) के बाद कॉलेज, यूनिवर्सिटी, आईटीआई, या व्यावसायिक कोर्स में पढ़ाई कर रहे अनुसूचित जाति, जनजाति व अन्य पिछड़ा वर्ग के छात्रों को वित्तीय सहायता प्रदान करती है ताकि वे बिना किसी आर्थिक बाधा के अपनी पढ़ाई पूरी कर सकें।",
+    "detailed_description_en": "The Post-Matric Scholarship provides complete tuition fee reimbursement and compulsory non-refundable fees along with annual maintenance allowances to eligible SC, ST, and OBC students pursuing higher secondary and post-secondary education.",
+    "ministry": "सामाजिक न्याय एवं अधिकारिता मंत्रालय (Ministry of Social Justice and Empowerment)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "education_scholarships",
+    "benefit_amount_text": "100% ट्यूशन फीस + ₹4,000 से ₹13,500 वार्षिक भत्ता",
+    "benefit_type": "scholarship",
+    "official_portal_url": "https://scholarships.gov.in/",
+    "rules": [
+      {
+        "field": "occupation",
+        "operator": "==",
+        "value": "student",
+        "description_hi": "आवेदक वर्तमान में अध्ययनरत छात्र होना चाहिए",
+        "description_en": "Applicant must be currently enrolled as a student"
+      },
+      {
+        "field": "category",
+        "operator": "IN",
+        "value": ["sc", "st", "obc"],
+        "description_hi": "आवेदक SC, ST या OBC वर्ग से होना चाहिए",
+        "description_en": "Applicant must belong to SC, ST, or OBC category"
+      },
+      {
+        "field": "annual_income",
+        "operator": "<=",
+        "value": 250000,
+        "description_hi": "पारिवारिक वार्षिक आय ₹2.5 लाख से अधिक नहीं होनी चाहिए",
+        "description_en": "Annual family income must not exceed ₹2.5 Lakhs"
+      },
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 15,
+        "description_hi": "आयु 15 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Age must be at least 15 years"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड (छात्र का)",
+        "name_en": "Aadhaar Card of the Student",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": "https://myaadhaar.uidai.gov.in/"
+      },
+      {
+        "id": "caste_certificate",
+        "name_hi": "जाति प्रमाण पत्र (Caste Certificate)",
+        "name_en": "Caste Certificate",
+        "is_mandatory": true,
+        "issuing_authority": "सक्षम राजस्व अधिकारी / तहसीलदार",
+        "how_to_get_url": null
+      },
+      {
+        "id": "income_certificate",
+        "name_hi": "आय प्रमाण पत्र (Income Certificate)",
+        "name_en": "Income Certificate",
+        "is_mandatory": true,
+        "issuing_authority": "तहसीलदार / राजस्व विभाग",
+        "how_to_get_url": null
+      },
+      {
+        "id": "previous_marksheet",
+        "name_hi": "पिछली कक्षा (10वीं/12वीं) की अंकतालिका",
+        "name_en": "Previous Qualifying Marksheet",
+        "is_mandatory": true,
+        "issuing_authority": "संबंधित शिक्षा बोर्ड / यूनिवर्सिटी",
+        "how_to_get_url": null
+      },
+      {
+        "id": "fee_receipt_bonafide",
+        "name_hi": "संस्थान से बोनाफाइड प्रमाण पत्र व फीस रसीद",
+        "name_en": "Institute Bonafide Certificate & Fee Receipt",
+        "is_mandatory": true,
+        "issuing_authority": "कॉलेज / संस्थान",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. राष्ट्रीय छात्रवृत्ति पोर्टल (NSP) scholarships.gov.in पर जाएं।",
+      "2. OTR (One Time Registration) प्रक्रिया पूरी करें।",
+      "3. Post-Matric Scholarship योजना का चयन करें और कोर्स विवरण भरें।",
+      "4. आवश्यक दस्तावेज़ (जाति, आय, अंकतालिका) अपलोड करें।",
+      "5. फॉर्म सबमिट करें और प्रिंटआउट अपने कॉलेज के नोडल अधिकारी के पास जमा कराएं।"
+    ],
+    "application_steps_en": [
+      "1. Visit the National Scholarship Portal at scholarships.gov.in.",
+      "2. Complete the One Time Registration (OTR) with your Aadhaar.",
+      "3. Select Post-Matric Scholarship and provide course and institute details.",
+      "4. Upload caste, income, and educational certificates.",
+      "5. Submit online and submit a hard copy to your institute's verification officer."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या प्राइवेट कॉलेज के छात्र भी इसके लिए पात्र हैं?",
+        "question_en": "Are students studying in private institutions eligible?",
+        "answer_hi": "हाँ, यदि प्राइवेट कॉलेज सरकार/UGC/AICTE से मान्यता प्राप्त है, तो छात्र पात्र हैं।",
+        "answer_en": "Yes, as long as the private college is government-recognized and mapped on NSP."
+      }
+    ]
+  },
+  {
+    "id": "national-apprenticeship-promotion-scheme",
+    "name_hi": "राष्ट्रीय शिक्षुता संवर्धन योजना (NAPS)",
+    "name_en": "National Apprenticeship Promotion Scheme (NAPS)",
+    "short_summary_hi": "युवाओं को उद्योगों में व्यावहारिक ऑन-द-जॉब ट्रेनिंग और प्रतिमाह स्टाइपेंड सहायता।",
+    "short_summary_en": "On-the-job industrial skill training with direct monthly government stipend support up to ₹1,500/month.",
+    "detailed_description_hi": "NAPS भारत सरकार के कौशल विकास और उद्यमशीलता मंत्रालय की प्रमुख योजना है, जो युवाओं को कंपनियों में हैंड्स-ऑन ट्रेनिंग दिलाती है। सरकार प्रशिक्षु (Apprentice) को दिए जाने वाले स्टाइपेंड का 25% (अधिकतम ₹1,500 प्रति माह) सीधे डीबीटी द्वारा प्रदान करती है।",
+    "detailed_description_en": "NAPS promotes apprenticeship training by incentivizing employers and providing financial stipend support directly to candidates, enhancing their employability through industry-led practical training.",
+    "ministry": "कौशल विकास और उद्यमशीलता मंत्रालय (MSDE)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "skills_employment",
+    "benefit_amount_text": "₹1,500/माह सरकारी स्टाइपेंड + इंडस्ट्री सर्टिफिकेशन",
+    "benefit_type": "direct_benefit_transfer",
+    "official_portal_url": "https://www.apprenticeshipindia.gov.in/",
+    "rules": [
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "description_hi": "आयु 18 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Minimum age must be 18 years"
+      },
+      {
+        "field": "age",
+        "operator": "<=",
+        "value": 35,
+        "description_hi": "आयु 35 वर्ष से अधिक नहीं होनी चाहिए",
+        "description_en": "Age must not exceed 35 years"
+      },
+      {
+        "field": "occupation",
+        "operator": "IN",
+        "value": ["student", "unemployed", "other"],
+        "description_hi": "आवेदक प्रशिक्षुता की तलाश में छात्र या बेरोजगार युवा होना चाहिए",
+        "description_en": "Applicant must be a student or job-seeker looking for apprenticeships"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड",
+        "name_en": "Aadhaar Card",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "education_proof",
+        "name_hi": "10वीं/12वीं/ITI/डिप्लोमा/ग्रेजुएशन प्रमाण पत्र",
+        "name_en": "Educational Qualification Certificate (10th/12th/ITI/Degree)",
+        "is_mandatory": true,
+        "issuing_authority": "शिक्षा बोर्ड / आईटीआई संस्थान",
+        "how_to_get_url": null
+      },
+      {
+        "id": "bank_passbook",
+        "name_hi": "बैंक पासबुक (DBT सक्रिय)",
+        "name_en": "Bank Passbook with DBT Seeding",
+        "is_mandatory": true,
+        "issuing_authority": "बैंक शाखा",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. apprenticeshipindia.gov.in पर जाएं और 'Candidate Registration' करें।",
+      "2. अपना आधार ई-केवाईसी और शैक्षणिक योग्यता विवरण भरें।",
+      "3. 'Apprenticeship Opportunities' में अपनी रुचि के अनुसार कंपनी और ट्रेड खोजें।",
+      "4. कंपनी के अवसर पर 'Apply' करें और चयन के बाद अप्रेंटिसशिप अनुबंध स्वीकार करें।"
+    ],
+    "application_steps_en": [
+      "1. Go to apprenticeshipindia.gov.in and click 'Candidate Registration'.",
+      "2. Complete Aadhaar e-KYC and educational profile details.",
+      "3. Search for available apprenticeship opportunities by trade and location.",
+      "4. Apply to preferred companies and accept the apprenticeship contract upon selection."
+    ],
+    "faqs": [
+      {
+        "question_hi": "ट्रेनिंग पूरी होने पर क्या सर्टिफिकेट मिलता है?",
+        "question_en": "Is a certificate awarded upon completion?",
+        "answer_hi": "हाँ, NCVT द्वारा प्रमाणित राष्ट्रीय शिक्षुता प्रमाण पत्र (National Apprenticeship Certificate) मिलता है।",
+        "answer_en": "Yes, candidates receive a government-recognized National Apprenticeship Certificate (NAC)."
+      }
+    ]
+  },
+  {
+    "id": "central-sector-merit-scholarship-college",
+    "name_hi": "सेंट्रल सेक्टर कॉलेज एवं यूनिवर्सिटी छात्रवृत्ति (CSSS)",
+    "name_en": "Central Sector Scheme of Scholarship for College and University Students",
+    "short_summary_hi": "12वीं में मेधावी छात्रों को स्नातक व स्नातकोत्तर पढ़ाई के लिए ₹12,000 से ₹20,000 प्रति वर्ष।",
+    "short_summary_en": "Financial assistance of ₹12,000 to ₹20,000/year for meritorious students pursuing graduate and post-graduate studies.",
+    "detailed_description_hi": "उच्च शिक्षा विभाग (शिक्षा मंत्रालय) द्वारा संचालित यह मेरिट-सह-साधन (Merit-cum-Means) छात्रवृत्ति उन मेधावी छात्रों के लिए है जो 12वीं बोर्ड परीक्षा में 80th परसेंटाइल से अधिक अंक प्राप्त करते हैं और नियमित डिग्री कोर्स कर रहे हैं।",
+    "detailed_description_en": "A prestigious central sector scheme for meritorious students above 80th percentile in relevant stream in 10+2. Provides ₹12,000/year for first 3 years of college and ₹20,000/year at post-graduation level.",
+    "ministry": "शिक्षा मंत्रालय (Ministry of Education - Higher Education)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "education_scholarships",
+    "benefit_amount_text": "₹12,000 से ₹20,000 प्रति वर्ष",
+    "benefit_type": "scholarship",
+    "official_portal_url": "https://scholarships.gov.in/",
+    "rules": [
+      {
+        "field": "occupation",
+        "operator": "==",
+        "value": "student",
+        "description_hi": "आवेदक नियमित कॉलेज/यूनिवर्सिटी छात्र होना चाहिए",
+        "description_en": "Applicant must be a regular college or university student"
+      },
+      {
+        "field": "annual_income",
+        "operator": "<=",
+        "value": 450000,
+        "description_hi": "पारिवारिक वार्षिक आय ₹4.5 लाख से कम होनी चाहिए",
+        "description_en": "Annual family income must be ₹4.5 Lakhs or less"
+      },
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 17,
+        "description_hi": "आयु 17 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Applicant must be at least 17 years old"
+      },
+      {
+        "field": "age",
+        "operator": "<=",
+        "value": 25,
+        "description_hi": "आयु 25 वर्ष से कम होनी चाहिए",
+        "description_en": "Age must be 25 years or younger"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड",
+        "name_en": "Aadhaar Card",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "class_12_marksheet",
+        "name_hi": "12वीं बोर्ड की अंकतालिका",
+        "name_en": "Class 12th Board Marksheet",
+        "is_mandatory": true,
+        "issuing_authority": "सीबीएसई / राज्य शिक्षा बोर्ड",
+        "how_to_get_url": null
+      },
+      {
+        "id": "income_certificate",
+        "name_hi": "सक्षम अधिकारी द्वारा जारी आय प्रमाण पत्र",
+        "name_en": "Income Certificate issued by Revenue Authority",
+        "is_mandatory": true,
+        "issuing_authority": "राजस्व विभाग / तहसीलदार",
+        "how_to_get_url": null
+      },
+      {
+        "id": "college_admission_proof",
+        "name_hi": "कॉलेज प्रवेश रसीद व छात्र पहचान पत्र",
+        "name_en": "College Admission Fee Receipt & Student ID",
+        "is_mandatory": true,
+        "issuing_authority": "संबद्ध कॉलेज / विश्वविद्यालय",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. scholarships.gov.in पर नेशनल स्कॉलरशिप पोर्टल (NSP) पर जाएं।",
+      "2. 'Department of Higher Education' के तहत इस योजना का चयन करें।",
+      "3. अपना 12वीं का रोल नंबर और कॉलेज दाखिला विवरण दर्ज करें।",
+      "4. आय प्रमाण पत्र और फीस रसीद अपलोड करके आवेदन सबमिट करें।",
+      "5. कॉलेज द्वारा सत्यापन के बाद राशि सीधे डीबीटी द्वारा छात्र के बैंक खाते में आएगी।"
+    ],
+    "application_steps_en": [
+      "1. Visit scholarships.gov.in on the National Scholarship Portal.",
+      "2. Select Central Sector Scheme under Department of Higher Education.",
+      "3. Enter Class 12 roll number and college admission details.",
+      "4. Upload income certificate and college proof.",
+      "5. Upon institutional and state verification, scholarship is disbursed via DBT."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या पत्राचार (Distance Education) वाले छात्र पात्र हैं?",
+        "question_en": "Are distance education students eligible?",
+        "answer_hi": "नहीं, यह योजना केवल नियमित (Regular full-time) छात्रों के लिए है।",
+        "answer_en": "No, this scheme is strictly for regular full-time undergraduate courses."
+      }
+    ]
+  },
+  {
+    "id": "pm-kaushal-vikas-yojana",
+    "name_hi": "प्रधानमंत्री कौशल विकास योजना 4.0 (PMKVY)",
+    "name_en": "Pradhan Mantri Kaushal Vikas Yojana (PMKVY 4.0)",
+    "short_summary_hi": "युवाओं को मुफ्त उद्योग-उन्मुख कौशल प्रशिक्षण, सरकारी प्रमाण पत्र और रोजगार सहायता।",
+    "short_summary_en": "100% Free industry-relevant skill certification training, digital courses, and placement assistance.",
+    "detailed_description_hi": "PMKVY भारत के युवाओं को आधुनिक उद्योगों की मांग के अनुसार लघु अवधि का कौशल प्रशिक्षण (Short-Term Training) प्रदान करती है। ट्रेनिंग पूरी तरह निशुल्क होती है और मूल्यांकन पास करने वाले छात्रों को राष्ट्रीय कौशल योग्यता फ्रेमवर्क (NSQF) प्रमाणपत्र व मानदेय सहायता दी जाती है।",
+    "detailed_description_en": "PMKVY empowers Indian youth with industry-recognized skill training across hundreds of modern job roles (AI, Robotics, Healthcare, Solar, Automotive) free of cost, with assessment certifications and employment linkage.",
+    "ministry": "कौशल विकास और उद्यमशीलता मंत्रालय (MSDE)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "skills_employment",
+    "benefit_amount_text": "मुफ्त प्रशिक्षण + ₹8,000 मानदेय + सरकारी प्रमाण पत्र",
+    "benefit_type": "in_kind_goods",
+    "official_portal_url": "https://www.pmkvyofficial.org/",
+    "rules": [
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 15,
+        "description_hi": "आयु 15 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Minimum age is 15 years"
+      },
+      {
+        "field": "age",
+        "operator": "<=",
+        "value": 45,
+        "description_hi": "आयु 45 वर्ष से कम होनी चाहिए",
+        "description_en": "Age must be 45 years or below"
+      },
+      {
+        "field": "occupation",
+        "operator": "IN",
+        "value": ["unemployed", "student", "daily_wage_laborer", "other"],
+        "description_hi": "आवेदक नए कौशल सीखने का इच्छुक युवा या बेरोजगार होना चाहिए",
+        "description_en": "Applicant must be a job-seeker or aspiring learner"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड",
+        "name_en": "Aadhaar Card",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "bank_account",
+        "name_hi": "बैंक खाता विवरण",
+        "name_en": "Bank Account Details",
+        "is_mandatory": true,
+        "issuing_authority": "बैंक शाखा",
+        "how_to_get_url": null
+      },
+      {
+        "id": "qualification_certificate",
+        "name_hi": "शैक्षणिक प्रमाण पत्र (न्यूनतम 5वीं/8वीं/10वीं)",
+        "name_en": "Minimum Qualification Certificate",
+        "is_mandatory": true,
+        "issuing_authority": "स्कूल / बोर्ड",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. स्किल इंडिया डिजिटल पोर्टल skillindiadigital.gov.in पर जाएं।",
+      "2. अपना मोबाइल नंबर दर्ज करके पंजीकरण करें।",
+      "3. अपने जिले में नजदीकी प्रधानमंत्री कौशल केंद्र (PMKK) या ट्रेनिंग सेंटर खोजें।",
+      "4. अपनी पसंद का कोर्स (उदा. डिजिटल लिटरेसी, सोलर टेक्नीशियन, हेल्थकेयर) चुनें।",
+      "5. सेंटर जाकर बायोमेट्रिक उपस्थिति दें और क्लास शुरू करें।"
+    ],
+    "application_steps_en": [
+      "1. Visit the Skill India Digital Portal at skillindiadigital.gov.in.",
+      "2. Register using your mobile number and Aadhaar.",
+      "3. Search for the nearest Pradhan Mantri Kaushal Kendra (PMKK) or accredited training center.",
+      "4. Select your preferred job role/course.",
+      "5. Attend classroom and practical sessions and take the national assessment test."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या ट्रेनिंग के लिए कोई फीस देनी होती है?",
+        "question_en": "Is there any course fee for PMKVY training?",
+        "answer_hi": "नहीं, PMKVY के तहत पूरी ट्रेनिंग और परीक्षा शुल्क सरकार वहन करती है।",
+        "answer_en": "No, the entire training, course material, and assessment fee is 100% funded by the Government."
+      }
+    ]
+  },
+  {
+    "id": "free-coaching-scheme-sc-obc",
+    "name_hi": "डॉ. आंबेडकर मुफ्त कोचिंग योजना (Free Coaching Scheme)",
+    "name_en": "Dr. Ambedkar Free Coaching Scheme for SC and OBC Students",
+    "short_summary_hi": "SC और OBC छात्रों को UPSC, SSC, NEET, JEE जैसी प्रतियोगी परीक्षाओं के लिए 100% मुफ्त कोचिंग और मासिक वजीफा।",
+    "short_summary_en": "100% Free premier competitive exam coaching (UPSC/NEET/JEE) + monthly stipend up to ₹6,000 for SC/OBC aspirants.",
+    "detailed_description_hi": "सामाजिक न्याय और अधिकारिता मंत्रालय द्वारा संचालित यह योजना आर्थिक रूप से कमजोर अनुसूचित जाति (SC) और अन्य पिछड़ा वर्ग (OBC) के होनहार छात्रों को देश के प्रतिष्ठित कोचिंग संस्थानों में सिविल सेवा, इंजीनियरिंग, मेडिकल, बैंकिंग आदि परीक्षाओं की मुफ्त तैयारी करवाती है।",
+    "detailed_description_en": "Provides free coaching to economically disadvantaged SC and OBC candidates for competitive exams like Civil Services, State PCS, JEE, NEET, Banking, and SSC, along with a monthly stipend to support living costs.",
+    "ministry": "सामाजिक न्याय एवं अधिकारिता मंत्रालय",
+    "level": "central",
+    "applicable_state": null,
+    "category": "education_scholarships",
+    "benefit_amount_text": "मुफ्त कोचिंग फीस + ₹4,000 से ₹6,000 मासिक वजीफा",
+    "benefit_type": "scholarship",
+    "official_portal_url": "https://coaching.dosje.gov.in/",
+    "rules": [
+      {
+        "field": "category",
+        "operator": "IN",
+        "value": ["sc", "obc"],
+        "description_hi": "आवेदक SC या OBC वर्ग का होना चाहिए",
+        "description_en": "Applicant must belong to SC or OBC category"
+      },
+      {
+        "field": "annual_income",
+        "operator": "<=",
+        "value": 800000,
+        "description_hi": "पारिवारिक वार्षिक आय ₹8.0 लाख या उससे कम होनी चाहिए",
+        "description_en": "Annual family income must be ₹8.0 Lakhs or less"
+      },
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "description_hi": "आयु 18 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Minimum age is 18 years"
+      },
+      {
+        "field": "age",
+        "operator": "<=",
+        "value": 35,
+        "description_hi": "आयु 35 वर्ष से कम होनी चाहिए",
+        "description_en": "Age must not exceed 35 years"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड",
+        "name_en": "Aadhaar Card",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "caste_certificate",
+        "name_hi": "जाति प्रमाण पत्र (SC / OBC)",
+        "name_en": "Caste Certificate (SC/OBC)",
+        "is_mandatory": true,
+        "issuing_authority": "राजस्व अधिकारी / तहसीलदार",
+        "how_to_get_url": null
+      },
+      {
+        "id": "income_certificate",
+        "name_hi": "सक्षम प्राधिकारी द्वारा जारी आय प्रमाण पत्र",
+        "name_en": "Income Certificate",
+        "is_mandatory": true,
+        "issuing_authority": "तहसीलदार",
+        "how_to_get_url": null
+      },
+      {
+        "id": "degree_marksheet",
+        "name_hi": "12वीं या स्नातक की अंकतालिका",
+        "name_en": "12th / Graduation Marksheet",
+        "is_mandatory": true,
+        "issuing_authority": "बोर्ड / यूनिवर्सिटी",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. आधिकारिक पोर्टल coaching.dosje.gov.in पर जाएं।",
+      "2. 'Register' पर क्लिक करें और अपनी मूल जानकारी दर्ज करें।",
+      "3. लक्षित परीक्षा (UPSC, NEET, JEE आदि) का चयन करें।",
+      "4. जाति और आय प्रमाण पत्र अपलोड करें।",
+      "5. मेरिट सूची में नाम आने पर चयनित कोचिंग संस्थान में प्रवेश लें।"
+    ],
+    "application_steps_en": [
+      "1. Visit the portal at coaching.dosje.gov.in.",
+      "2. Register with basic personal and educational credentials.",
+      "3. Select your target competitive exam (UPSC, NEET, JEE, Banking).",
+      "4. Upload caste, income, and educational certificates.",
+      "5. Upon merit list publication, join the empanelled institute of choice."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या कोई छात्र इस योजना का लाभ एक से अधिक बार ले सकता है?",
+        "question_en": "Can a student avail this benefit more than once?",
+        "answer_hi": "प्रारंभिक और मुख्य परीक्षा के लिए छात्र को अधिकतम 2 बार कोचिंग का अवसर मिल सकता है।",
+        "answer_en": "A candidate can avail coaching assistance a maximum of two times across attempts."
+      }
+    ]
   }
 ]
