@@ -359,12 +359,12 @@ export const Header: React.FC<HeaderProps> = ({
                     setIsMobileMenuOpen(false);
                     setIsMyDetailsOpen(true);
                   }}
-                  className="py-1.5 px-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs font-semibold text-[#0D684E] flex items-center justify-center gap-1.5 cursor-pointer"
+                  className="py-1.5 px-2.5 rounded-lg bg-[#1D5F49]/10 border border-[#1D5F49]/20 text-xs font-semibold text-[#1D5F49] flex items-center justify-center gap-1.5 cursor-pointer"
                 >
-                  <UsersIcon className="w-3.5 h-3.5 text-[#0D684E]" />
+                  <UsersIcon className="w-3.5 h-3.5 text-[#1D5F49]" />
                   <span>{isHindi ? "सदस्य जोड़ें" : "Add Members"}</span>
                   {familyMembers.length > 0 && (
-                    <span className="w-4 h-4 rounded-full bg-[#0D684E] text-white text-[10px] flex items-center justify-center">
+                    <span className="w-4 h-4 rounded-full bg-[#1D5F49] text-white text-[10px] flex items-center justify-center">
                       {familyMembers.length}
                     </span>
                   )}
