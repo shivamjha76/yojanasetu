@@ -50,7 +50,7 @@ export const Header: React.FC<HeaderProps> = ({
                 : "font-medium text-[#4B5563] hover:text-[#111827]"
             }`}
           >
-            <span>Home</span>
+            <span>{isHindi ? "होम" : "Home"}</span>
             {currentView === "home" && (
               <span className="absolute -bottom-1.5 left-0 right-0 h-[2.5px] bg-[#1D5F49] rounded-full" />
             )}
@@ -64,7 +64,7 @@ export const Header: React.FC<HeaderProps> = ({
                 : "font-medium text-[#4B5563] hover:text-[#111827]"
             }`}
           >
-            <span>About</span>
+            <span>{isHindi ? "योजनाएं (Schemes)" : "Schemes"}</span>
             {currentView === "schemes" && (
               <span className="absolute -bottom-1.5 left-0 right-0 h-[2.5px] bg-[#1D5F49] rounded-full" />
             )}
@@ -78,7 +78,7 @@ export const Header: React.FC<HeaderProps> = ({
                 : "font-medium text-[#4B5563] hover:text-[#111827]"
             }`}
           >
-            <span>Contact</span>
+            <span>{isHindi ? "सेवा केंद्र (CSC)" : "CSC Centers"}</span>
             {currentView === "csc" && (
               <span className="absolute -bottom-1.5 left-0 right-0 h-[2.5px] bg-[#1D5F49] rounded-full" />
             )}
@@ -196,13 +196,7 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Primary CTA Button: Get Started */}
           <button
-            onClick={() => {
-              if (!isAuthenticated) {
-                onNavigate("login");
-              } else {
-                onNavigate("wizard");
-              }
-            }}
+            onClick={() => onNavigate("wizard")}
             className="bg-[#1D5F49] hover:bg-[#174E3C] text-white px-5 py-2.5 rounded-xl text-[14px] font-semibold shadow-2xs hover:shadow-xs transition-all duration-150 active:scale-95 cursor-pointer"
           >
             {isHindi ? "शुरू करें" : "Get Started"}
@@ -255,7 +249,7 @@ export const Header: React.FC<HeaderProps> = ({
               }}
               className="text-left py-2 font-semibold text-[#1D5F49]"
             >
-              Home
+              {isHindi ? "होम (Home)" : "Home"}
             </button>
             <button
               onClick={() => {
@@ -264,7 +258,7 @@ export const Header: React.FC<HeaderProps> = ({
               }}
               className="text-left py-2 font-medium text-gray-700"
             >
-              About
+              {isHindi ? "योजनाएं (Schemes)" : "Schemes"}
             </button>
             <button
               onClick={() => {
@@ -273,7 +267,7 @@ export const Header: React.FC<HeaderProps> = ({
               }}
               className="text-left py-2 font-medium text-gray-700"
             >
-              Contact
+              {isHindi ? "सेवा केंद्र (CSC)" : "CSC Centers"}
             </button>
           </nav>
 
@@ -292,11 +286,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             <button
               onClick={() => {
-                if (!isAuthenticated) {
-                  onNavigate("login");
-                } else {
-                  onNavigate("wizard");
-                }
+                onNavigate("wizard");
                 setIsMobileMenuOpen(false);
               }}
               className="w-full bg-[#1D5F49] text-white py-2.5 rounded-xl font-semibold text-sm shadow-xs cursor-pointer"

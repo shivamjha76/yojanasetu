@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { AppProvider, useApp } from "@/context/AppContext";
-import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { AuthProvider } from "@/context/AuthContext";
 import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/home/HeroSection";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { LoginPage } from "@/components/auth/LoginPage";
@@ -62,7 +63,6 @@ const SAMPLE_SCHEME: Scheme = {
 
 const MainContent: React.FC = () => {
   const { setIsAssistantOpen } = useApp();
-  const { isAuthenticated } = useAuth();
   const [currentView, setCurrentView] = useState("home");
   const [selectedScheme, setSelectedScheme] = useState<Scheme | null>(null);
   const [selectedCategoryFilter] = useState<string>("all");
@@ -87,13 +87,9 @@ const MainContent: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // When clicking Get Started: redirect to Login if not logged in, otherwise open Wizard
+  // When clicking Get Started: directly open Wizard for 100% friction-free citizen access
   const handleGetStarted = () => {
-    if (!isAuthenticated) {
-      setCurrentView("login");
-    } else {
-      setCurrentView("wizard");
-    }
+    setCurrentView("wizard");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -165,6 +161,9 @@ const MainContent: React.FC = () => {
           />
         </main>
       )}
+
+      {/* Global Footer */}
+      {currentView !== "login" && currentView !== "register" && <Footer />}
 
       {/* Global Floating AI Assistant & Slide-over Drawer */}
       <SetuSahayakDrawer

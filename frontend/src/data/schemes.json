@@ -1,0 +1,1342 @@
+[
+  {
+    "id": "pm-kisan",
+    "name_hi": "प्रधानमंत्री किसान सम्मान निधि (PM-KISAN)",
+    "name_en": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+    "short_summary_hi": "देश के सभी भूमिधारक किसान परिवारों को ₹6,000 प्रति वर्ष की सीधी आर्थिक सहायता।",
+    "short_summary_en": "Direct income support of ₹6,000 per year in 3 equal installments to landholding farmer families.",
+    "detailed_description_hi": "प्रधानमंत्री किसान सम्मान निधि योजना भारत सरकार की एक प्रमुख योजना है जिसके तहत पात्र किसान परिवारों को प्रति वर्ष ₹6,000 की वित्तीय सहायता ₹2,000 की तीन समान किस्तों में सीधे उनके बैंक खातों (DBT) में भेजी जाती है। इसका उद्देश्य किसानों को बीज, खाद व घरेलू जरूरतों के लिए सहायता देना है।",
+    "detailed_description_en": "PM-KISAN is a Central Sector Scheme providing financial assistance of ₹6,000 per year to eligible landholding farmers, payable in three equal four-monthly installments directly into their bank accounts via Direct Benefit Transfer (DBT).",
+    "ministry": "कृषि एवं किसान कल्याण मंत्रालय (Ministry of Agriculture & Farmers Welfare)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "agriculture",
+    "benefit_amount_text": "₹6,000 प्रति वर्ष (₹2,000 की 3 किस्तें)",
+    "benefit_type": "direct_benefit_transfer",
+    "official_portal_url": "https://pmkisan.gov.in/",
+    "rules": [
+      {
+        "field": "occupation",
+        "operator": "==",
+        "value": "farmer",
+        "description_hi": "आवेदक का पेशा किसान होना चाहिए",
+        "description_en": "Applicant must be a farmer"
+      },
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "description_hi": "आयु 18 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Age must be 18 years or above"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड (बैंक खाते से लिंक)",
+        "name_en": "Aadhaar Card (Linked with Bank)",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": "https://myaadhaar.uidai.gov.in/"
+      },
+      {
+        "id": "land_record",
+        "name_hi": "जमीन के कागजात (खसरा/खतौनी)",
+        "name_en": "Land Ownership Record (Khatauni/Khasra)",
+        "is_mandatory": true,
+        "issuing_authority": "राज्य राजस्व विभाग (State Revenue Dept)",
+        "how_to_get_url": "https://bhulekh.gov.in/"
+      },
+      {
+        "id": "bank_passbook",
+        "name_hi": "बैंक पासबुक (Aadhaar & NPCI Seeding जरूरी)",
+        "name_en": "Bank Account Passbook (NPCI Seeded)",
+        "is_mandatory": true,
+        "issuing_authority": "संबंधित बैंक शाखा",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. आधिकारिक पोर्टल pmkisan.gov.in पर जाएं।",
+      "2. 'Farmers Corner' में 'New Farmer Registration' पर क्लिक करें।",
+      "3. अपना आधार नंबर, मोबाइल नंबर दर्ज करें और राज्य का चयन करें।",
+      "4. जमीन की खतौनी का विवरण दर्ज करें और दस्तावेज अपलोड करें।",
+      "5. सबमिट करने के बाद नजदीकी सीएससी या पटवारी/लेखपाल से सत्यापन करवाएं।"
+    ],
+    "application_steps_en": [
+      "1. Visit the official portal at pmkisan.gov.in.",
+      "2. Click on 'New Farmer Registration' in the Farmers Corner.",
+      "3. Enter your Aadhaar number, mobile number, and select your state.",
+      "4. Fill in your land record details and upload necessary documents.",
+      "5. Submit and get verification from your local Patwari/Lekhpal or CSC center."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या e-KYC करवाना अनिवार्य है?",
+        "question_en": "Is e-KYC mandatory for PM-KISAN?",
+        "answer_hi": "हाँ, सभी पंजीकृत किसानों के लिए OTP या बायोमेट्रिक आधारित e-KYC करवाना अनिवार्य है।",
+        "answer_en": "Yes, e-KYC is strictly mandatory for all registered farmers to receive subsequent installments."
+      },
+      {
+        "question_hi": "क्या सरकारी नौकरी वाले किसान इसके लिए पात्र हैं?",
+        "question_en": "Are institutional landholders or govt employees eligible?",
+        "answer_hi": "नहीं, संवैधानिक पद धारक, सरकारी कर्मचारी या ₹10,000 से अधिक मासिक पेंशन पाने वाले अपात्र हैं।",
+        "answer_en": "No, constitutional post holders, govt employees, or pensioners drawing over ₹10,000/month are excluded."
+      }
+    ]
+  },
+  {
+    "id": "ayushman-bharat-pmjay",
+    "name_hi": "आयुष्मान भारत - प्रधानमंत्री जन आरोग्य योजना (AB-PMJAY)",
+    "name_en": "Ayushman Bharat - Pradhan Mantri Jan Arogya Yojana (AB-PMJAY)",
+    "short_summary_hi": "गरीब और वंचित परिवारों को प्रति वर्ष ₹5,00,000 तक का मुफ्त कैशलेस इलाज।",
+    "short_summary_en": "Free cashless health insurance coverage up to ₹5,00,000 per family per year for secondary & tertiary hospitalization.",
+    "detailed_description_hi": "आयुष्मान भारत योजना दुनिया की सबसे बड़ी सरकारी वित्तपोषित स्वास्थ्य बीमा योजना है। यह देश के 12 करोड़ से अधिक गरीब और कमजोर परिवारों (लगभग 55 करोड़ नागरिकों) को सूचीबद्ध सरकारी और निजी अस्पतालों में प्रति परिवार प्रति वर्ष ₹5 लाख तक का कैशलेस इलाज प्रदान करती है।",
+    "detailed_description_en": "Ayushman Bharat PM-JAY provides health coverage of up to ₹5 lakh per family per year for secondary and tertiary care hospitalization to over 12 crore vulnerable and low-income families across empanelled hospitals.",
+    "ministry": "स्वास्थ्य एवं परिवार कल्याण मंत्रालय (Ministry of Health and Family Welfare)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "healthcare",
+    "benefit_amount_text": "₹5,00,000 / वर्ष मुफ्त इलाज",
+    "benefit_type": "health_insurance",
+    "official_portal_url": "https://pmjay.gov.in/",
+    "rules": [
+      {
+        "field": "annual_income",
+        "operator": "<=",
+        "value": 250000,
+        "description_hi": "वार्षिक पारिवारिक आय ₹2.5 लाख या उससे कम होनी चाहिए",
+        "description_en": "Annual family income must be ₹2.5 Lakhs or less"
+      },
+      {
+        "field": "ration_card_type",
+        "operator": "IN",
+        "value": ["bpl", "antyodaya"],
+        "description_hi": "परिवार के पास BPL या अंत्योदय राशन कार्ड होना चाहिए",
+        "description_en": "Family must hold BPL or Antyodaya ration card"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड",
+        "name_en": "Aadhaar Card",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": "https://myaadhaar.uidai.gov.in/"
+      },
+      {
+        "id": "ration_card",
+        "name_hi": "राशन कार्ड (BPL / अंत्योदय / SECC पात्रता)",
+        "name_en": "Ration Card (BPL / Antyodaya / SECC)",
+        "is_mandatory": true,
+        "issuing_authority": "राज्य खाद्य एवं आपूर्ति विभाग",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. आधिकारिक पोर्टल beneficiary.nha.gov.in पर जाएं।",
+      "2. 'Am I Eligible' पर क्लिक करें और अपना मोबाइल नंबर व ओटीपी दर्ज करें।",
+      "3. अपना राज्य चुनें और राशन कार्ड नंबर या आधार से पात्रता खोजें।",
+      "4. नाम मिलने पर ई-केवाईसी पूरी करें और आयुष्मान कार्ड डाउनलोड करें।",
+      "5. किसी भी सूचीबद्ध अस्पताल में जाकर कार्ड दिखाकर मुफ्त इलाज पाएं।"
+    ],
+    "application_steps_en": [
+      "1. Visit the beneficiary portal at beneficiary.nha.gov.in.",
+      "2. Click on 'Am I Eligible' and enter your mobile number and OTP.",
+      "3. Select your state and search using your Ration card or Aadhaar number.",
+      "4. Complete e-KYC and download your Ayushman Golden Card.",
+      "5. Present your card at any empanelled hospital for cashless treatment."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या इसमें पहले से मौजूद बीमारियों का इलाज भी कवर होता है?",
+        "question_en": "Are pre-existing diseases covered from day one?",
+        "answer_hi": "हाँ, पहले से मौजूद सभी बीमारियों का इलाज पहले दिन से ही कवर होता है।",
+        "answer_en": "Yes, all pre-existing conditions are covered from day one of enrollment."
+      }
+    ]
+  },
+  {
+    "id": "pm-mudra-yojana",
+    "name_hi": "प्रधानमंत्री मुद्रा योजना (PMMY)",
+    "name_en": "Pradhan Mantri MUDRA Yojana (PMMY)",
+    "short_summary_hi": "गैर-कॉर्पोरेट और छोटे व्यवसायों को ₹50,000 से ₹10,00,000 तक का बिना गारंटी लोन।",
+    "short_summary_en": "Collateral-free business loans up to ₹10 Lakhs across Shishu, Kishore, and Tarun categories.",
+    "detailed_description_hi": "प्रधानमंत्री मुद्रा योजना (PMMY) सूक्ष्म और छोटे व्यवसायों, दुकानदारों, दस्तकारों और नए उद्यमियों को बिना किसी गारंटी (Collateral-Free) के लोन उपलब्ध कराती है। इसके तहत तीन श्रेणियां हैं: शिशु (₹50,000 तक), किशोर (₹50,000 से ₹5 लाख तक) और तरुण (₹5 लाख से ₹10 लाख तक)।",
+    "detailed_description_en": "PMMY provides collateral-free loans to micro and small enterprises for income-generating activities in manufacturing, processing, trading, or services. Structured in 3 tiers: Shishu (up to ₹50k), Kishore (₹50k to ₹5L), and Tarun (₹5L to ₹10L).",
+    "ministry": "वित्त मंत्रालय (Ministry of Finance)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "business_msme_loans",
+    "benefit_amount_text": "₹50,000 से ₹10,00,000 तक बिना गारंटी लोन",
+    "benefit_type": "loan_subsidy",
+    "official_portal_url": "https://www.mudra.org.in/",
+    "rules": [
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "description_hi": "आवेदक की आयु 18 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Applicant must be at least 18 years old"
+      },
+      {
+        "field": "occupation",
+        "operator": "IN",
+        "value": ["business_self_employed", "unemployed", "artisan_craftsperson", "employed_private", "other"],
+        "description_hi": "आवेदक छोटा व्यापारी, स्वरोजगारी, कारीगर या नया व्यवसाय शुरू करने वाला होना चाहिए",
+        "description_en": "Applicant must be a micro-entrepreneur, artisan, or self-employed individual"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "पहचान प्रमाण (आधार कार्ड / वोटर आईडी)",
+        "name_en": "Identity Proof (Aadhaar / Voter ID)",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI / ECI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "address_proof",
+        "name_hi": "निवास प्रमाण पत्र / बिजली बिल",
+        "name_en": "Address Proof / Utility Bill",
+        "is_mandatory": true,
+        "issuing_authority": "संबंधित विभाग",
+        "how_to_get_url": null
+      },
+      {
+        "id": "business_proof",
+        "name_hi": "व्यवसाय का विवरण / प्रोजेक्ट रिपोर्ट / रजिस्ट्रेशन",
+        "name_en": "Business Proof / Quotation / Project Report",
+        "is_mandatory": true,
+        "issuing_authority": "उद्यम आधार या संबंधित स्थानीय संस्था",
+        "how_to_get_url": "https://udyamregistration.gov.in/"
+      },
+      {
+        "id": "bank_statement",
+        "name_hi": "पिछले 6 महीने का बैंक स्टेटमेंट",
+        "name_en": "Last 6 Months Bank Statement",
+        "is_mandatory": true,
+        "issuing_authority": "बैंक शाखा",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. अपने नजदीकी बैंक शाखा, ग्रामीण बैंक या NBFC में संपर्क करें या udyamimitra.in पर ऑनलाइन आवेदन करें।",
+      "2. मुद्रा लोन आवेदन फॉर्म (शिशु, किशोर या तरुण) भरें।",
+      "3. अपने व्यवसाय की योजना (कोटेशन/प्रोजेक्ट रिपोर्ट) और जरूरी कागजात संलग्न करें।",
+      "4. बैंक द्वारा सत्यापन के बाद लोन राशि आपके खाते में स्वीकृत कर दी जाती है।"
+    ],
+    "application_steps_en": [
+      "1. Apply online via udyamimitra.in or visit any commercial bank, RRB, or MFI.",
+      "2. Fill out the MUDRA application form corresponding to your category.",
+      "3. Submit business quotations, KYC documents, and project details.",
+      "4. After bank appraisal, the loan is disbursed with a MUDRA Debit Card."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या मुद्रा लोन के लिए किसी गारंटी या गिरवी की जरूरत होती है?",
+        "question_en": "Is collateral security required for MUDRA loans?",
+        "answer_hi": "नहीं, मुद्रा योजना के तहत किसी भी संपत्ति या गारंटी की आवश्यकता नहीं होती है।",
+        "answer_en": "No, MUDRA loans do not require any collateral security or third-party guarantee."
+      }
+    ]
+  },
+  {
+    "id": "sukanya-samriddhi-yojana",
+    "name_hi": "सुकन्या समृद्धि योजना (SSY)",
+    "name_en": "Sukanya Samriddhi Yojana (SSY)",
+    "short_summary_hi": "बेटियों के उच्च शिक्षा और विवाह के लिए 8.2% ब्याज दर और 100% टैक्स छूट वाली बचत योजना।",
+    "short_summary_en": "Small savings scheme for girl child offering 8.2% interest and complete tax exemption under 80C.",
+    "detailed_description_hi": "सुकन्या समृद्धि योजना 'बेटी बचाओ, बेटी पढ़ाओ' अभियान के अंतर्गत बालिकाओं के भविष्य को सुरक्षित करने के लिए शुरू की गई एक सरकारी बचत योजना है। इसमें 10 वर्ष से कम आयु की बेटी के नाम पर न्यूनतम ₹250 से खाता खोला जा सकता है। यह योजना 8.2% की उच्चतम ब्याज दर और EEE (Exempt-Exempt-Exempt) टैक्स छूट प्रदान करती है।",
+    "detailed_description_en": "A Government of India-backed savings scheme targeted at parents of girl children under 10 years of age. It offers an attractive 8.2% sovereign interest rate with triple tax benefits (EEE status) under Section 80C.",
+    "ministry": "महिला एवं बाल विकास मंत्रालय / वित्त मंत्रालय",
+    "level": "central",
+    "applicable_state": null,
+    "category": "women_child",
+    "benefit_amount_text": "8.2% वार्षिक ब्याज + 100% टैक्स छूट",
+    "benefit_type": "direct_benefit_transfer",
+    "official_portal_url": "https://www.indiapost.gov.in/",
+    "rules": [
+      {
+        "field": "gender",
+        "operator": "IN",
+        "value": ["female", "all"],
+        "description_hi": "योजना केवल बालिकाओं (लड़कियों) के नाम पर लागू है",
+        "description_en": "Scheme is specifically for female child beneficiaries"
+      },
+      {
+        "field": "age",
+        "operator": "<=",
+        "value": 10,
+        "description_hi": "बालिका की आयु 10 वर्ष से कम होनी चाहिए (या परिवार में 10 वर्ष से कम की बेटी हो)",
+        "description_en": "Girl child age must be 10 years or younger at account opening"
+      }
+    ],
+    "documents": [
+      {
+        "id": "birth_certificate",
+        "name_hi": "बालिका का जन्म प्रमाण पत्र (Birth Certificate)",
+        "name_en": "Girl Child Birth Certificate",
+        "is_mandatory": true,
+        "issuing_authority": "नगर निगम / रजिस्ट्रार",
+        "how_to_get_url": null
+      },
+      {
+        "id": "guardian_aadhaar",
+        "name_hi": "माता-पिता या अभिभावक का आधार कार्ड व पैन कार्ड",
+        "name_en": "Parent / Guardian Aadhaar & PAN Card",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI / Income Tax Dept",
+        "how_to_get_url": null
+      },
+      {
+        "id": "photograph",
+        "name_hi": "बालिका और अभिभावक की पासपोर्ट साइज फोटो",
+        "name_en": "Passport Size Photographs",
+        "is_mandatory": true,
+        "issuing_authority": "स्वयं",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. नजदीकी डाकघर (Post Office) या किसी भी अधिकृत बैंक शाखा में जाएं।",
+      "2. सुकन्या समृद्धि योजना (SSY) खाता खोलने का फॉर्म भरें।",
+      "3. बेटी का जन्म प्रमाण पत्र और अभिभावक का आधार कार्ड संलग्न करें।",
+      "4. न्यूनतम ₹250 की प्रारंभिक राशि जमा करें और पासबुक प्राप्त करें।"
+    ],
+    "application_steps_en": [
+      "1. Visit the nearest India Post office or authorized public/private commercial bank.",
+      "2. Fill out the SSY account opening form.",
+      "3. Attach girl child birth certificate and parent/guardian KYC documents.",
+      "4. Deposit initial opening amount (minimum ₹250) and collect passbook."
+    ],
+    "faqs": [
+      {
+        "question_hi": "एक परिवार में कितनी बेटियों के खाते खोले जा सकते हैं?",
+        "question_en": "How many accounts can be opened per family?",
+        "answer_hi": "एक परिवार में अधिकतम दो बेटियों के खाते खोले जा सकते हैं (जुड़वां के मामले में तीन)।",
+        "answer_en": "Maximum of two accounts per family (or three in case of twin girls as second birth)."
+      }
+    ]
+  },
+  {
+    "id": "pm-awas-yojana-urban-gramin",
+    "name_hi": "प्रधानमंत्री आवास योजना (PMAY)",
+    "name_en": "Pradhan Mantri Awas Yojana (PMAY)",
+    "short_summary_hi": "बेघर एवं कच्चे मकानों में रहने वाले परिवारों को पक्का मकान बनाने के लिए ₹1.20 लाख से ₹2.5 लाख तक की आर्थिक सहायता।",
+    "short_summary_en": "Financial assistance of ₹1.20 Lakh to ₹2.5 Lakh to homeless and kutcha house dwellers to construct a pucca house.",
+    "detailed_description_hi": "प्रधानमंत्री आवास योजना भारत सरकार की एक महत्वाकांक्षी पहल है जिसका उद्देश्य सभी पात्र बेघर और कच्चे घरों में रहने वाले ग्रामीण व शहरी परिवारों को बुनियादी सुविधाओं (शौचालय, बिजली, पानी) से युक्त पक्के मकान उपलब्ध कराना है। ग्रामीण क्षेत्रों में ₹1.20 लाख (मैदानी) और ₹1.30 लाख (पहाड़ी) तथा शहरी क्षेत्रों में ब्याज सब्सिडी (CLSS) प्रदान की जाती है।",
+    "detailed_description_en": "PMAY aims to provide housing for all by assisting eligible rural (PMAY-G) and urban (PMAY-U) families without a pucca house with direct financial grants and credit-linked interest subsidies.",
+    "ministry": "आवासन और शहरी कार्य मंत्रालय / ग्रामीण विकास मंत्रालय",
+    "level": "central",
+    "applicable_state": null,
+    "category": "housing_urban",
+    "benefit_amount_text": "₹1,20,000 से ₹2,50,000 पक्का मकान सहायता",
+    "benefit_type": "housing_grant",
+    "official_portal_url": "https://pmaymis.gov.in/",
+    "rules": [
+      {
+        "field": "annual_income",
+        "operator": "<=",
+        "value": 300000,
+        "description_hi": "वार्षिक पारिवारिक आय EWS श्रेणी (₹3 लाख तक) के अंतर्गत होनी चाहिए",
+        "description_en": "Annual family income must be within EWS bracket (up to ₹3 Lakhs)"
+      },
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "description_hi": "परिवार का मुखिया 18 वर्ष या उससे अधिक आयु का होना चाहिए",
+        "description_en": "Head of household must be 18 years or older"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड (परिवार के सभी सदस्यों का)",
+        "name_en": "Aadhaar Cards of all household members",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "income_certificate",
+        "name_hi": "आय प्रमाण पत्र",
+        "name_en": "Income Certificate",
+        "is_mandatory": true,
+        "issuing_authority": "तहसीलदार / राजस्व अधिकारी",
+        "how_to_get_url": null
+      },
+      {
+        "id": "bank_passbook",
+        "name_hi": "बैंक पासबुक (DBT सक्रिय)",
+        "name_en": "Bank Account Passbook (DBT active)",
+        "is_mandatory": true,
+        "issuing_authority": "बैंक शाखा",
+        "how_to_get_url": null
+      },
+      {
+        "id": "no_pucca_house_affidavit",
+        "name_hi": "पक्का मकान न होने का शपथ पत्र",
+        "name_en": "Affidavit confirming no pucca house ownership in India",
+        "is_mandatory": true,
+        "issuing_authority": "नोटरी / शपथ आयुक्त",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. ग्रामीण क्षेत्रों में ग्राम पंचायत/सचिव के माध्यम से Awaas+ सूची में नाम पंजीकृत करवाएं।",
+      "2. शहरी क्षेत्रों में pmaymis.gov.in पर जाएं या नजदीकी सीएससी (CSC) केंद्र पर आवेदन करें।",
+      "3. अपना आधार विवरण और परिवार के सदस्यों की जानकारी भरें।",
+      "4. सत्यापन (Geo-tagging) के बाद मकान निर्माण के चरणों के अनुसार किस्तें खाते में प्राप्त होती हैं।"
+    ],
+    "application_steps_en": [
+      "1. In rural areas, register via Gram Panchayat Awaas+ survey list.",
+      "2. In urban areas, apply online at pmaymis.gov.in or through the nearest CSC center.",
+      "3. Submit family Aadhaar details, income certificate, and bank information.",
+      "4. After geo-tagging inspection, grant installments are transferred in phases."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या जिनके पास पहले से पक्का मकान है वे आवेदन कर सकते हैं?",
+        "question_en": "Can someone who already owns a pucca house apply?",
+        "answer_hi": "नहीं, परिवार के किसी भी सदस्य के नाम पर देश में कहीं भी पक्का मकान नहीं होना चाहिए।",
+        "answer_en": "No, the beneficiary family should not own a pucca house anywhere in India."
+      }
+    ]
+  },
+  {
+    "id": "post-matric-scholarship-sc-st-obc",
+    "name_hi": "पोस्ट मैट्रिक छात्रवृत्ति योजना (Post-Matric Scholarship)",
+    "name_en": "Post-Matric Scholarship Scheme for SC/ST/OBC Students",
+    "short_summary_hi": "10वीं के बाद उच्च शिक्षा प्राप्त कर रहे विद्यार्थियों को 100% ट्यूशन फीस प्रतिपूर्ति और मासिक भत्ता।",
+    "short_summary_en": "Full tuition fee reimbursement and maintenance allowance for SC/ST/OBC students pursuing post-matric studies.",
+    "detailed_description_hi": "यह योजना 10वीं कक्षा (मैट्रिक) के बाद कॉलेज, यूनिवर्सिटी, आईटीआई, या व्यावसायिक कोर्स में पढ़ाई कर रहे अनुसूचित जाति, जनजाति व अन्य पिछड़ा वर्ग के छात्रों को वित्तीय सहायता प्रदान करती है ताकि वे बिना किसी आर्थिक बाधा के अपनी पढ़ाई पूरी कर सकें।",
+    "detailed_description_en": "The Post-Matric Scholarship provides complete tuition fee reimbursement and compulsory non-refundable fees along with annual maintenance allowances to eligible SC, ST, and OBC students pursuing higher secondary and post-secondary education.",
+    "ministry": "सामाजिक न्याय एवं अधिकारिता मंत्रालय (Ministry of Social Justice and Empowerment)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "education_scholarships",
+    "benefit_amount_text": "100% ट्यूशन फीस + ₹4,000 से ₹13,500 वार्षिक भत्ता",
+    "benefit_type": "scholarship",
+    "official_portal_url": "https://scholarships.gov.in/",
+    "rules": [
+      {
+        "field": "occupation",
+        "operator": "==",
+        "value": "student",
+        "description_hi": "आवेदक वर्तमान में अध्ययनरत छात्र होना चाहिए",
+        "description_en": "Applicant must be currently enrolled as a student"
+      },
+      {
+        "field": "category",
+        "operator": "IN",
+        "value": ["sc", "st", "obc"],
+        "description_hi": "आवेदक SC, ST या OBC वर्ग से होना चाहिए",
+        "description_en": "Applicant must belong to SC, ST, or OBC category"
+      },
+      {
+        "field": "annual_income",
+        "operator": "<=",
+        "value": 250000,
+        "description_hi": "पारिवारिक वार्षिक आय ₹2.5 लाख से अधिक नहीं होनी चाहिए",
+        "description_en": "Annual family income must not exceed ₹2.5 Lakhs"
+      },
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 15,
+        "description_hi": "आयु 15 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Age must be at least 15 years"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड (छात्र का)",
+        "name_en": "Aadhaar Card of the Student",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": "https://myaadhaar.uidai.gov.in/"
+      },
+      {
+        "id": "caste_certificate",
+        "name_hi": "जाति प्रमाण पत्र (Caste Certificate)",
+        "name_en": "Caste Certificate",
+        "is_mandatory": true,
+        "issuing_authority": "सक्षम राजस्व अधिकारी / तहसीलदार",
+        "how_to_get_url": null
+      },
+      {
+        "id": "income_certificate",
+        "name_hi": "आय प्रमाण पत्र (Income Certificate)",
+        "name_en": "Income Certificate",
+        "is_mandatory": true,
+        "issuing_authority": "तहसीलदार / राजस्व विभाग",
+        "how_to_get_url": null
+      },
+      {
+        "id": "previous_marksheet",
+        "name_hi": "पिछली कक्षा (10वीं/12वीं) की अंकतालिका",
+        "name_en": "Previous Qualifying Marksheet",
+        "is_mandatory": true,
+        "issuing_authority": "संबंधित शिक्षा बोर्ड / यूनिवर्सिटी",
+        "how_to_get_url": null
+      },
+      {
+        "id": "fee_receipt_bonafide",
+        "name_hi": "संस्थान से बोनाफाइड प्रमाण पत्र व फीस रसीद",
+        "name_en": "Institute Bonafide Certificate & Fee Receipt",
+        "is_mandatory": true,
+        "issuing_authority": "कॉलेज / संस्थान",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. राष्ट्रीय छात्रवृत्ति पोर्टल (NSP) scholarships.gov.in पर जाएं।",
+      "2. OTR (One Time Registration) प्रक्रिया पूरी करें।",
+      "3. Post-Matric Scholarship योजना का चयन करें और कोर्स विवरण भरें।",
+      "4. आवश्यक दस्तावेज़ (जाति, आय, अंकतालिका) अपलोड करें।",
+      "5. फॉर्म सबमिट करें और प्रिंटआउट अपने कॉलेज के नोडल अधिकारी के पास जमा कराएं।"
+    ],
+    "application_steps_en": [
+      "1. Visit the National Scholarship Portal at scholarships.gov.in.",
+      "2. Complete the One Time Registration (OTR) with your Aadhaar.",
+      "3. Select Post-Matric Scholarship and provide course and institute details.",
+      "4. Upload caste, income, and educational certificates.",
+      "5. Submit online and submit a hard copy to your institute's verification officer."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या प्राइवेट कॉलेज के छात्र भी इसके लिए पात्र हैं?",
+        "question_en": "Are students studying in private institutions eligible?",
+        "answer_hi": "हाँ, यदि प्राइवेट कॉलेज सरकार/UGC/AICTE से मान्यता प्राप्त है, तो छात्र पात्र हैं।",
+        "answer_en": "Yes, as long as the private college is government-recognized and mapped on NSP."
+      }
+    ]
+  },
+  {
+    "id": "national-apprenticeship-promotion-scheme",
+    "name_hi": "राष्ट्रीय शिक्षुता संवर्धन योजना (NAPS)",
+    "name_en": "National Apprenticeship Promotion Scheme (NAPS)",
+    "short_summary_hi": "युवाओं को उद्योगों में व्यावहारिक ऑन-द-जॉब ट्रेनिंग और प्रतिमाह स्टाइपेंड सहायता।",
+    "short_summary_en": "On-the-job industrial skill training with direct monthly government stipend support up to ₹1,500/month.",
+    "detailed_description_hi": "NAPS भारत सरकार के कौशल विकास और उद्यमशीलता मंत्रालय की प्रमुख योजना है, जो युवाओं को कंपनियों में हैंड्स-ऑन ट्रेनिंग दिलाती है। सरकार प्रशिक्षु (Apprentice) को दिए जाने वाले स्टाइपेंड का 25% (अधिकतम ₹1,500 प्रति माह) सीधे डीबीटी द्वारा प्रदान करती है।",
+    "detailed_description_en": "NAPS promotes apprenticeship training by incentivizing employers and providing financial stipend support directly to candidates, enhancing their employability through industry-led practical training.",
+    "ministry": "कौशल विकास और उद्यमशीलता मंत्रालय (MSDE)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "skills_employment",
+    "benefit_amount_text": "₹1,500/माह सरकारी स्टाइपेंड + इंडस्ट्री सर्टिफिकेशन",
+    "benefit_type": "direct_benefit_transfer",
+    "official_portal_url": "https://www.apprenticeshipindia.gov.in/",
+    "rules": [
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "description_hi": "आयु 18 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Minimum age must be 18 years"
+      },
+      {
+        "field": "age",
+        "operator": "<=",
+        "value": 35,
+        "description_hi": "आयु 35 वर्ष से अधिक नहीं होनी चाहिए",
+        "description_en": "Age must not exceed 35 years"
+      },
+      {
+        "field": "occupation",
+        "operator": "IN",
+        "value": ["student", "unemployed", "other"],
+        "description_hi": "आवेदक प्रशिक्षुता की तलाश में छात्र या बेरोजगार युवा होना चाहिए",
+        "description_en": "Applicant must be a student or job-seeker looking for apprenticeships"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड",
+        "name_en": "Aadhaar Card",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "education_proof",
+        "name_hi": "10वीं/12वीं/ITI/डिप्लोमा/ग्रेजुएशन प्रमाण पत्र",
+        "name_en": "Educational Qualification Certificate (10th/12th/ITI/Degree)",
+        "is_mandatory": true,
+        "issuing_authority": "शिक्षा बोर्ड / आईटीआई संस्थान",
+        "how_to_get_url": null
+      },
+      {
+        "id": "bank_passbook",
+        "name_hi": "बैंक पासबुक (DBT सक्रिय)",
+        "name_en": "Bank Passbook with DBT Seeding",
+        "is_mandatory": true,
+        "issuing_authority": "बैंक शाखा",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. apprenticeshipindia.gov.in पर जाएं और 'Candidate Registration' करें।",
+      "2. अपना आधार ई-केवाईसी और शैक्षणिक योग्यता विवरण भरें।",
+      "3. 'Apprenticeship Opportunities' में अपनी रुचि के अनुसार कंपनी और ट्रेड खोजें।",
+      "4. कंपनी के अवसर पर 'Apply' करें और चयन के बाद अप्रेंटिसशिप अनुबंध स्वीकार करें।"
+    ],
+    "application_steps_en": [
+      "1. Go to apprenticeshipindia.gov.in and click 'Candidate Registration'.",
+      "2. Complete Aadhaar e-KYC and educational profile details.",
+      "3. Search for available apprenticeship opportunities by trade and location.",
+      "4. Apply to preferred companies and accept the apprenticeship contract upon selection."
+    ],
+    "faqs": [
+      {
+        "question_hi": "ट्रेनिंग पूरी होने पर क्या सर्टिफिकेट मिलता है?",
+        "question_en": "Is a certificate awarded upon completion?",
+        "answer_hi": "हाँ, NCVT द्वारा प्रमाणित राष्ट्रीय शिक्षुता प्रमाण पत्र (National Apprenticeship Certificate) मिलता है।",
+        "answer_en": "Yes, candidates receive a government-recognized National Apprenticeship Certificate (NAC)."
+      }
+    ]
+  },
+  {
+    "id": "central-sector-merit-scholarship-college",
+    "name_hi": "सेंट्रल सेक्टर कॉलेज एवं यूनिवर्सिटी छात्रवृत्ति (CSSS)",
+    "name_en": "Central Sector Scheme of Scholarship for College and University Students",
+    "short_summary_hi": "12वीं में मेधावी छात्रों को स्नातक व स्नातकोत्तर पढ़ाई के लिए ₹12,000 से ₹20,000 प्रति वर्ष।",
+    "short_summary_en": "Financial assistance of ₹12,000 to ₹20,000/year for meritorious students pursuing graduate and post-graduate studies.",
+    "detailed_description_hi": "उच्च शिक्षा विभाग (शिक्षा मंत्रालय) द्वारा संचालित यह मेरिट-सह-साधन (Merit-cum-Means) छात्रवृत्ति उन मेधावी छात्रों के लिए है जो 12वीं बोर्ड परीक्षा में 80th परसेंटाइल से अधिक अंक प्राप्त करते हैं और नियमित डिग्री कोर्स कर रहे हैं।",
+    "detailed_description_en": "A prestigious central sector scheme for meritorious students above 80th percentile in relevant stream in 10+2. Provides ₹12,000/year for first 3 years of college and ₹20,000/year at post-graduation level.",
+    "ministry": "शिक्षा मंत्रालय (Ministry of Education - Higher Education)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "education_scholarships",
+    "benefit_amount_text": "₹12,000 से ₹20,000 प्रति वर्ष",
+    "benefit_type": "scholarship",
+    "official_portal_url": "https://scholarships.gov.in/",
+    "rules": [
+      {
+        "field": "occupation",
+        "operator": "==",
+        "value": "student",
+        "description_hi": "आवेदक नियमित कॉलेज/यूनिवर्सिटी छात्र होना चाहिए",
+        "description_en": "Applicant must be a regular college or university student"
+      },
+      {
+        "field": "annual_income",
+        "operator": "<=",
+        "value": 450000,
+        "description_hi": "पारिवारिक वार्षिक आय ₹4.5 लाख से कम होनी चाहिए",
+        "description_en": "Annual family income must be ₹4.5 Lakhs or less"
+      },
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 17,
+        "description_hi": "आयु 17 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Applicant must be at least 17 years old"
+      },
+      {
+        "field": "age",
+        "operator": "<=",
+        "value": 25,
+        "description_hi": "आयु 25 वर्ष से कम होनी चाहिए",
+        "description_en": "Age must be 25 years or younger"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड",
+        "name_en": "Aadhaar Card",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "class_12_marksheet",
+        "name_hi": "12वीं बोर्ड की अंकतालिका",
+        "name_en": "Class 12th Board Marksheet",
+        "is_mandatory": true,
+        "issuing_authority": "सीबीएसई / राज्य शिक्षा बोर्ड",
+        "how_to_get_url": null
+      },
+      {
+        "id": "income_certificate",
+        "name_hi": "सक्षम अधिकारी द्वारा जारी आय प्रमाण पत्र",
+        "name_en": "Income Certificate issued by Revenue Authority",
+        "is_mandatory": true,
+        "issuing_authority": "राजस्व विभाग / तहसीलदार",
+        "how_to_get_url": null
+      },
+      {
+        "id": "college_admission_proof",
+        "name_hi": "कॉलेज प्रवेश रसीद व छात्र पहचान पत्र",
+        "name_en": "College Admission Fee Receipt & Student ID",
+        "is_mandatory": true,
+        "issuing_authority": "संबद्ध कॉलेज / विश्वविद्यालय",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. scholarships.gov.in पर नेशनल स्कॉलरशिप पोर्टल (NSP) पर जाएं।",
+      "2. 'Department of Higher Education' के तहत इस योजना का चयन करें।",
+      "3. अपना 12वीं का रोल नंबर और कॉलेज दाखिला विवरण दर्ज करें।",
+      "4. आय प्रमाण पत्र और फीस रसीद अपलोड करके आवेदन सबमिट करें।",
+      "5. कॉलेज द्वारा सत्यापन के बाद राशि सीधे डीबीटी द्वारा छात्र के बैंक खाते में आएगी।"
+    ],
+    "application_steps_en": [
+      "1. Visit scholarships.gov.in on the National Scholarship Portal.",
+      "2. Select Central Sector Scheme under Department of Higher Education.",
+      "3. Enter Class 12 roll number and college admission details.",
+      "4. Upload income certificate and college proof.",
+      "5. Upon institutional and state verification, scholarship is disbursed via DBT."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या पत्राचार (Distance Education) वाले छात्र पात्र हैं?",
+        "question_en": "Are distance education students eligible?",
+        "answer_hi": "नहीं, यह योजना केवल नियमित (Regular full-time) छात्रों के लिए है।",
+        "answer_en": "No, this scheme is strictly for regular full-time undergraduate courses."
+      }
+    ]
+  },
+  {
+    "id": "pm-kaushal-vikas-yojana",
+    "name_hi": "प्रधानमंत्री कौशल विकास योजना 4.0 (PMKVY)",
+    "name_en": "Pradhan Mantri Kaushal Vikas Yojana (PMKVY 4.0)",
+    "short_summary_hi": "युवाओं को मुफ्त उद्योग-उन्मुख कौशल प्रशिक्षण, सरकारी प्रमाण पत्र और रोजगार सहायता।",
+    "short_summary_en": "100% Free industry-relevant skill certification training, digital courses, and placement assistance.",
+    "detailed_description_hi": "PMKVY भारत के युवाओं को आधुनिक उद्योगों की मांग के अनुसार लघु अवधि का कौशल प्रशिक्षण (Short-Term Training) प्रदान करती है। ट्रेनिंग पूरी तरह निशुल्क होती है और मूल्यांकन पास करने वाले छात्रों को राष्ट्रीय कौशल योग्यता फ्रेमवर्क (NSQF) प्रमाणपत्र व मानदेय सहायता दी जाती है।",
+    "detailed_description_en": "PMKVY empowers Indian youth with industry-recognized skill training across hundreds of modern job roles (AI, Robotics, Healthcare, Solar, Automotive) free of cost, with assessment certifications and employment linkage.",
+    "ministry": "कौशल विकास और उद्यमशीलता मंत्रालय (MSDE)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "skills_employment",
+    "benefit_amount_text": "मुफ्त प्रशिक्षण + ₹8,000 मानदेय + सरकारी प्रमाण पत्र",
+    "benefit_type": "in_kind_goods",
+    "official_portal_url": "https://www.pmkvyofficial.org/",
+    "rules": [
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 15,
+        "description_hi": "आयु 15 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Minimum age is 15 years"
+      },
+      {
+        "field": "age",
+        "operator": "<=",
+        "value": 45,
+        "description_hi": "आयु 45 वर्ष से कम होनी चाहिए",
+        "description_en": "Age must be 45 years or below"
+      },
+      {
+        "field": "occupation",
+        "operator": "IN",
+        "value": ["unemployed", "student", "daily_wage_laborer", "other"],
+        "description_hi": "आवेदक नए कौशल सीखने का इच्छुक युवा या बेरोजगार होना चाहिए",
+        "description_en": "Applicant must be a job-seeker or aspiring learner"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड",
+        "name_en": "Aadhaar Card",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "bank_account",
+        "name_hi": "बैंक खाता विवरण",
+        "name_en": "Bank Account Details",
+        "is_mandatory": true,
+        "issuing_authority": "बैंक शाखा",
+        "how_to_get_url": null
+      },
+      {
+        "id": "qualification_certificate",
+        "name_hi": "शैक्षणिक प्रमाण पत्र (न्यूनतम 5वीं/8वीं/10वीं)",
+        "name_en": "Minimum Qualification Certificate",
+        "is_mandatory": true,
+        "issuing_authority": "स्कूल / बोर्ड",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. स्किल इंडिया डिजिटल पोर्टल skillindiadigital.gov.in पर जाएं।",
+      "2. अपना मोबाइल नंबर दर्ज करके पंजीकरण करें।",
+      "3. अपने जिले में नजदीकी प्रधानमंत्री कौशल केंद्र (PMKK) या ट्रेनिंग सेंटर खोजें।",
+      "4. अपनी पसंद का कोर्स (उदा. डिजिटल लिटरेसी, सोलर टेक्नीशियन, हेल्थकेयर) चुनें।",
+      "5. सेंटर जाकर बायोमेट्रिक उपस्थिति दें और क्लास शुरू करें।",
+      "6. ट्रेनिंग पूरी करने के बाद परीक्षा दें और सरकारी प्रमाण पत्र प्राप्त करें।"
+    ],
+    "application_steps_en": [
+      "1. Visit the Skill India Digital Portal at skillindiadigital.gov.in.",
+      "2. Register using your mobile number and Aadhaar.",
+      "3. Search for the nearest Pradhan Mantri Kaushal Kendra (PMKK) or accredited training center.",
+      "4. Select your preferred job role/course.",
+      "5. Attend classroom and practical sessions and take the national assessment test."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या ट्रेनिंग के लिए कोई फीस देनी होती है?",
+        "question_en": "Is there any course fee for PMKVY training?",
+        "answer_hi": "नहीं, PMKVY के तहत पूरी ट्रेनिंग और परीक्षा शुल्क सरकार वहन करती है।",
+        "answer_en": "No, the entire training, course material, and assessment fee is 100% funded by the Government."
+      }
+    ]
+  },
+  {
+    "id": "free-coaching-scheme-sc-obc",
+    "name_hi": "डॉ. आंबेडकर मुफ्त कोचिंग योजना (Free Coaching Scheme)",
+    "name_en": "Dr. Ambedkar Free Coaching Scheme for SC and OBC Students",
+    "short_summary_hi": "SC और OBC छात्रों को UPSC, SSC, NEET, JEE जैसी प्रतियोगी परीक्षाओं के लिए 100% मुफ्त कोचिंग और मासिक वजीफा।",
+    "short_summary_en": "100% Free premier competitive exam coaching (UPSC/NEET/JEE) + monthly stipend up to ₹6,000 for SC/OBC aspirants.",
+    "detailed_description_hi": "सामाजिक न्याय और अधिकारिता मंत्रालय द्वारा संचालित यह योजना आर्थिक रूप से कमजोर अनुसूचित जाति (SC) और अन्य पिछड़ा वर्ग (OBC) के होनहार छात्रों को देश के प्रतिष्ठित कोचिंग संस्थानों में सिविल सेवा, इंजीनियरिंग, मेडिकल, बैंकिंग आदि परीक्षाओं की मुफ्त तैयारी करवाती है।",
+    "detailed_description_en": "Provides free coaching to economically disadvantaged SC and OBC candidates for competitive exams like Civil Services, State PCS, JEE, NEET, Banking, and SSC, along with a monthly stipend to support living costs.",
+    "ministry": "सामाजिक न्याय एवं अधिकारिता मंत्रालय",
+    "level": "central",
+    "applicable_state": null,
+    "category": "education_scholarships",
+    "benefit_amount_text": "मुफ्त कोचिंग फीस + ₹4,00,0 से ₹6,000 मासिक वजीफा",
+    "benefit_type": "scholarship",
+    "official_portal_url": "https://coaching.dosje.gov.in/",
+    "rules": [
+      {
+        "field": "category",
+        "operator": "IN",
+        "value": ["sc", "obc"],
+        "description_hi": "आवेदक SC या OBC वर्ग का होना चाहिए",
+        "description_en": "Applicant must belong to SC or OBC category"
+      },
+      {
+        "field": "annual_income",
+        "operator": "<=",
+        "value": 800000,
+        "description_hi": "पारिवारिक वार्षिक आय ₹8.0 लाख या उससे कम होनी चाहिए",
+        "description_en": "Annual family income must be ₹8.0 Lakhs or less"
+      },
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "description_hi": "आयु 18 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Minimum age is 18 years"
+      },
+      {
+        "field": "age",
+        "operator": "<=",
+        "value": 35,
+        "description_hi": "आयु 35 वर्ष से कम होनी चाहिए",
+        "description_en": "Age must not exceed 35 years"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड",
+        "name_en": "Aadhaar Card",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "caste_certificate",
+        "name_hi": "जाति प्रमाण पत्र (SC / OBC)",
+        "name_en": "Caste Certificate (SC/OBC)",
+        "is_mandatory": true,
+        "issuing_authority": "राजस्व अधिकारी / तहसीलदार",
+        "how_to_get_url": null
+      },
+      {
+        "id": "income_certificate",
+        "name_hi": "सक्षम प्राधिकारी द्वारा जारी आय प्रमाण पत्र",
+        "name_en": "Income Certificate",
+        "is_mandatory": true,
+        "issuing_authority": "तहसीलदार",
+        "how_to_get_url": null
+      },
+      {
+        "id": "degree_marksheet",
+        "name_hi": "12वीं या स्नातक की अंकतालिका",
+        "name_en": "12th / Graduation Marksheet",
+        "is_mandatory": true,
+        "issuing_authority": "बोर्ड / यूनिवर्सिटी",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. आधिकारिक पोर्टल coaching.dosje.gov.in पर जाएं।",
+      "2. 'Register' पर क्लिक करें और अपनी मूल जानकारी दर्ज करें।",
+      "3. लक्षित परीक्षा (UPSC, NEET, JEE आदि) का चयन करें।",
+      "4. जाति और आय प्रमाण पत्र अपलोड करें।",
+      "5. मेरिट सूची में नाम आने पर चयनित कोचिंग संस्थान में प्रवेश लें।"
+    ],
+    "application_steps_en": [
+      "1. Visit the portal at coaching.dosje.gov.in.",
+      "2. Register with basic personal and educational credentials.",
+      "3. Select your target competitive exam (UPSC, NEET, JEE, Banking).",
+      "4. Upload caste, income, and educational certificates.",
+      "5. Upon merit list publication, join the empanelled institute of choice."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या कोई छात्र इस योजना का लाभ एक से अधिक बार ले सकता है?",
+        "question_en": "Can a student avail this benefit more than once?",
+        "answer_hi": "प्रारंभिक और मुख्य परीक्षा के लिए छात्र को अधिकतम 2 बार कोचिंग का अवसर मिल सकता है।",
+        "answer_en": "A candidate can avail coaching assistance a maximum of two times across attempts."
+      }
+    ]
+  },
+  {
+    "id": "ladli-behna-yojana-mp",
+    "name_hi": "मुख्यमंत्री लाड़ली बहना योजना (Ladli Behna)",
+    "name_en": "Mukhyamantri Ladli Behna Yojana (Madhya Pradesh)",
+    "short_summary_hi": "मध्य प्रदेश की महिलाओं को आर्थिक स्वावलंबन हेतु ₹1,250 प्रति माह (₹15,000 प्रति वर्ष) की सीधी सहायता।",
+    "short_summary_en": "Direct monthly financial support of ₹1,250/month (₹15,000/year) to women in Madhya Pradesh.",
+    "detailed_description_hi": "मध्य प्रदेश सरकार की यह फ्लैगशिप योजना राज्य की 21 से 60 वर्ष की विवाहित, विधवा, परित्यक्ता एवं तलाकशुदा महिलाओं को आर्थिक रूप से सशक्त बनाने और उनके पोषण व स्वास्थ्य में सुधार के लिए ₹1,250 प्रतिमाह सीधे उनके डीबीटी सक्रिय बैंक खाते में प्रदान करती है।",
+    "detailed_description_en": "A transformative state welfare program by the Government of Madhya Pradesh transferring ₹1,250 per month directly into bank accounts of eligible women aged 21-60 years to promote financial independence and nutrition.",
+    "ministry": "महिला एवं बाल विकास विभाग (Government of Madhya Pradesh)",
+    "level": "state",
+    "applicable_state": "Madhya Pradesh",
+    "category": "women_child",
+    "benefit_amount_text": "₹1,250 / माह (₹15,000 प्रति वर्ष)",
+    "benefit_type": "direct_benefit_transfer",
+    "official_portal_url": "https://cmladlibahna.mp.gov.in/",
+    "rules": [
+      {
+        "field": "gender",
+        "operator": "==",
+        "value": "female",
+        "description_hi": "केवल महिला आवेदक ही पात्र हैं",
+        "description_en": "Applicant must be female"
+      },
+      {
+        "field": "state",
+        "operator": "==",
+        "value": "Madhya Pradesh",
+        "description_hi": "आवेदक मध्य प्रदेश की मूल निवासी होनी चाहिए",
+        "description_en": "Applicant must be a permanent resident of Madhya Pradesh"
+      },
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 21,
+        "description_hi": "आयु 21 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Minimum age is 21 years"
+      },
+      {
+        "field": "age",
+        "operator": "<=",
+        "value": 60,
+        "description_hi": "आयु 60 वर्ष से कम होनी चाहिए",
+        "description_en": "Maximum age is 60 years"
+      },
+      {
+        "field": "annual_income",
+        "operator": "<=",
+        "value": 250000,
+        "description_hi": "पारिवारिक वार्षिक आय ₹2.5 लाख से कम होनी चाहिए",
+        "description_en": "Annual family income must be under ₹2.5 Lakhs"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड (DBT सक्रिय बैंक खाते से लिंक)",
+        "name_en": "Aadhaar Card with active DBT seeding",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "samagra_id",
+        "name_hi": "समग्र परिवार आईडी एवं सदस्य आईडी",
+        "name_en": "Samagra Family & Member ID",
+        "is_mandatory": true,
+        "issuing_authority": "मध्य प्रदेश समग्र पोर्टल",
+        "how_to_get_url": "https://samagra.gov.in/"
+      },
+      {
+        "id": "bank_passbook",
+        "name_hi": "स्वयं का एकल बैंक खाता पासबुक",
+        "name_en": "Individual Bank Account Passbook",
+        "is_mandatory": true,
+        "issuing_authority": "बैंक शाखा",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. अपनी ग्राम पंचायत या वार्ड कार्यालय में आयोजित लाड़ली बहना शिविर में जाएं।",
+      "2. आवेदन पत्र में समग्र आईडी और आधार नंबर दर्ज कराएं।",
+      "3. शिविर में मौजूद ऑपरेटर द्वारा लाइव फोटो और बायोमेट्रिक सत्यापन करवाएं।",
+      "4. पावती (Acknowledgment Slip) प्राप्त करें। सत्यापन के बाद हर महीने की 10 तारीख को राशि खाते में आएगी।"
+    ],
+    "application_steps_en": [
+      "1. Visit the local camp set up at your Gram Panchayat or Ward Office.",
+      "2. Present your Samagra Family ID and Aadhaar card.",
+      "3. Operator captures on-site live photograph and biometric authentication.",
+      "4. Collect acknowledgment receipt; ₹1,250 is credited on the 10th of every month."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या परिवार में 5 एकड़ से अधिक जमीन होने पर पात्र हैं?",
+        "question_en": "Is a family holding over 5 acres of land eligible?",
+        "answer_hi": "नहीं, परिवार के पास कुल 5 एकड़ से अधिक कृषि भूमि होने पर अपात्रता लागू होती है।",
+        "answer_en": "No, families holding more than 5 acres of agricultural land are excluded."
+      }
+    ]
+  },
+  {
+    "id": "indira-gandhi-divyangjan-pension",
+    "name_hi": "इंदिरा गांधी राष्ट्रीय दिव्यांग पेंशन योजना (IGNDPS)",
+    "name_en": "Indira Gandhi National Disability Pension Scheme (IGNDPS)",
+    "short_summary_hi": "गंभीर दिव्यांगता वाले नागरिकों को जीवनयापन हेतु ₹1,000 से ₹2,500 प्रति माह नियमित पेंशन सहायता।",
+    "short_summary_en": "Monthly pension support of ₹1,000 to ₹2,500 for persons with severe disabilities living below poverty line.",
+    "detailed_description_hi": "राष्ट्रीय सामाजिक सहायता कार्यक्रम (NSAP) के तहत भारत सरकार और राज्य सरकारों द्वारा 18 वर्ष या उससे अधिक आयु के 80% या अधिक गंभीर दिव्यांगता (Severe or Multiple Disability) वाले बीपीएल परिवारों के नागरिकों को आजीवन मासिक पेंशन प्रदान की जाती है।",
+    "detailed_description_en": "Under the National Social Assistance Programme (NSAP), individuals aged 18-79 years who suffer from severe or multiple disabilities (80% and above) and belong to BPL households receive monthly disability pension support.",
+    "ministry": "ग्रामीण विकास मंत्रालय (Ministry of Rural Development - NSAP)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "social_security_pensions",
+    "benefit_amount_text": "₹1,000 से ₹2,500 प्रति माह पेंशन",
+    "benefit_type": "direct_benefit_transfer",
+    "official_portal_url": "https://nsap.nic.in/",
+    "rules": [
+      {
+        "field": "is_differently_abled",
+        "operator": "==",
+        "value": true,
+        "description_hi": "आवेदक दिव्यांग (Divyangjan) होना चाहिए",
+        "description_en": "Applicant must be differently-abled"
+      },
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "description_hi": "आयु 18 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Minimum age is 18 years"
+      },
+      {
+        "field": "ration_card_type",
+        "operator": "IN",
+        "value": ["bpl", "antyodaya"],
+        "description_hi": "आवेदक बीपीएल या अंत्योदय परिवार से होना चाहिए",
+        "description_en": "Applicant must belong to a BPL or Antyodaya household"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड",
+        "name_en": "Aadhaar Card",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "disability_certificate",
+        "name_hi": "दिव्यांगता प्रमाण पत्र / स्वावलंबन कार्ड (UDID)",
+        "name_en": "Disability Certificate / Unique Disability ID (UDID)",
+        "is_mandatory": true,
+        "issuing_authority": "मुख्य चिकित्सा अधिकारी (CMO / Medical Board)",
+        "how_to_get_url": "https://www.swavlambancard.gov.in/"
+      },
+      {
+        "id": "bpl_ration_card",
+        "name_hi": "बीपीएल राशन कार्ड / आय प्रमाण पत्र",
+        "name_en": "BPL Ration Card / Income Certificate",
+        "is_mandatory": true,
+        "issuing_authority": "खाद्य विभाग / तहसीलदार",
+        "how_to_get_url": null
+      },
+      {
+        "id": "bank_passbook",
+        "name_hi": "बैंक पासबुक (DBT सक्रिय)",
+        "name_en": "Bank Account Passbook (DBT enabled)",
+        "is_mandatory": true,
+        "issuing_authority": "बैंक शाखा",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. nsap.nic.in पोर्टल पर जाएं या अपने ब्लॉक/तहसील के समाज कल्याण कार्यालय में जाएं।",
+      "2. पेंशन आवेदन पत्र भरें और अपना यूडीआईडी (UDID) नंबर दर्ज करें।",
+      "3. मेडिकल बोर्ड द्वारा जारी दिव्यांगता प्रमाण पत्र और बीपीएल कार्ड संलग्न करें।",
+      "4. सत्यापन के बाद हर महीने पेंशन सीधे बैंक खाते में जमा होती है।"
+    ],
+    "application_steps_en": [
+      "1. Apply via nsap.nic.in or visit the Block/Tehsil Social Welfare Department office.",
+      "2. Complete the disability pension application form and link your UDID card.",
+      "3. Attach CMO disability certificate, BPL proof, and bank passbook.",
+      "4. Following verification, pension is deposited monthly into beneficiary's account."
+    ],
+    "faqs": [
+      {
+        "question_hi": "न्यूनतम कितने प्रतिशत दिव्यांगता पर यह पेंशन मिलती है?",
+        "question_en": "What is the minimum disability percentage required?",
+        "answer_hi": "केंद्रीय योजना के तहत न्यूनतम 80% गंभीर दिव्यांगता आवश्यक है (कुछ राज्य 40% पर भी राज्य पेंशन देते हैं)।",
+        "answer_en": "Under the central IGNDPS scheme, 80% and above disability is required."
+      }
+    ]
+  },
+  {
+    "id": "indira-gandhi-old-age-pension",
+    "name_hi": "इंदिरा गांधी राष्ट्रीय वृद्धावस्था पेंशन योजना (IGNOAPS)",
+    "name_en": "Indira Gandhi National Old Age Pension Scheme (IGNOAPS)",
+    "short_summary_hi": "60 वर्ष या उससे अधिक आयु के वृद्ध नागरिकों को आर्थिक संबल हेतु ₹1,000 से ₹3,000 मासिक पेंशन।",
+    "short_summary_en": "Monthly old age pension of ₹1,000 to ₹3,000 for senior citizens aged 60+ living below poverty line.",
+    "detailed_description_hi": "यह योजना देश के गरीब और बेसहारा वरिष्ठ नागरिकों को वृद्धावस्था में सम्मानपूर्वक जीवन जीने के लिए मासिक वित्तीय सुरक्षा प्रदान करती है। 60 से 79 वर्ष के नागरिकों को मूल पेंशन और 80 वर्ष से अधिक आयु होने पर बढ़ी हुई पेंशन दी जाती है।",
+    "detailed_description_en": "IGNOAPS is a social assistance pension for elderly citizens aged 60 years and above who belong to households living below poverty line, providing regular income in old age.",
+    "ministry": "ग्रामीण विकास मंत्रालय (Ministry of Rural Development)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "social_security_pensions",
+    "benefit_amount_text": "₹1,000 से ₹3,000 प्रति माह पेंशन",
+    "benefit_type": "direct_benefit_transfer",
+    "official_portal_url": "https://nsap.nic.in/",
+    "rules": [
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 60,
+        "description_hi": "आयु 60 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Applicant must be 60 years or older"
+      },
+      {
+        "field": "ration_card_type",
+        "operator": "IN",
+        "value": ["bpl", "antyodaya"],
+        "description_hi": "आवेदक बीपीएल या अंत्योदय राशन कार्ड धारक परिवार से होना चाहिए",
+        "description_en": "Applicant must belong to BPL or Antyodaya family"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड (आयु एवं पहचान प्रमाण)",
+        "name_en": "Aadhaar Card (Age and Identity Proof)",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "bpl_proof",
+        "name_hi": "बीपीएल राशन कार्ड",
+        "name_en": "BPL Ration Card",
+        "is_mandatory": true,
+        "issuing_authority": "खाद्य विभाग",
+        "how_to_get_url": null
+      },
+      {
+        "id": "bank_passbook",
+        "name_hi": "बैंक खाता पासबुक",
+        "name_en": "Bank Account Passbook",
+        "is_mandatory": true,
+        "issuing_authority": "बैंक शाखा",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. नजदीकी ग्राम पंचायत, नगरपालिका या सीएससी (CSC) केंद्र पर जाएं।",
+      "2. वृद्धावस्था पेंशन आवेदन फॉर्म भरें और आधार व बीपीएल कार्ड लगाएं।",
+      "3. ब्लॉक विकास अधिकारी (BDO) या एसडीएम कार्यालय द्वारा सत्यापन।",
+      "4. स्वीकृति मिलते ही पेंशन सीधे बैंक खाते में आनी शुरू हो जाएगी।"
+    ],
+    "application_steps_en": [
+      "1. Visit your local Gram Panchayat, Municipal office, or CSC center.",
+      "2. Fill out the Old Age Pension form with Aadhaar and BPL card copies.",
+      "3. Local BDO/SDM revenue verification is performed.",
+      "4. Once approved, monthly pension is credited directly to the bank account."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या 80 वर्ष के बाद पेंशन राशि बढ़ जाती है?",
+        "question_en": "Does pension increase after reaching 80 years?",
+        "answer_hi": "हाँ, 80 वर्ष की आयु पूरी होने पर केंद्र और राज्य सरकार दोनों की ओर से पेंशन राशि में बढ़ोतरी होती है।",
+        "answer_en": "Yes, both central and state components increase after the beneficiary turns 80."
+      }
+    ]
+  },
+  {
+    "id": "pm-svanidhi-street-vendors",
+    "name_hi": "प्रधानमंत्री स्ट्रीट वेंडर्स आत्मनिर्भर निधि (PM SVANidhi)",
+    "name_en": "PM Street Vendor's AtmaNirbhar Nidhi (PM SVANidhi)",
+    "short_summary_hi": "सड़क किनारे रेहड़ी-पटरी और ठेला लगाने वाले वेंडर्स को ₹10,000 से ₹50,000 तक का सस्ता बैंक लोन और 7% ब्याज सब्सिडी।",
+    "short_summary_en": "Micro-credit facility up to ₹50,000 with 7% interest subsidy and cashback on digital transactions for street vendors.",
+    "detailed_description_hi": "आवासन और शहरी कार्य मंत्रालय द्वारा शुरू की गई PM SVANidhi योजना शहरी और अर्ध-शहरी क्षेत्रों में रेहड़ी, पटरी, ठेला और फेरी लगाने वाले स्ट्रीट वेंडर्स को बिना किसी गारंटी के आसान वर्किंग कैपिटल लोन देती है। पहले ₹10,000, समय पर चुकाने पर ₹20,000 और फिर ₹50,000 का लोन मिलता है।",
+    "detailed_description_en": "PM SVANidhi facilitates affordable working capital loans of ₹10,000 (1st tranche), ₹20,000 (2nd tranche), and ₹50,000 (3rd tranche) without collateral to street vendors to resume their livelihood, incentivizing digital transactions with monthly cashbacks.",
+    "ministry": "आवासन और शहरी कार्य मंत्रालय (MoHUA)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "business_msme_loans",
+    "benefit_amount_text": "₹10,000 से ₹50,000 तक आसान लोन + 7% ब्याज सब्सिडी",
+    "benefit_type": "loan_subsidy",
+    "official_portal_url": "https://pmsvanidhi.mohua.gov.in/",
+    "rules": [
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "description_hi": "आवेदक की आयु 18 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Applicant must be at least 18 years old"
+      },
+      {
+        "field": "occupation",
+        "operator": "IN",
+        "value": ["daily_wage_laborer", "business_self_employed", "artisan_craftsperson", "other"],
+        "description_hi": "आवेदक रेहड़ी, पटरी, ठेला, फेरी लगाने वाला वेंडर या कारीगर होना चाहिए",
+        "description_en": "Applicant must be a street vendor or petty trader"
+      },
+      {
+        "field": "area_type",
+        "operator": "IN",
+        "value": ["urban", "semi-urban"],
+        "description_hi": "वेंडिंग कार्य शहरी या अर्ध-शहरी क्षेत्र में होना चाहिए",
+        "description_en": "Vending activity must be in urban or peri-urban areas"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड (मोबाइल से लिंक)",
+        "name_en": "Aadhaar Card (Linked with Mobile)",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "vending_certificate",
+        "name_hi": "शहरी निकाय द्वारा जारी वेंडिंग प्रमाण पत्र / LOR / सर्वे पहचान पत्र",
+        "name_en": "Vending Certificate / Letter of Recommendation (LOR)",
+        "is_mandatory": true,
+        "issuing_authority": "नगर निगम / नगर पालिका",
+        "how_to_get_url": null
+      },
+      {
+        "id": "bank_passbook",
+        "name_hi": "बैंक पासबुक",
+        "name_en": "Bank Account Passbook",
+        "is_mandatory": true,
+        "issuing_authority": "बैंक शाखा",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. pmsvanidhi.mohua.gov.in पोर्टल पर जाएं या नजदीकी सीएससी (CSC) केंद्र जाएं।",
+      "2. अपना आधार नंबर डालकर ओटीपी से लॉगिन करें।",
+      "3. वेंडिंग सर्टिफिकेट या नगर निकाय से मिला LOR नंबर दर्ज करें।",
+      "4. अपनी नजदीकी बैंक शाखा का चयन करें और लोन आवेदन सबमिट करें।",
+      "5. बैंक द्वारा स्वीकृति मिलते ही 7 दिनों के भीतर लोन राशि खाते में आ जाती है।"
+    ],
+    "application_steps_en": [
+      "1. Visit pmsvanidhi.mohua.gov.in or your nearest CSC center.",
+      "2. Log in using Aadhaar-linked mobile number and OTP.",
+      "3. Enter your Urban Local Body Vending Certificate or Letter of Recommendation (LOR).",
+      "4. Choose preferred lending institution (bank or micro-finance).",
+      "5. Upon appraisal, loan amount is disbursed within 7 days."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या डिजिटल लेनदेन करने पर कैशबैक मिलता है?",
+        "question_en": "Is cashback available on digital transactions?",
+        "answer_hi": "हाँ, UPI/QR कोड से डिजिटल लेनदेन करने पर हर महीने ₹100 तक का कैशबैक सीधे खाते में मिलता है।",
+        "answer_en": "Yes, vendors receive up to ₹1,200 annual cashback (₹100/month) for accepting digital payments."
+      }
+    ]
+  },
+  {
+    "id": "pm-matsya-sampada-yojana",
+    "name_hi": "प्रधानमंत्री मत्स्य संपदा योजना (PMMSY)",
+    "name_en": "Pradhan Mantri Matsya Sampada Yojana (PMMSY)",
+    "short_summary_hi": "मछली पालन, बायोफ्लोक तालाब, बोट और उपकरणों पर 40% से 60% तक की भारी सरकारी सब्सिडी।",
+    "short_summary_en": "Up to 60% government capital subsidy for fish farming, biofloc units, hatcheries, and modern fishing equipment.",
+    "detailed_description_hi": "मत्स्य पालन, पशुपालन और डेयरी मंत्रालय की यह योजना भारत में 'नीली क्रांति' (Blue Revolution) लाने के लिए मत्स्य पालकों, किसानों, स्वयं सहायता समूहों और युवाओं को नए तालाब निर्माण, बायोफ्लोक, RAS सिस्टम, आइस बॉक्स, बोट और कोल्ड चेन पर 40% (सामान्य वर्ग) और 60% (SC/ST/महिला) तक की भारी सब्सिडी देती है।",
+    "detailed_description_en": "PMMSY is a flagship initiative addressing critical infrastructure gaps in fish production, processing, and marketing. Offers 40% capital subsidy for General category and 60% subsidy for SC, ST, and Women beneficiaries across fresh and marine aquaculture.",
+    "ministry": "मत्स्य पालन, पशुपालन और डेयरी मंत्रालय",
+    "level": "central",
+    "applicable_state": null,
+    "category": "agriculture",
+    "benefit_amount_text": "40% से 60% तक सरकारी पूंजीगत सब्सिडी",
+    "benefit_type": "direct_benefit_transfer",
+    "official_portal_url": "https://pmmsy.dof.gov.in/",
+    "rules": [
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "description_hi": "आयु 18 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Applicant must be at least 18 years old"
+      },
+      {
+        "field": "occupation",
+        "operator": "IN",
+        "value": ["farmer", "business_self_employed", "unemployed", "other"],
+        "description_hi": "आवेदक मछली पालक, किसान, उद्यमी या बेरोजगार युवा होना चाहिए",
+        "description_en": "Applicant must be a fish farmer, entrepreneur, or progressive agriculturist"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड",
+        "name_en": "Aadhaar Card",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "land_waterbody_proof",
+        "name_hi": "जमीन/तालाब के मालिकाना हक या 10 साल के लीज के कागजात",
+        "name_en": "Land / Waterbody Ownership or 10-Year Lease Agreement",
+        "is_mandatory": true,
+        "issuing_authority": "राजस्व विभाग / नोटरी",
+        "how_to_get_url": null
+      },
+      {
+        "id": "detailed_project_report",
+        "name_hi": "विस्तृत प्रोजेक्ट रिपोर्ट (DPR)",
+        "name_en": "Detailed Project Report (DPR)",
+        "is_mandatory": true,
+        "issuing_authority": "मत्स्य विशेषज्ञ / तकनीकी सलाहकार",
+        "how_to_get_url": null
+      },
+      {
+        "id": "bank_passbook",
+        "name_hi": "बैंक खाता पासबुक",
+        "name_en": "Bank Account Passbook",
+        "is_mandatory": true,
+        "issuing_authority": "बैंक शाखा",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. आधिकारिक पोर्टल pmmsy.dof.gov.in पर जाएं।",
+      "2. 'Beneficiary Registration' पर क्लिक करके अपनी प्रोफाइल बनाएं।",
+      "3. वांछित परियोजना (तालाब निर्माण, बायोफ्लोक, आइस बॉक्स आदि) चुनें।",
+      "4. प्रोजेक्ट रिपोर्ट (DPR) और जमीन के कागजात अपलोड करें।",
+      "5. जिला मत्स्य अधिकारी (DFO) द्वारा अनुमोदन के बाद सब्सिडी स्वीकृति मिलती है।"
+    ],
+    "application_steps_en": [
+      "1. Visit the portal at pmmsy.dof.gov.in.",
+      "2. Register under 'Beneficiary Registration' and select beneficiary category.",
+      "3. Select the specific project component (e.g. Biofloc, Pond construction, Cold storage).",
+      "4. Upload Detailed Project Report (DPR) and waterbody/land ownership records.",
+      "5. District Fisheries Officer (DFO) inspects and sanctions the subsidy installment."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या किराये की जमीन पर तालाब बनाकर सब्सिडी मिल सकती है?",
+        "question_en": "Can one apply on leased land?",
+        "answer_hi": "हाँ, न्यूनतम 7 से 10 वर्ष के पंजीकृत लीज एग्रीमेंट पर सब्सिडी का लाभ लिया जा सकता है।",
+        "answer_en": "Yes, registered lease agreement for a minimum of 7-10 years is fully eligible."
+      }
+    ]
+  }
+]
