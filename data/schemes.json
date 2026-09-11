@@ -773,7 +773,8 @@
       "2. अपना मोबाइल नंबर दर्ज करके पंजीकरण करें।",
       "3. अपने जिले में नजदीकी प्रधानमंत्री कौशल केंद्र (PMKK) या ट्रेनिंग सेंटर खोजें।",
       "4. अपनी पसंद का कोर्स (उदा. डिजिटल लिटरेसी, सोलर टेक्नीशियन, हेल्थकेयर) चुनें।",
-      "5. सेंटर जाकर बायोमेट्रिक उपस्थिति दें और क्लास शुरू करें।"
+      "5. सेंटर जाकर बायोमेट्रिक उपस्थिति दें और क्लास शुरू करें।",
+      "6. ट्रेनिंग पूरी करने के बाद परीक्षा दें और सरकारी प्रमाण पत्र प्राप्त करें।"
     ],
     "application_steps_en": [
       "1. Visit the Skill India Digital Portal at skillindiadigital.gov.in.",
@@ -803,7 +804,7 @@
     "level": "central",
     "applicable_state": null,
     "category": "education_scholarships",
-    "benefit_amount_text": "मुफ्त कोचिंग फीस + ₹4,000 से ₹6,000 मासिक वजीफा",
+    "benefit_amount_text": "मुफ्त कोचिंग फीस + ₹4,00,0 से ₹6,000 मासिक वजीफा",
     "benefit_type": "scholarship",
     "official_portal_url": "https://coaching.dosje.gov.in/",
     "rules": [
@@ -890,6 +891,451 @@
         "question_en": "Can a student avail this benefit more than once?",
         "answer_hi": "प्रारंभिक और मुख्य परीक्षा के लिए छात्र को अधिकतम 2 बार कोचिंग का अवसर मिल सकता है।",
         "answer_en": "A candidate can avail coaching assistance a maximum of two times across attempts."
+      }
+    ]
+  },
+  {
+    "id": "ladli-behna-yojana-mp",
+    "name_hi": "मुख्यमंत्री लाड़ली बहना योजना (Ladli Behna)",
+    "name_en": "Mukhyamantri Ladli Behna Yojana (Madhya Pradesh)",
+    "short_summary_hi": "मध्य प्रदेश की महिलाओं को आर्थिक स्वावलंबन हेतु ₹1,250 प्रति माह (₹15,000 प्रति वर्ष) की सीधी सहायता।",
+    "short_summary_en": "Direct monthly financial support of ₹1,250/month (₹15,000/year) to women in Madhya Pradesh.",
+    "detailed_description_hi": "मध्य प्रदेश सरकार की यह फ्लैगशिप योजना राज्य की 21 से 60 वर्ष की विवाहित, विधवा, परित्यक्ता एवं तलाकशुदा महिलाओं को आर्थिक रूप से सशक्त बनाने और उनके पोषण व स्वास्थ्य में सुधार के लिए ₹1,250 प्रतिमाह सीधे उनके डीबीटी सक्रिय बैंक खाते में प्रदान करती है।",
+    "detailed_description_en": "A transformative state welfare program by the Government of Madhya Pradesh transferring ₹1,250 per month directly into bank accounts of eligible women aged 21-60 years to promote financial independence and nutrition.",
+    "ministry": "महिला एवं बाल विकास विभाग (Government of Madhya Pradesh)",
+    "level": "state",
+    "applicable_state": "Madhya Pradesh",
+    "category": "women_child",
+    "benefit_amount_text": "₹1,250 / माह (₹15,000 प्रति वर्ष)",
+    "benefit_type": "direct_benefit_transfer",
+    "official_portal_url": "https://cmladlibahna.mp.gov.in/",
+    "rules": [
+      {
+        "field": "gender",
+        "operator": "==",
+        "value": "female",
+        "description_hi": "केवल महिला आवेदक ही पात्र हैं",
+        "description_en": "Applicant must be female"
+      },
+      {
+        "field": "state",
+        "operator": "==",
+        "value": "Madhya Pradesh",
+        "description_hi": "आवेदक मध्य प्रदेश की मूल निवासी होनी चाहिए",
+        "description_en": "Applicant must be a permanent resident of Madhya Pradesh"
+      },
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 21,
+        "description_hi": "आयु 21 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Minimum age is 21 years"
+      },
+      {
+        "field": "age",
+        "operator": "<=",
+        "value": 60,
+        "description_hi": "आयु 60 वर्ष से कम होनी चाहिए",
+        "description_en": "Maximum age is 60 years"
+      },
+      {
+        "field": "annual_income",
+        "operator": "<=",
+        "value": 250000,
+        "description_hi": "पारिवारिक वार्षिक आय ₹2.5 लाख से कम होनी चाहिए",
+        "description_en": "Annual family income must be under ₹2.5 Lakhs"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड (DBT सक्रिय बैंक खाते से लिंक)",
+        "name_en": "Aadhaar Card with active DBT seeding",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "samagra_id",
+        "name_hi": "समग्र परिवार आईडी एवं सदस्य आईडी",
+        "name_en": "Samagra Family & Member ID",
+        "is_mandatory": true,
+        "issuing_authority": "मध्य प्रदेश समग्र पोर्टल",
+        "how_to_get_url": "https://samagra.gov.in/"
+      },
+      {
+        "id": "bank_passbook",
+        "name_hi": "स्वयं का एकल बैंक खाता पासबुक",
+        "name_en": "Individual Bank Account Passbook",
+        "is_mandatory": true,
+        "issuing_authority": "बैंक शाखा",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. अपनी ग्राम पंचायत या वार्ड कार्यालय में आयोजित लाड़ली बहना शिविर में जाएं।",
+      "2. आवेदन पत्र में समग्र आईडी और आधार नंबर दर्ज कराएं।",
+      "3. शिविर में मौजूद ऑपरेटर द्वारा लाइव फोटो और बायोमेट्रिक सत्यापन करवाएं।",
+      "4. पावती (Acknowledgment Slip) प्राप्त करें। सत्यापन के बाद हर महीने की 10 तारीख को राशि खाते में आएगी।"
+    ],
+    "application_steps_en": [
+      "1. Visit the local camp set up at your Gram Panchayat or Ward Office.",
+      "2. Present your Samagra Family ID and Aadhaar card.",
+      "3. Operator captures on-site live photograph and biometric authentication.",
+      "4. Collect acknowledgment receipt; ₹1,250 is credited on the 10th of every month."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या परिवार में 5 एकड़ से अधिक जमीन होने पर पात्र हैं?",
+        "question_en": "Is a family holding over 5 acres of land eligible?",
+        "answer_hi": "नहीं, परिवार के पास कुल 5 एकड़ से अधिक कृषि भूमि होने पर अपात्रता लागू होती है।",
+        "answer_en": "No, families holding more than 5 acres of agricultural land are excluded."
+      }
+    ]
+  },
+  {
+    "id": "indira-gandhi-divyangjan-pension",
+    "name_hi": "इंदिरा गांधी राष्ट्रीय दिव्यांग पेंशन योजना (IGNDPS)",
+    "name_en": "Indira Gandhi National Disability Pension Scheme (IGNDPS)",
+    "short_summary_hi": "गंभीर दिव्यांगता वाले नागरिकों को जीवनयापन हेतु ₹1,000 से ₹2,500 प्रति माह नियमित पेंशन सहायता।",
+    "short_summary_en": "Monthly pension support of ₹1,000 to ₹2,500 for persons with severe disabilities living below poverty line.",
+    "detailed_description_hi": "राष्ट्रीय सामाजिक सहायता कार्यक्रम (NSAP) के तहत भारत सरकार और राज्य सरकारों द्वारा 18 वर्ष या उससे अधिक आयु के 80% या अधिक गंभीर दिव्यांगता (Severe or Multiple Disability) वाले बीपीएल परिवारों के नागरिकों को आजीवन मासिक पेंशन प्रदान की जाती है।",
+    "detailed_description_en": "Under the National Social Assistance Programme (NSAP), individuals aged 18-79 years who suffer from severe or multiple disabilities (80% and above) and belong to BPL households receive monthly disability pension support.",
+    "ministry": "ग्रामीण विकास मंत्रालय (Ministry of Rural Development - NSAP)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "social_security_pensions",
+    "benefit_amount_text": "₹1,000 से ₹2,500 प्रति माह पेंशन",
+    "benefit_type": "direct_benefit_transfer",
+    "official_portal_url": "https://nsap.nic.in/",
+    "rules": [
+      {
+        "field": "is_differently_abled",
+        "operator": "==",
+        "value": true,
+        "description_hi": "आवेदक दिव्यांग (Divyangjan) होना चाहिए",
+        "description_en": "Applicant must be differently-abled"
+      },
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "description_hi": "आयु 18 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Minimum age is 18 years"
+      },
+      {
+        "field": "ration_card_type",
+        "operator": "IN",
+        "value": ["bpl", "antyodaya"],
+        "description_hi": "आवेदक बीपीएल या अंत्योदय परिवार से होना चाहिए",
+        "description_en": "Applicant must belong to a BPL or Antyodaya household"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड",
+        "name_en": "Aadhaar Card",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "disability_certificate",
+        "name_hi": "दिव्यांगता प्रमाण पत्र / स्वावलंबन कार्ड (UDID)",
+        "name_en": "Disability Certificate / Unique Disability ID (UDID)",
+        "is_mandatory": true,
+        "issuing_authority": "मुख्य चिकित्सा अधिकारी (CMO / Medical Board)",
+        "how_to_get_url": "https://www.swavlambancard.gov.in/"
+      },
+      {
+        "id": "bpl_ration_card",
+        "name_hi": "बीपीएल राशन कार्ड / आय प्रमाण पत्र",
+        "name_en": "BPL Ration Card / Income Certificate",
+        "is_mandatory": true,
+        "issuing_authority": "खाद्य विभाग / तहसीलदार",
+        "how_to_get_url": null
+      },
+      {
+        "id": "bank_passbook",
+        "name_hi": "बैंक पासबुक (DBT सक्रिय)",
+        "name_en": "Bank Account Passbook (DBT enabled)",
+        "is_mandatory": true,
+        "issuing_authority": "बैंक शाखा",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. nsap.nic.in पोर्टल पर जाएं या अपने ब्लॉक/तहसील के समाज कल्याण कार्यालय में जाएं।",
+      "2. पेंशन आवेदन पत्र भरें और अपना यूडीआईडी (UDID) नंबर दर्ज करें।",
+      "3. मेडिकल बोर्ड द्वारा जारी दिव्यांगता प्रमाण पत्र और बीपीएल कार्ड संलग्न करें।",
+      "4. सत्यापन के बाद हर महीने पेंशन सीधे बैंक खाते में जमा होती है।"
+    ],
+    "application_steps_en": [
+      "1. Apply via nsap.nic.in or visit the Block/Tehsil Social Welfare Department office.",
+      "2. Complete the disability pension application form and link your UDID card.",
+      "3. Attach CMO disability certificate, BPL proof, and bank passbook.",
+      "4. Following verification, pension is deposited monthly into beneficiary's account."
+    ],
+    "faqs": [
+      {
+        "question_hi": "न्यूनतम कितने प्रतिशत दिव्यांगता पर यह पेंशन मिलती है?",
+        "question_en": "What is the minimum disability percentage required?",
+        "answer_hi": "केंद्रीय योजना के तहत न्यूनतम 80% गंभीर दिव्यांगता आवश्यक है (कुछ राज्य 40% पर भी राज्य पेंशन देते हैं)।",
+        "answer_en": "Under the central IGNDPS scheme, 80% and above disability is required."
+      }
+    ]
+  },
+  {
+    "id": "indira-gandhi-old-age-pension",
+    "name_hi": "इंदिरा गांधी राष्ट्रीय वृद्धावस्था पेंशन योजना (IGNOAPS)",
+    "name_en": "Indira Gandhi National Old Age Pension Scheme (IGNOAPS)",
+    "short_summary_hi": "60 वर्ष या उससे अधिक आयु के वृद्ध नागरिकों को आर्थिक संबल हेतु ₹1,000 से ₹3,000 मासिक पेंशन।",
+    "short_summary_en": "Monthly old age pension of ₹1,000 to ₹3,000 for senior citizens aged 60+ living below poverty line.",
+    "detailed_description_hi": "यह योजना देश के गरीब और बेसहारा वरिष्ठ नागरिकों को वृद्धावस्था में सम्मानपूर्वक जीवन जीने के लिए मासिक वित्तीय सुरक्षा प्रदान करती है। 60 से 79 वर्ष के नागरिकों को मूल पेंशन और 80 वर्ष से अधिक आयु होने पर बढ़ी हुई पेंशन दी जाती है।",
+    "detailed_description_en": "IGNOAPS is a social assistance pension for elderly citizens aged 60 years and above who belong to households living below poverty line, providing regular income in old age.",
+    "ministry": "ग्रामीण विकास मंत्रालय (Ministry of Rural Development)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "social_security_pensions",
+    "benefit_amount_text": "₹1,000 से ₹3,000 प्रति माह पेंशन",
+    "benefit_type": "direct_benefit_transfer",
+    "official_portal_url": "https://nsap.nic.in/",
+    "rules": [
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 60,
+        "description_hi": "आयु 60 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Applicant must be 60 years or older"
+      },
+      {
+        "field": "ration_card_type",
+        "operator": "IN",
+        "value": ["bpl", "antyodaya"],
+        "description_hi": "आवेदक बीपीएल या अंत्योदय राशन कार्ड धारक परिवार से होना चाहिए",
+        "description_en": "Applicant must belong to BPL or Antyodaya family"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड (आयु एवं पहचान प्रमाण)",
+        "name_en": "Aadhaar Card (Age and Identity Proof)",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "bpl_proof",
+        "name_hi": "बीपीएल राशन कार्ड",
+        "name_en": "BPL Ration Card",
+        "is_mandatory": true,
+        "issuing_authority": "खाद्य विभाग",
+        "how_to_get_url": null
+      },
+      {
+        "id": "bank_passbook",
+        "name_hi": "बैंक खाता पासबुक",
+        "name_en": "Bank Account Passbook",
+        "is_mandatory": true,
+        "issuing_authority": "बैंक शाखा",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. नजदीकी ग्राम पंचायत, नगरपालिका या सीएससी (CSC) केंद्र पर जाएं।",
+      "2. वृद्धावस्था पेंशन आवेदन फॉर्म भरें और आधार व बीपीएल कार्ड लगाएं।",
+      "3. ब्लॉक विकास अधिकारी (BDO) या एसडीएम कार्यालय द्वारा सत्यापन।",
+      "4. स्वीकृति मिलते ही पेंशन सीधे बैंक खाते में आनी शुरू हो जाएगी।"
+    ],
+    "application_steps_en": [
+      "1. Visit your local Gram Panchayat, Municipal office, or CSC center.",
+      "2. Fill out the Old Age Pension form with Aadhaar and BPL card copies.",
+      "3. Local BDO/SDM revenue verification is performed.",
+      "4. Once approved, monthly pension is credited directly to the bank account."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या 80 वर्ष के बाद पेंशन राशि बढ़ जाती है?",
+        "question_en": "Does pension increase after reaching 80 years?",
+        "answer_hi": "हाँ, 80 वर्ष की आयु पूरी होने पर केंद्र और राज्य सरकार दोनों की ओर से पेंशन राशि में बढ़ोतरी होती है।",
+        "answer_en": "Yes, both central and state components increase after the beneficiary turns 80."
+      }
+    ]
+  },
+  {
+    "id": "pm-svanidhi-street-vendors",
+    "name_hi": "प्रधानमंत्री स्ट्रीट वेंडर्स आत्मनिर्भर निधि (PM SVANidhi)",
+    "name_en": "PM Street Vendor's AtmaNirbhar Nidhi (PM SVANidhi)",
+    "short_summary_hi": "सड़क किनारे रेहड़ी-पटरी और ठेला लगाने वाले वेंडर्स को ₹10,000 से ₹50,000 तक का सस्ता बैंक लोन और 7% ब्याज सब्सिडी।",
+    "short_summary_en": "Micro-credit facility up to ₹50,000 with 7% interest subsidy and cashback on digital transactions for street vendors.",
+    "detailed_description_hi": "आवासन और शहरी कार्य मंत्रालय द्वारा शुरू की गई PM SVANidhi योजना शहरी और अर्ध-शहरी क्षेत्रों में रेहड़ी, पटरी, ठेला और फेरी लगाने वाले स्ट्रीट वेंडर्स को बिना किसी गारंटी के आसान वर्किंग कैपिटल लोन देती है। पहले ₹10,000, समय पर चुकाने पर ₹20,000 और फिर ₹50,000 का लोन मिलता है।",
+    "detailed_description_en": "PM SVANidhi facilitates affordable working capital loans of ₹10,000 (1st tranche), ₹20,000 (2nd tranche), and ₹50,000 (3rd tranche) without collateral to street vendors to resume their livelihood, incentivizing digital transactions with monthly cashbacks.",
+    "ministry": "आवासन और शहरी कार्य मंत्रालय (MoHUA)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "business_msme_loans",
+    "benefit_amount_text": "₹10,000 से ₹50,000 तक आसान लोन + 7% ब्याज सब्सिडी",
+    "benefit_type": "loan_subsidy",
+    "official_portal_url": "https://pmsvanidhi.mohua.gov.in/",
+    "rules": [
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "description_hi": "आवेदक की आयु 18 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Applicant must be at least 18 years old"
+      },
+      {
+        "field": "occupation",
+        "operator": "IN",
+        "value": ["daily_wage_laborer", "business_self_employed", "artisan_craftsperson", "other"],
+        "description_hi": "आवेदक रेहड़ी, पटरी, ठेला, फेरी लगाने वाला वेंडर या कारीगर होना चाहिए",
+        "description_en": "Applicant must be a street vendor or petty trader"
+      },
+      {
+        "field": "area_type",
+        "operator": "IN",
+        "value": ["urban", "semi-urban"],
+        "description_hi": "वेंडिंग कार्य शहरी या अर्ध-शहरी क्षेत्र में होना चाहिए",
+        "description_en": "Vending activity must be in urban or peri-urban areas"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड (मोबाइल से लिंक)",
+        "name_en": "Aadhaar Card (Linked with Mobile)",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "vending_certificate",
+        "name_hi": "शहरी निकाय द्वारा जारी वेंडिंग प्रमाण पत्र / LOR / सर्वे पहचान पत्र",
+        "name_en": "Vending Certificate / Letter of Recommendation (LOR)",
+        "is_mandatory": true,
+        "issuing_authority": "नगर निगम / नगर पालिका",
+        "how_to_get_url": null
+      },
+      {
+        "id": "bank_passbook",
+        "name_hi": "बैंक पासबुक",
+        "name_en": "Bank Account Passbook",
+        "is_mandatory": true,
+        "issuing_authority": "बैंक शाखा",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. pmsvanidhi.mohua.gov.in पोर्टल पर जाएं या नजदीकी सीएससी (CSC) केंद्र जाएं।",
+      "2. अपना आधार नंबर डालकर ओटीपी से लॉगिन करें।",
+      "3. वेंडिंग सर्टिफिकेट या नगर निकाय से मिला LOR नंबर दर्ज करें।",
+      "4. अपनी नजदीकी बैंक शाखा का चयन करें और लोन आवेदन सबमिट करें।",
+      "5. बैंक द्वारा स्वीकृति मिलते ही 7 दिनों के भीतर लोन राशि खाते में आ जाती है।"
+    ],
+    "application_steps_en": [
+      "1. Visit pmsvanidhi.mohua.gov.in or your nearest CSC center.",
+      "2. Log in using Aadhaar-linked mobile number and OTP.",
+      "3. Enter your Urban Local Body Vending Certificate or Letter of Recommendation (LOR).",
+      "4. Choose preferred lending institution (bank or micro-finance).",
+      "5. Upon appraisal, loan amount is disbursed within 7 days."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या डिजिटल लेनदेन करने पर कैशबैक मिलता है?",
+        "question_en": "Is cashback available on digital transactions?",
+        "answer_hi": "हाँ, UPI/QR कोड से डिजिटल लेनदेन करने पर हर महीने ₹100 तक का कैशबैक सीधे खाते में मिलता है।",
+        "answer_en": "Yes, vendors receive up to ₹1,200 annual cashback (₹100/month) for accepting digital payments."
+      }
+    ]
+  },
+  {
+    "id": "pm-matsya-sampada-yojana",
+    "name_hi": "प्रधानमंत्री मत्स्य संपदा योजना (PMMSY)",
+    "name_en": "Pradhan Mantri Matsya Sampada Yojana (PMMSY)",
+    "short_summary_hi": "मछली पालन, बायोफ्लोक तालाब, बोट और उपकरणों पर 40% से 60% तक की भारी सरकारी सब्सिडी।",
+    "short_summary_en": "Up to 60% government capital subsidy for fish farming, biofloc units, hatcheries, and modern fishing equipment.",
+    "detailed_description_hi": "मत्स्य पालन, पशुपालन और डेयरी मंत्रालय की यह योजना भारत में 'नीली क्रांति' (Blue Revolution) लाने के लिए मत्स्य पालकों, किसानों, स्वयं सहायता समूहों और युवाओं को नए तालाब निर्माण, बायोफ्लोक, RAS सिस्टम, आइस बॉक्स, बोट और कोल्ड चेन पर 40% (सामान्य वर्ग) और 60% (SC/ST/महिला) तक की भारी सब्सिडी देती है।",
+    "detailed_description_en": "PMMSY is a flagship initiative addressing critical infrastructure gaps in fish production, processing, and marketing. Offers 40% capital subsidy for General category and 60% subsidy for SC, ST, and Women beneficiaries across fresh and marine aquaculture.",
+    "ministry": "मत्स्य पालन, पशुपालन और डेयरी मंत्रालय",
+    "level": "central",
+    "applicable_state": null,
+    "category": "agriculture",
+    "benefit_amount_text": "40% से 60% तक सरकारी पूंजीगत सब्सिडी",
+    "benefit_type": "direct_benefit_transfer",
+    "official_portal_url": "https://pmmsy.dof.gov.in/",
+    "rules": [
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "description_hi": "आयु 18 वर्ष या उससे अधिक होनी चाहिए",
+        "description_en": "Applicant must be at least 18 years old"
+      },
+      {
+        "field": "occupation",
+        "operator": "IN",
+        "value": ["farmer", "business_self_employed", "unemployed", "other"],
+        "description_hi": "आवेदक मछली पालक, किसान, उद्यमी या बेरोजगार युवा होना चाहिए",
+        "description_en": "Applicant must be a fish farmer, entrepreneur, or progressive agriculturist"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड",
+        "name_en": "Aadhaar Card",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI",
+        "how_to_get_url": null
+      },
+      {
+        "id": "land_waterbody_proof",
+        "name_hi": "जमीन/तालाब के मालिकाना हक या 10 साल के लीज के कागजात",
+        "name_en": "Land / Waterbody Ownership or 10-Year Lease Agreement",
+        "is_mandatory": true,
+        "issuing_authority": "राजस्व विभाग / नोटरी",
+        "how_to_get_url": null
+      },
+      {
+        "id": "detailed_project_report",
+        "name_hi": "विस्तृत प्रोजेक्ट रिपोर्ट (DPR)",
+        "name_en": "Detailed Project Report (DPR)",
+        "is_mandatory": true,
+        "issuing_authority": "मत्स्य विशेषज्ञ / तकनीकी सलाहकार",
+        "how_to_get_url": null
+      },
+      {
+        "id": "bank_passbook",
+        "name_hi": "बैंक खाता पासबुक",
+        "name_en": "Bank Account Passbook",
+        "is_mandatory": true,
+        "issuing_authority": "बैंक शाखा",
+        "how_to_get_url": null
+      }
+    ],
+    "application_steps_hi": [
+      "1. आधिकारिक पोर्टल pmmsy.dof.gov.in पर जाएं।",
+      "2. 'Beneficiary Registration' पर क्लिक करके अपनी प्रोफाइल बनाएं।",
+      "3. वांछित परियोजना (तालाब निर्माण, बायोफ्लोक, आइस बॉक्स आदि) चुनें।",
+      "4. प्रोजेक्ट रिपोर्ट (DPR) और जमीन के कागजात अपलोड करें।",
+      "5. जिला मत्स्य अधिकारी (DFO) द्वारा अनुमोदन के बाद सब्सिडी स्वीकृति मिलती है।"
+    ],
+    "application_steps_en": [
+      "1. Visit the portal at pmmsy.dof.gov.in.",
+      "2. Register under 'Beneficiary Registration' and select beneficiary category.",
+      "3. Select the specific project component (e.g. Biofloc, Pond construction, Cold storage).",
+      "4. Upload Detailed Project Report (DPR) and waterbody/land ownership records.",
+      "5. District Fisheries Officer (DFO) inspects and sanctions the subsidy installment."
+    ],
+    "faqs": [
+      {
+        "question_hi": "क्या किराये की जमीन पर तालाब बनाकर सब्सिडी मिल सकती है?",
+        "question_en": "Can one apply on leased land?",
+        "answer_hi": "हाँ, न्यूनतम 7 से 10 वर्ष के पंजीकृत लीज एग्रीमेंट पर सब्सिडी का लाभ लिया जा सकता है।",
+        "answer_en": "Yes, registered lease agreement for a minimum of 7-10 years is fully eligible."
       }
     ]
   }
