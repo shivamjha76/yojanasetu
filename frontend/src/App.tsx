@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { AppProvider, useApp } from "@/context/AppContext";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { Button } from "@/components/ui/button";
+import { HeroSection } from "@/components/home/HeroSection";
+import { SchemeCard } from "@/components/schemes/SchemeCard";
+import { DocumentChecklist } from "@/components/schemes/DocumentChecklist";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -12,10 +14,58 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
-import { Sparkles, ArrowRight, ShieldCheck, HelpCircle } from "lucide-react";
+import { Sparkles, ShieldCheck, HelpCircle } from "lucide-react";
+import { Scheme } from "@/types/schema";
+
+// Sample scheme for preview
+const SAMPLE_SCHEME: Scheme = {
+  id: "pm-kisan",
+  name_hi: "प्रधानमंत्री किसान सम्मान निधि (PM-KISAN)",
+  name_en: "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+  short_summary_hi: "देश के सभी भूमिधारक किसान परिवारों को ₹6,000 प्रति वर्ष की सीधी आर्थिक सहायता।",
+  short_summary_en: "Direct income support of ₹6,000 per year in 3 equal installments to landholding farmer families.",
+  detailed_description_hi: "पात्र किसान परिवारों को प्रति वर्ष ₹6,000 की वित्तीय सहायता DBT के माध्यम से सीधे बैंक खाते में।",
+  detailed_description_en: "PM-KISAN is a Central Sector Scheme providing financial assistance of ₹6,000 per year.",
+  ministry: "Ministry of Agriculture & Farmers Welfare",
+  level: "central",
+  applicable_state: null,
+  category: "agriculture",
+  benefit_amount_text: "₹6,000 प्रति वर्ष (₹2,000 की 3 किस्तें)",
+  benefit_type: "direct_benefit_transfer",
+  official_portal_url: "https://pmkisan.gov.in/",
+  rules: [],
+  documents: [
+    {
+      id: "aadhaar",
+      name_hi: "आधार कार्ड (बैंक खाते से लिंक)",
+      name_en: "Aadhaar Card (Linked with Bank)",
+      is_mandatory: true,
+      issuing_authority: "UIDAI",
+      how_to_get_url: "https://myaadhaar.uidai.gov.in/",
+    },
+    {
+      id: "land_record",
+      name_hi: "जमीन के कागजात (खसरा/खतौनी)",
+      name_en: "Land Ownership Record (Khatauni)",
+      is_mandatory: true,
+      issuing_authority: "राज्य राजस्व विभाग (State Revenue Dept)",
+      how_to_get_url: "https://bhulekh.gov.in/",
+    },
+    {
+      id: "bank_passbook",
+      name_hi: "बैंक खाता पासबुक",
+      name_en: "Bank Account Passbook",
+      is_mandatory: true,
+      issuing_authority: "Nationalized / Commercial Bank",
+    },
+  ],
+  application_steps_hi: ["पोर्टल पर जाएं", "ई-केवाईसी करें"],
+  application_steps_en: ["Visit portal", "Complete eKYC"],
+  faqs: [],
+};
 
 const MainContent: React.FC = () => {
-  const { language } = useApp();
+  const { language, setIsAssistantOpen } = useApp();
   const [currentView, setCurrentView] = useState("home");
   const isHindi = language === "hi";
 
@@ -23,48 +73,57 @@ const MainContent: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-200">
       <Header currentView={currentView} onNavigate={setCurrentView} />
 
-      <main className="flex-1 container mx-auto px-4 sm:px-8 py-10 max-w-5xl">
-        {/* Welcome Showcase Banner */}
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20 p-8 sm:p-12 mb-10 text-center sm:text-left">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-4 border border-primary/20">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>{isHindi ? "डिजिटल भारत • 100% प्रत्यक्ष लाभ" : "Digital Bharat • 100% Direct Benefits"}</span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground leading-tight">
-              {isHindi
-                ? "सरकारी योजनाओं की सही जानकारी और सीधी पात्रता"
-                : "Know what you qualify for. Know why. Know what to do next."}
-            </h1>
-            <p className="text-muted-foreground text-sm sm:text-base mt-3 leading-relaxed">
-              {isHindi
-                ? "बिना किसी बिचौलिए या दलाल के, 15+ प्रमुख सरकारी योजनाओं में अपनी सटीक पात्रता 2 मिनट में जांचें।"
-                : "Discover central and state government welfare schemes tailored to your profile with 100% deterministic precision."}
-            </p>
+      {/* Hero Section (Step 33) */}
+      <HeroSection
+        onStartWizard={() => setCurrentView("wizard")}
+        onExploreSchemes={() => setCurrentView("schemes")}
+        onOpenAssistant={() => setIsAssistantOpen(true)}
+      />
 
-            <div className="mt-6 flex flex-wrap gap-3 justify-center sm:justify-start">
-              <Button
-                size="lg"
-                className="bg-primary hover:bg-primary/90 text-white shadow-md font-medium"
-                onClick={() => setCurrentView("wizard")}
-              >
-                <span>{isHindi ? "अपनी पात्रता जांचें (2 मिनट)" : "Check Your Eligibility (2 min)"}</span>
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={() => setCurrentView("schemes")}
-              >
-                {isHindi ? "सभी योजनाएं देखें" : "Explore All Schemes"}
-              </Button>
+      <main className="flex-1 container mx-auto px-4 sm:px-8 py-10 max-w-6xl">
+        {/* Step 31 & 32 Showcase Grid */}
+        <div className="mb-12">
+          <div className="flex items-center space-x-2 mb-6">
+            <span className="text-xl">🌟</span>
+            <div>
+              <h2 className="text-xl font-bold text-foreground">
+                {isHindi ? "योजना पूर्वावलोकन एवं दस्तावेज चेकलिस्ट" : "Scheme Card & Document Checklist UI"}
+              </h2>
+              <p className="text-xs text-muted-foreground">
+                {isHindi ? "पुन: प्रयोज्य UI घटक (Step 31 & Step 32)" : "Reusable UI primitives preview"}
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Step 31: SchemeCard Component */}
+            <div>
+              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                {isHindi ? "योजना कार्ड (SchemeCard Component)" : "SchemeCard Component"}
+              </div>
+              <SchemeCard
+                scheme={SAMPLE_SCHEME}
+                matchPercentage={100}
+                isEligible={true}
+                onViewDetails={(id) => alert(`View details clicked for: ${id}`)}
+              />
+            </div>
+
+            {/* Step 32: DocumentChecklist Component */}
+            <div>
+              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                {isHindi ? "दस्तावेज चेकलिस्ट (DocumentChecklist Component)" : "DocumentChecklist Component"}
+              </div>
+              <DocumentChecklist
+                documents={SAMPLE_SCHEME.documents}
+                initialCheckedState={{ aadhaar: true }}
+              />
             </div>
           </div>
         </div>
 
-        {/* Core Design Primitives Demonstration */}
+        {/* Core Architecture Status Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-          {/* Card 1: Eligibility Engine Status */}
           <Card className="card-interactive">
             <CardHeader>
               <div className="flex items-center justify-between">
@@ -94,7 +153,6 @@ const MainContent: React.FC = () => {
             </CardContent>
           </Card>
 
-          {/* Card 2: AI Understanding Layer */}
           <Card className="card-interactive">
             <CardHeader>
               <div className="flex items-center justify-between">
@@ -123,7 +181,7 @@ const MainContent: React.FC = () => {
           </Card>
         </div>
 
-        {/* Interactive FAQ Section using Accordion */}
+        {/* Interactive FAQ Section */}
         <div className="border border-border rounded-xl p-6 bg-card">
           <div className="flex items-center space-x-2 mb-4">
             <HelpCircle className="w-5 h-5 text-primary" />
@@ -154,18 +212,6 @@ const MainContent: React.FC = () => {
                 {isHindi
                   ? "कदापि नहीं! योजनासेतु का स्वर्णिम नियम है: 'हम AI का उपयोग नागरिक की भाषा समझने के लिए करते हैं, पात्रता तय करने के लिए नहीं।' पात्रता का निर्णय 100% गणितीय नियमों द्वारा होता है।"
                   : "Absolutely not. Our golden rule is: 'We use AI to understand the citizen, NOT to decide eligibility.' Eligibility is calculated with 100% mathematical precision by our deterministic engine."}
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-3">
-              <AccordionTrigger>
-                {isHindi
-                  ? "पात्र होने के बाद मुझे क्या करना होगा?"
-                  : "What do I do after finding out I qualify?"}
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">
-                {isHindi
-                  ? "प्रत्येक योजना के साथ आवश्यक दस्तावेजों की चेकलिस्ट और संबंधित सरकारी मंत्रालय के आधिकारिक पोर्टल का सीधा लिंक उपलब्ध है।"
-                  : "Each scheme detail page provides a step-by-step checklist of required documents and direct links to verified official government portals."}
               </AccordionContent>
             </AccordionItem>
           </Accordion>
