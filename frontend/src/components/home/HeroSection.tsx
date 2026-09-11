@@ -5,20 +5,25 @@ import {
   ArrowRight,
   ShieldCheck,
   Sparkles,
-  Mic,
   Compass,
+  Mic,
 } from "lucide-react";
+import { OmniSearchBar } from "./OmniSearchBar";
 
 interface HeroSectionProps {
   onStartWizard?: () => void;
   onExploreSchemes?: () => void;
   onOpenAssistant?: () => void;
+  onSearch?: (query: string) => void;
+  onSelectScheme?: (schemeId: string) => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onStartWizard = () => {},
   onExploreSchemes = () => {},
   onOpenAssistant = () => {},
+  onSearch = () => {},
+  onSelectScheme = () => {},
 }) => {
   const { language } = useApp();
   const isHindi = language === "hi";
@@ -69,8 +74,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               : "Zero commission, zero middlemen. Evaluate your exact eligibility in 2 minutes across 15+ central & state schemes with 100% mathematical precision."}
           </p>
 
+          {/* OmniSearchBar (Step 34) */}
+          <div className="pt-2 pb-2 max-w-2xl mx-auto">
+            <OmniSearchBar
+              onSearch={onSearch}
+              onSelectScheme={onSelectScheme}
+              onVoiceClick={onOpenAssistant}
+            />
+          </div>
+
           {/* Primary Action Buttons */}
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3.5 max-w-md sm:max-w-none mx-auto">
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3.5 max-w-md sm:max-w-none mx-auto">
             {/* Primary CTA: 2-Minute Eligibility Wizard */}
             <Button
               size="lg"

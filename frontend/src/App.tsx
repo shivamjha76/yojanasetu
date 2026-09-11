@@ -3,21 +3,32 @@ import { AppProvider, useApp } from "@/context/AppContext";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/home/HeroSection";
+import { CategoryGrid } from "@/components/home/CategoryGrid";
+import { TrendingSchemes } from "@/components/home/TrendingSchemes";
 import { SchemeCard } from "@/components/schemes/SchemeCard";
 import { DocumentChecklist } from "@/components/schemes/DocumentChecklist";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
-import { Sparkles, ShieldCheck, HelpCircle } from "lucide-react";
+import { Sparkles, ShieldCheck, HelpCircle, ExternalLink, Building2, Coins } from "lucide-react";
 import { Scheme } from "@/types/schema";
+import { api } from "@/services/api";
 
-// Sample scheme for preview
+// Sample scheme for preview in component showcase
 const SAMPLE_SCHEME: Scheme = {
   id: "pm-kisan",
   name_hi: "प्रधानमंत्री किसान सम्मान निधि (PM-KISAN)",
@@ -67,20 +78,58 @@ const SAMPLE_SCHEME: Scheme = {
 const MainContent: React.FC = () => {
   const { language, setIsAssistantOpen } = useApp();
   const [currentView, setCurrentView] = useState("home");
+  const [selectedScheme, setSelectedScheme] = useState<Scheme | null>(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
   const isHindi = language === "hi";
+
+  // Handle scheme selection from Search or Trending grid
+  const handleSelectScheme = async (schemeId: string) => {
+    try {
+      const scheme = await api.getSchemeById(schemeId);
+      setSelectedScheme(scheme);
+      setIsDetailOpen(true);
+    } catch {
+      // Fallback: check if it's sample scheme
+      if (schemeId === SAMPLE_SCHEME.id) {
+        setSelectedScheme(SAMPLE_SCHEME);
+        setIsDetailOpen(true);
+      }
+    }
+  };
+
+  const handleSearch = (query: string) => {
+    console.log("Citizen searched for:", query);
+    // Future Phase 8 will route to full /schemes?q=query
+  };
+
+  const handleSelectCategory = (categoryId: string) => {
+    console.log("Citizen selected category:", categoryId);
+    // Future Phase 8 will route to /schemes?category=categoryId
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-200">
       <Header currentView={currentView} onNavigate={setCurrentView} />
 
-      {/* Hero Section (Step 33) */}
+      {/* Step 33 & 34: Hero Section with OmniSearchBar */}
       <HeroSection
         onStartWizard={() => setCurrentView("wizard")}
         onExploreSchemes={() => setCurrentView("schemes")}
         onOpenAssistant={() => setIsAssistantOpen(true)}
+        onSearch={handleSearch}
+        onSelectScheme={handleSelectScheme}
       />
 
-      <main className="flex-1 container mx-auto px-4 sm:px-8 py-10 max-w-6xl">
+      {/* Step 35: 8 Welfare Categories Grid */}
+      <CategoryGrid onSelectCategory={handleSelectCategory} />
+
+      {/* Step 36: Trending & Flagship Schemes Showcase */}
+      <TrendingSchemes
+        onViewDetails={handleSelectScheme}
+        onExploreAll={() => setCurrentView("schemes")}
+      />
+
+      <main className="flex-1 container mx-auto px-4 sm:px-8 py-12 max-w-6xl">
         {/* Step 31 & 32 Showcase Grid */}
         <div className="mb-12">
           <div className="flex items-center space-x-2 mb-6">
@@ -105,7 +154,7 @@ const MainContent: React.FC = () => {
                 scheme={SAMPLE_SCHEME}
                 matchPercentage={100}
                 isEligible={true}
-                onViewDetails={(id) => alert(`View details clicked for: ${id}`)}
+                onViewDetails={handleSelectScheme}
               />
             </div>
 
@@ -217,6 +266,90 @@ const MainContent: React.FC = () => {
           </Accordion>
         </div>
       </main>
+
+      {/* Quick Scheme Preview Modal */}
+      <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
+        <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+          {selectedScheme && (
+            <>
+              <DialogHeader>
+                <div className="flex items-center space-x-2 text-xs text-primary font-semibold mb-1">
+                  <Building2 className="w-4 h-4" />
+                  <span>{selectedScheme.ministry}</span>
+                </div>
+                <DialogTitle className="text-lg font-bold text-foreground">
+                  {isHindi ? selectedScheme.name_hi : selectedScheme.name_en}
+                </DialogTitle>
+                <DialogDescription className="text-xs text-muted-foreground">
+                  {isHindi ? selectedScheme.short_summary_hi : selectedScheme.short_summary_en}
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="space-y-4 pt-2">
+                {/* Benefit Pill */}
+                <div className="p-3 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Coins className="w-5 h-5 text-primary" />
+                    <div>
+                      <div className="text-[11px] text-muted-foreground">
+                        {isHindi ? "कुल वित्तीय सहायता" : "Financial Benefit"}
+                      </div>
+                      <div className="text-sm font-bold text-primary">
+                        {selectedScheme.benefit_amount_text}
+                      </div>
+                    </div>
+                  </div>
+                  <Badge variant="success">DBT Direct</Badge>
+                </div>
+
+                {/* Detailed Description */}
+                <div>
+                  <h4 className="text-xs font-bold text-foreground mb-1">
+                    {isHindi ? "योजना का विवरण" : "Detailed Description"}
+                  </h4>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    {isHindi
+                      ? selectedScheme.detailed_description_hi
+                      : selectedScheme.detailed_description_en}
+                  </p>
+                </div>
+
+                {/* Documents preview if present */}
+                {selectedScheme.documents && selectedScheme.documents.length > 0 && (
+                  <div>
+                    <h4 className="text-xs font-bold text-foreground mb-2">
+                      {isHindi ? "आवश्यक दस्तावेज" : "Required Documents"}
+                    </h4>
+                    <DocumentChecklist documents={selectedScheme.documents} />
+                  </div>
+                )}
+
+                {/* Actions */}
+                <div className="pt-3 border-t border-border flex items-center justify-between gap-3">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsDetailOpen(false)}
+                    className="text-xs"
+                  >
+                    {isHindi ? "बंद करें" : "Close"}
+                  </Button>
+
+                  <a
+                    href={selectedScheme.official_portal_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center h-9 px-4 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold text-xs transition-colors shadow-sm"
+                  >
+                    <span>{isHindi ? "आधिकारिक पोर्टल पर जाएं" : "Official Portal"}</span>
+                    <ExternalLink className="w-3.5 h-3.5 ml-1.5" />
+                  </a>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>
