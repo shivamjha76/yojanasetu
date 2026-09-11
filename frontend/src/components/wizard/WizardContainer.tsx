@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useApp } from "@/context/AppContext";
 import { CitizenProfile } from "@/types/schema";
-import { api } from "@/services/api";
+import { api, EligibilityResponse } from "@/services/api";
 import { WizardStep1, Step1Data } from "./WizardStep1";
 import { WizardStep2, Step2Data } from "./WizardStep2";
 import { WizardStep3, Step3Data } from "./WizardStep3";
+import { WizardResultsView } from "./WizardResultsView";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -29,6 +30,7 @@ export interface WizardContainerProps {
   onSubmit: (profile: CitizenProfile) => void;
   onCancel?: () => void;
   initialData?: Partial<CitizenProfile>;
+  onViewSchemeDetail?: (schemeId: string) => void;
 }
 
 const DEFAULT_PROFILE: CitizenProfile = {
@@ -50,6 +52,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   onSubmit,
   onCancel,
   initialData,
+  onViewSchemeDetail = () => {},
 }) => {
   const { language } = useApp();
   const isHindi = language === "hi";
@@ -116,9 +119,18 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     }
   };
 
-  const handleSubmit = () => {
+  const [evaluationResult, setEvaluationResult] = useState<EligibilityResponse | null>(null);
+
+  const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
+      const res = await api.checkEligibility(formData);
+      setEvaluationResult(res);
+      onSubmit(formData);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err) {
+      console.error("Eligibility check failed", err);
+      // Fallback: alert
       onSubmit(formData);
     } finally {
       setIsSubmitting(false);
@@ -178,6 +190,23 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   ];
 
   const progressPercentage = Math.round((currentStep / 3) * 100);
+
+  if (evaluationResult) {
+    return (
+      <div className="max-w-4xl mx-auto py-6 px-4 sm:px-6">
+        <WizardResultsView
+          results={evaluationResult}
+          profile={formData}
+          onEditProfile={() => setEvaluationResult(null)}
+          onReset={() => {
+            setEvaluationResult(null);
+            handleReset();
+          }}
+          onViewSchemeDetail={onViewSchemeDetail}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-3xl mx-auto py-6 px-4 sm:px-6">

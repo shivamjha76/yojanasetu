@@ -7,6 +7,8 @@ import { CategoryGrid } from "@/components/home/CategoryGrid";
 import { TrendingSchemes } from "@/components/home/TrendingSchemes";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { WizardContainer } from "@/components/wizard/WizardContainer";
+import { SchemesExplorePage } from "@/components/schemes/SchemesExplorePage";
+import { SchemeDetailPage } from "@/components/schemes/SchemeDetailPage";
 import { SchemeCard } from "@/components/schemes/SchemeCard";
 import { DocumentChecklist } from "@/components/schemes/DocumentChecklist";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -84,29 +86,31 @@ const MainContent: React.FC = () => {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const isHindi = language === "hi";
 
-  // Handle scheme selection from Search or Trending grid
-  const handleSelectScheme = async (schemeId: string) => {
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>("all");
+
+  // Handle scheme selection: opens dedicated SchemeDetailPage
+  const handleOpenSchemeDetail = async (schemeId: string) => {
     try {
       const scheme = await api.getSchemeById(schemeId);
       setSelectedScheme(scheme);
-      setIsDetailOpen(true);
     } catch {
-      // Fallback: check if it's sample scheme
       if (schemeId === SAMPLE_SCHEME.id) {
         setSelectedScheme(SAMPLE_SCHEME);
-        setIsDetailOpen(true);
       }
     }
+    setCurrentView("scheme_detail");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleSearch = (query: string) => {
-    console.log("Citizen searched for:", query);
-    // Future Phase 8 will route to full /schemes?q=query
+  const handleSearch = (_query: string) => {
+    setCurrentView("schemes");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleSelectCategory = (categoryId: string) => {
-    console.log("Citizen selected category:", categoryId);
-    // Future Phase 8 will route to /schemes?category=categoryId
+    setSelectedCategoryFilter(categoryId);
+    setCurrentView("schemes");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -116,19 +120,25 @@ const MainContent: React.FC = () => {
       {currentView === "wizard" ? (
         <main className="flex-1 py-8 bg-muted/20">
           <WizardContainer
-            onSubmit={async (profile) => {
-              try {
-                const evalRes = await api.checkEligibility(profile);
-                alert(
-                  isHindi
-                    ? `सफलता! गणितीय नियम इंजन के अनुसार आप ${evalRes.eligible_count} योजनाओं के पात्र हैं!`
-                    : `Success! You qualify for ${evalRes.eligible_count} schemes based on deterministic rules!`
-                );
-              } catch (err) {
-                console.error("Evaluation failed", err);
-              }
-            }}
+            onSubmit={(_profile) => {}}
             onCancel={() => setCurrentView("home")}
+            onViewSchemeDetail={handleOpenSchemeDetail}
+          />
+        </main>
+      ) : currentView === "schemes" ? (
+        <main className="flex-1">
+          <SchemesExplorePage
+            onSelectScheme={handleOpenSchemeDetail}
+            onStartWizard={() => setCurrentView("wizard")}
+            initialCategory={selectedCategoryFilter}
+          />
+        </main>
+      ) : currentView === "scheme_detail" ? (
+        <main className="flex-1">
+          <SchemeDetailPage
+            scheme={selectedScheme || SAMPLE_SCHEME}
+            onBack={() => setCurrentView("schemes")}
+            onCheckEligibility={() => setCurrentView("wizard")}
           />
         </main>
       ) : (
@@ -139,7 +149,7 @@ const MainContent: React.FC = () => {
             onExploreSchemes={() => setCurrentView("schemes")}
             onOpenAssistant={() => setIsAssistantOpen(true)}
             onSearch={handleSearch}
-            onSelectScheme={handleSelectScheme}
+            onSelectScheme={handleOpenSchemeDetail}
           />
 
           {/* Step 35: 8 Welfare Categories Grid */}
@@ -147,7 +157,7 @@ const MainContent: React.FC = () => {
 
           {/* Step 36: Trending & Flagship Schemes Showcase */}
           <TrendingSchemes
-            onViewDetails={handleSelectScheme}
+            onViewDetails={handleOpenSchemeDetail}
             onExploreAll={() => setCurrentView("schemes")}
           />
 
@@ -179,7 +189,7 @@ const MainContent: React.FC = () => {
                 scheme={SAMPLE_SCHEME}
                 matchPercentage={100}
                 isEligible={true}
-                onViewDetails={handleSelectScheme}
+                onViewDetails={handleOpenSchemeDetail}
               />
             </div>
 
