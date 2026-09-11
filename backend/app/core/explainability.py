@@ -1,7 +1,8 @@
 """
 YojanaSetu Explainability Generator
 Translates raw rule evaluation results into transparent, evidence-based proofs:
-"Why You Qualify" (with green checkmarks, user values, and criteria thresholds).
+- "Why You Qualify" (with green checkmarks, user values, and criteria thresholds).
+- "Why Ineligible" (with constructive, clear explanations of unmet conditions).
 """
 
 from typing import Any, List, Tuple
@@ -53,32 +54,76 @@ def build_evidence(rule: Rule, user_val: Any, is_matched: bool) -> RuleMatchEvid
 
     # Bilingual natural text
     if rule.field == "age":
-        evidence_hi = f"{prefix_hi}आपकी आयु {user_val} वर्ष है (नियम: {rule.description_hi or f'{rule.operator} {target_str}'})"
-        evidence_en = f"{prefix_en}Your age is {user_val} (Required: {rule.description_en or f'{rule.operator} {target_str}'})"
+        if is_matched:
+            evidence_hi = f"{prefix_hi}आपकी आयु {user_val} वर्ष है (नियम: {rule.description_hi or f'{rule.operator} {target_str}'})"
+            evidence_en = f"{prefix_en}Your age is {user_val} (Required: {rule.description_en or f'{rule.operator} {target_str}'})"
+        else:
+            evidence_hi = f"{prefix_hi}आपकी आयु {user_val} वर्ष है, जबकि योजना के लिए {rule.description_hi or f'आयु {rule.operator} {target_str}'} आवश्यक है।"
+            evidence_en = f"{prefix_en}Your age is {user_val}, but the scheme requires {rule.description_en or f'age {rule.operator} {target_str}'}."
+
     elif rule.field == "annual_income":
-        evidence_hi = f"{prefix_hi}आपकी पारिवारिक वार्षिक आय {user_str} है (अधिकतम सीमा: {target_str})"
-        evidence_en = f"{prefix_en}Your annual family income is {user_str} (Limit: {target_str})"
+        if is_matched:
+            evidence_hi = f"{prefix_hi}आपकी पारिवारिक वार्षिक आय {user_str} है (अधिकतम सीमा: {target_str})"
+            evidence_en = f"{prefix_en}Your annual family income is {user_str} (Limit: {target_str})"
+        else:
+            evidence_hi = f"{prefix_hi}आपकी पारिवारिक वार्षिक आय {user_str} है, जो इस योजना की अधिकतम सीमा {target_str} से अधिक है।"
+            evidence_en = f"{prefix_en}Your annual family income is {user_str}, which exceeds the scheme's limit of {target_str}."
+
     elif rule.field == "gender":
-        evidence_hi = f"{prefix_hi}आपका लिंग {user_str} है ({rule.description_hi or f'आवश्यक: {target_str}'})"
-        evidence_en = f"{prefix_en}Your gender is {user_str} ({rule.description_en or f'Required: {target_str}'})"
+        if is_matched:
+            evidence_hi = f"{prefix_hi}आपका लिंग {user_str} है ({rule.description_hi or f'आवश्यक: {target_str}'})"
+            evidence_en = f"{prefix_en}Your gender is {user_str} ({rule.description_en or f'Required: {target_str}'})"
+        else:
+            evidence_hi = f"{prefix_hi}यह योजना केवल {target_str} वर्ग के लिए है (आपकी प्रोफाइल: {user_str})।"
+            evidence_en = f"{prefix_en}This scheme is only for {target_str} beneficiaries (Your profile: {user_str})."
+
     elif rule.field == "category":
-        evidence_hi = f"{prefix_hi}आपका वर्ग {user_str} है (मान्य वर्ग: {target_str})"
-        evidence_en = f"{prefix_en}Your category is {user_str} (Eligible categories: {target_str})"
+        if is_matched:
+            evidence_hi = f"{prefix_hi}आपका वर्ग {user_str} है (मान्य वर्ग: {target_str})"
+            evidence_en = f"{prefix_en}Your category is {user_str} (Eligible categories: {target_str})"
+        else:
+            evidence_hi = f"{prefix_hi}आपकी श्रेणी {user_str} है, जबकि यह योजना {target_str} वर्ग के लिए निर्दिष्ट है।"
+            evidence_en = f"{prefix_en}Your category is {user_str}, while this scheme is specified for {target_str}."
+
     elif rule.field == "occupation":
-        evidence_hi = f"{prefix_hi}आपका पेशा: {user_str} ({rule.description_hi or f'नियम: {target_str}'})"
-        evidence_en = f"{prefix_en}Your occupation: {user_str} ({rule.description_en or f'Criteria: {target_str}'})"
+        if is_matched:
+            evidence_hi = f"{prefix_hi}आपका पेशा: {user_str} ({rule.description_hi or f'नियम: {target_str}'})"
+            evidence_en = f"{prefix_en}Your occupation: {user_str} ({rule.description_en or f'Criteria: {target_str}'})"
+        else:
+            evidence_hi = f"{prefix_hi}आपका वर्तमान पेशा '{user_str}' है, जबकि यह योजना '{target_str}' हेतु है।"
+            evidence_en = f"{prefix_en}Your current occupation is '{user_str}', but this scheme is for '{target_str}'."
+
     elif rule.field == "state":
-        evidence_hi = f"{prefix_hi}आपका राज्य: {user_str} ({rule.description_hi or f'आवश्यक राज्य: {target_str}'})"
-        evidence_en = f"{prefix_en}Your state: {user_str} ({rule.description_en or f'Applicable state: {target_str}'})"
+        if is_matched:
+            evidence_hi = f"{prefix_hi}आपका राज्य: {user_str} ({rule.description_hi or f'आवश्यक राज्य: {target_str}'})"
+            evidence_en = f"{prefix_en}Your state: {user_str} ({rule.description_en or f'Applicable state: {target_str}'})"
+        else:
+            evidence_hi = f"{prefix_hi}यह योजना राज्य-विशिष्ट है ({target_str} के लिए), जबकि आपका राज्य '{user_str}' है।"
+            evidence_en = f"{prefix_en}This is a state-specific scheme for {target_str}, whereas your state is '{user_str}'."
+
     elif rule.field == "ration_card_type":
-        evidence_hi = f"{prefix_hi}राशन कार्ड: {user_str} (मान्य प्रकार: {target_str})"
-        evidence_en = f"{prefix_en}Ration card: {user_str} (Eligible types: {target_str})"
+        if is_matched:
+            evidence_hi = f"{prefix_hi}राशन कार्ड: {user_str} (मान्य प्रकार: {target_str})"
+            evidence_en = f"{prefix_en}Ration card: {user_str} (Eligible types: {target_str})"
+        else:
+            evidence_hi = f"{prefix_hi}आपके पास {user_str} राशन कार्ड है, जबकि योजना के लिए {target_str} कार्ड आवश्यक है।"
+            evidence_en = f"{prefix_en}You have a {user_str} ration card, whereas {target_str} is required for this scheme."
+
     elif rule.field == "is_differently_abled":
-        evidence_hi = f"{prefix_hi}दिव्यांग स्थिति: {user_str} (आवश्यक: हाँ)"
-        evidence_en = f"{prefix_en}Disability status: {user_str} (Required: Yes)"
+        if is_matched:
+            evidence_hi = f"{prefix_hi}दिव्यांग स्थिति: {user_str} (आवश्यक: हाँ)"
+            evidence_en = f"{prefix_en}Disability status: {user_str} (Required: Yes)"
+        else:
+            evidence_hi = f"{prefix_hi}यह योजना विशेष रूप से दिव्यांगजन (Divyangjan) नागरिकों के लिए है।"
+            evidence_en = f"{prefix_en}This scheme is specifically dedicated to persons with disabilities (Divyangjan)."
+
     else:
-        evidence_hi = f"{prefix_hi}{field_display}: आपका विवरण '{user_str}' है ({rule.description_hi or target_str} - {status_hi})"
-        evidence_en = f"{prefix_en}{field_display}: Your detail is '{user_str}' ({rule.description_en or target_str} - {status_en})"
+        if is_matched:
+            evidence_hi = f"{prefix_hi}{field_display}: आपका विवरण '{user_str}' है ({rule.description_hi or target_str} - {status_hi})"
+            evidence_en = f"{prefix_en}{field_display}: Your detail is '{user_str}' ({rule.description_en or target_str} - {status_en})"
+        else:
+            evidence_hi = f"{prefix_hi}{field_display}: आपका विवरण '{user_str}' है (नियम: {rule.description_hi or target_str} - {status_hi})"
+            evidence_en = f"{prefix_en}{field_display}: Your detail is '{user_str}' (Criteria: {rule.description_en or target_str} - {status_en})"
 
     condition_str = f"{rule.field} {rule.operator} {rule.value}"
 
@@ -92,10 +137,25 @@ def build_evidence(rule: Rule, user_val: Any, is_matched: bool) -> RuleMatchEvid
     )
 
 
+def generate_ineligibility_reasons(failing_rules: List[RuleMatchEvidence]) -> Tuple[List[str], List[str]]:
+    """
+    Extracts polite, bullet-point citizen-facing ineligibility reasons in Hindi and English.
+    """
+    reasons_hi = []
+    reasons_en = []
+    for f in failing_rules:
+        # Strip leading symbol if present
+        text_hi = f.evidence_text_hi.replace("✗ ", "").strip()
+        text_en = f.evidence_text_en.replace("✗ ", "").strip()
+        reasons_hi.append(text_hi)
+        reasons_en.append(text_en)
+    return reasons_hi, reasons_en
+
+
 def generate_eligibility_result(profile: CitizenProfile, scheme: Scheme) -> EligibilityResult:
     """
-    Evaluates a scheme against a citizen profile and generates a full explainability report.
-    Returns: EligibilityResult with matched_rules, failing_rules, match_percentage, and docs.
+    Evaluates a scheme against a citizen profile and generates a full explainability report,
+    including Why You Qualify evidence, Why Ineligible reasons, and required documents.
     """
     eval_res = evaluate_scheme(profile, scheme)
     rule_results: List[Tuple[Rule, bool, Any, str]] = eval_res["rule_results"]
@@ -110,6 +170,8 @@ def generate_eligibility_result(profile: CitizenProfile, scheme: Scheme) -> Elig
         else:
             failing_evidence_list.append(evidence)
 
+    reasons_hi, reasons_en = generate_ineligibility_reasons(failing_evidence_list)
+
     return EligibilityResult(
         scheme_id=scheme.id,
         scheme_name_hi=scheme.name_hi,
@@ -122,5 +184,7 @@ def generate_eligibility_result(profile: CitizenProfile, scheme: Scheme) -> Elig
         match_percentage=eval_res["match_percentage"],
         matched_rules=matched_evidence_list,
         failing_rules=failing_evidence_list,
+        ineligibility_reasons_hi=reasons_hi,
+        ineligibility_reasons_en=reasons_en,
         required_documents=scheme.documents,
     )

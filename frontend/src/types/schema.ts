@@ -145,5 +145,7 @@ export interface EligibilityResult {
   match_percentage: number;
   matched_rules: RuleMatchEvidence[];
   failing_rules: RuleMatchEvidence[];
+  ineligibility_reasons_hi?: string[];
+  ineligibility_reasons_en?: string[];
   required_documents: DocumentRequirement[];
 }

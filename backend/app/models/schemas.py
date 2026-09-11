@@ -173,4 +173,6 @@ class EligibilityResult(BaseModel):
     match_percentage: int = Field(..., ge=0, le=100)
     matched_rules: List[RuleMatchEvidence] = Field(default_factory=list)
     failing_rules: List[RuleMatchEvidence] = Field(default_factory=list)
+    ineligibility_reasons_hi: List[str] = Field(default_factory=list)
+    ineligibility_reasons_en: List[str] = Field(default_factory=list)
     required_documents: List[DocumentRequirement] = Field(default_factory=list)
