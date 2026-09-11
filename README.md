@@ -27,31 +27,38 @@
 
 <div align="center">
 
-### 1. Welfare Schemes Discovery & Multilingual Catalog
-*Explore 15+ central & state welfare schemes with real-time category filters, instant search, and official benefit metrics.*
+### 1. Citizen Portal Homepage & Voice Omni-Search
+*Multilingual citizen discovery portal featuring natural language search, Web Speech API voice intake, and Setu AI assistance.*
 
-<img src="./docs/screenshots/01_schemes_discovery.png" alt="YojanaSetu Schemes Discovery" width="850"/>
-
-<br/><br/>
-
-### 2. Deterministic 5-Step Eligibility Profiler
-*Citizen-first intuitive onboarding measuring age, landholding, income brackets, and priority demographics with zero friction.*
-
-<img src="./docs/screenshots/02_eligibility_wizard.png" alt="YojanaSetu Eligibility Wizard" width="850"/>
+<img src="./docs/screenshots/01_home_hero.png" alt="YojanaSetu Citizen Portal & Omni-Search" width="900"/>
 
 <br/><br/>
 
-### 3. Explainable Results: "Why You Qualify" & Document Readiness
-*100% transparent proofs with mathematical criteria checkmarks, benefit disbursement estimates, and direct official portal routes.*
+### 2. Schemes Directory & Real-time Categorization
+*Browse verified welfare schemes across Central & State ministries with dynamic category filtering, honest timelines, and Gazette prose ingestion.*
 
-<img src="./docs/screenshots/03_results_explainability.png" alt="YojanaSetu Explainable Results" width="850"/>
+<img src="./docs/screenshots/02_schemes_catalog.png" alt="YojanaSetu Schemes Catalog" width="900"/>
 
 <br/><br/>
 
-### 4. Jan Seva Kendra / CSC Offline Pathway
-*Geo-mapped directory of Common Services Centers empowering citizens in rural and semi-urban Bharat to complete offline biometric eKYC.*
+### 3. Personalized Eligibility Engine & Match Evidence
+*Deterministic scheme recommendation showing demographic criteria matches, processing timelines, and transparent "Why You Qualify" proofs.*
 
-<img src="./docs/screenshots/04_csc_locator.png" alt="YojanaSetu CSC Locator" width="850"/>
+<img src="./docs/screenshots/03_eligibility_recommendations.png" alt="YojanaSetu Eligibility Recommendations" width="900"/>
+
+<br/><br/>
+
+### 4. Scheme Intelligence & Guided Application Hub
+*Comprehensive scheme details breakdown: benefits, eligibility checklists, AI document verification, and direct CSC Center routing.*
+
+<img src="./docs/screenshots/04_scheme_details.png" alt="YojanaSetu Scheme Details" width="900"/>
+
+<br/><br/>
+
+### 5. Citizen & CSC Operator Gateway
+*Seamless authentication for citizens and field operators with instant one-click demo personas (Farmer, Student, Women Entrepreneur, CSC Agent).*
+
+<img src="./docs/screenshots/05_auth_modal.png" alt="YojanaSetu Authentication Modal" width="700"/>
 
 </div>
 

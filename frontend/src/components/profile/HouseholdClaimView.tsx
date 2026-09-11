@@ -175,32 +175,35 @@ export const HouseholdClaimView: React.FC<HouseholdClaimViewProps> = ({
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-in fade-in duration-300">
-      {/* Header Banner */}
-      <div className="bg-gradient-to-r from-[#165D51] via-[#1A6D5E] to-[#124B41] rounded-3xl p-6 sm:p-10 text-white shadow-lg relative overflow-hidden">
-        <div className="absolute right-0 top-0 translate-x-10 -translate-y-10 w-96 h-96 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-        <div className="relative z-10 max-w-3xl space-y-3">
+      {/* ======================================================== */}
+      {/* Header Banner (Landing Page Hero Style)                  */}
+      {/* ======================================================== */}
+      <div className="bg-white rounded-3xl p-6 sm:p-10 border border-[#E2E8F0] shadow-subtle relative overflow-hidden">
+        <div className="relative z-10 max-w-3xl space-y-3.5">
           <div className="flex items-center justify-between">
-            <div className="inline-flex items-center space-x-2 bg-white/15 px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-xs">
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              <span>{isHindi ? "नवाचार: संयुक्त पारिवारिक दावा" : "PS #1 Bonus: Household Combined Claim"}</span>
+            <div className="inline-flex items-center space-x-2 bg-[#1D5F49]/10 text-[#1D5F49] border border-[#1D5F49]/20 px-3.5 py-1 rounded-full text-xs font-semibold">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <span>{isHindi ? "नवाचार: संयुक्त पारिवारिक दावा" : "Unified Benefit: Household Combined Claim"}</span>
             </div>
             {onBackToHome && (
               <button
                 type="button"
                 onClick={onBackToHome}
-                className="inline-flex items-center space-x-1 text-xs text-emerald-100 hover:text-white font-medium cursor-pointer"
+                className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl border border-[#CBD5E1] hover:border-[#1D5F49]/40 hover:bg-[#1D5F49]/5 text-xs text-[#334155] font-medium transition-colors cursor-pointer active:scale-95"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>{isHindi ? "होम पर लौटें" : "Back to Home"}</span>
               </button>
             )}
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-            {isHindi
-              ? "एक परिवार, एकीकृत योजना सेतु — संपूर्ण पारिवारिक लाभ दृश्य"
-              : "One Household, Unified Benefits — Combined Claim Roadmap"}
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-[#0C1924] tracking-tight leading-tight">
+            <span>{isHindi ? "एक परिवार, " : "One Household, "}</span>
+            <span className="text-[#1D5F49]">
+              {isHindi ? "एकीकृत योजना सेतु" : "Unified Benefits"}
+            </span>
+            <span>{isHindi ? " — संपूर्ण पारिवारिक लाभ दृश्य" : " — Combined Roadmap"}</span>
           </h1>
-          <p className="text-sm text-emerald-100 leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#525B64] leading-relaxed max-w-2xl font-normal">
             {isHindi
               ? "परिवार के सभी सदस्यों की एक साथ पात्रता जांचें। परिवार-स्तरीय योजनाओं (जैसे आयुष्मान भारत या राशन कार्ड) का दोहराव समाप्त करें और पूरे परिवार का कुल वार्षिक वित्तीय लाभ देखें।"
               : "Scan eligibility for all family members at once. Eliminate duplicate household caps (like shared Ayushman health cards) and unlock the total combined monetary value."}
@@ -212,18 +215,20 @@ export const HouseholdClaimView: React.FC<HouseholdClaimViewProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: Family Setup (5 Cols) */}
         <div className="lg:col-span-5 space-y-5">
-          <div className="bg-white rounded-3xl border border-gray-200 p-6 shadow-xs space-y-5">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+          <div className="bg-white rounded-3xl border border-[#E2E8F0] p-6 shadow-subtle space-y-5">
+            <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-4">
               <div className="flex items-center space-x-2.5">
-                <Users className="w-5 h-5 text-[#165D51]" />
-                <h2 className="text-base font-bold text-gray-900">
+                <div className="w-8 h-8 rounded-xl bg-[#1D5F49]/10 text-[#1D5F49] flex items-center justify-center">
+                  <Users className="w-4.5 h-4.5" />
+                </div>
+                <h2 className="text-base font-bold text-[#0C1924]">
                   {isHindi ? "पारिवारिक सदस्य विवरण" : "Family Members Profile"}
                 </h2>
               </div>
               <button
                 type="button"
                 onClick={handleAddMember}
-                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-[#165D51] hover:bg-emerald-100 font-semibold text-xs transition-colors cursor-pointer"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-[#1D5F49]/10 text-[#1D5F49] hover:bg-[#1D5F49]/15 font-semibold text-xs transition-colors cursor-pointer active:scale-95"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>{isHindi ? "+ सदस्य जोड़ें" : "+ Add Member"}</span>
@@ -232,14 +237,14 @@ export const HouseholdClaimView: React.FC<HouseholdClaimViewProps> = ({
 
             {/* Family Reference Name */}
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">
+              <label className="block text-xs font-bold text-[#334155] mb-1.5">
                 {isHindi ? "परिवार का नाम / संदर्भ" : "Household / Family Reference"}
               </label>
               <input
                 type="text"
                 value={familyName}
                 onChange={(e) => setFamilyName(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm font-semibold text-gray-800 focus:ring-2 focus:ring-[#165D51]/20 focus:border-[#165D51] outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#CBD5E1] text-xs sm:text-sm font-semibold text-[#0C1924] focus:ring-2 focus:ring-[#1D5F49]/20 focus:border-[#1D5F49] outline-none transition-all bg-white"
               />
             </div>
 
@@ -248,25 +253,25 @@ export const HouseholdClaimView: React.FC<HouseholdClaimViewProps> = ({
               {members.map((m, idx) => (
                 <div
                   key={m.id}
-                  className="p-4 rounded-2xl border border-gray-200/80 bg-gray-50/70 space-y-3 relative group"
+                  className="p-4 rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC]/60 hover:bg-white hover:border-[#1D5F49]/40 transition-all space-y-3 relative group"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <span className="w-6 h-6 rounded-full bg-[#165D51] text-white flex items-center justify-center text-xs font-bold">
+                      <span className="w-6 h-6 rounded-full bg-[#1D5F49] text-white flex items-center justify-center text-xs font-bold">
                         {idx + 1}
                       </span>
                       <input
                         type="text"
                         value={m.name}
                         onChange={(e) => handleUpdateMember(m.id, "name", e.target.value)}
-                        className="text-xs font-bold text-gray-900 bg-transparent border-b border-transparent hover:border-gray-300 focus:border-[#165D51] outline-none px-1"
+                        className="text-xs font-bold text-[#0C1924] bg-transparent border-b border-transparent hover:border-[#CBD5E1] focus:border-[#1D5F49] outline-none px-1"
                       />
                     </div>
                     {members.length > 1 && (
                       <button
                         type="button"
                         onClick={() => handleRemoveMember(m.id)}
-                        className="text-gray-400 hover:text-rose-600 transition-colors p-1 cursor-pointer"
+                        className="text-[#94A3B8] hover:text-rose-600 transition-colors p-1 cursor-pointer"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -276,13 +281,13 @@ export const HouseholdClaimView: React.FC<HouseholdClaimViewProps> = ({
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     {/* Relation */}
                     <div>
-                      <label className="block text-[10px] font-semibold text-gray-500 mb-0.5">
+                      <label className="block text-[10px] font-semibold text-[#64748B] mb-0.5">
                         {isHindi ? "संबंध (Relation)" : "Relation"}
                       </label>
                       <select
                         value={m.relation}
                         onChange={(e) => handleUpdateMember(m.id, "relation", e.target.value)}
-                        className="w-full p-2 bg-white rounded-lg border border-gray-200 text-xs font-medium outline-none"
+                        className="w-full p-2 bg-white rounded-xl border border-[#CBD5E1] text-xs font-medium text-[#0C1924] focus:ring-2 focus:ring-[#1D5F49]/20 focus:border-[#1D5F49] outline-none"
                       >
                         <option value="self">{isHindi ? "स्वयं (Self)" : "Self"}</option>
                         <option value="spouse">{isHindi ? "पति/पत्नी (Spouse)" : "Spouse"}</option>
@@ -295,26 +300,26 @@ export const HouseholdClaimView: React.FC<HouseholdClaimViewProps> = ({
 
                     {/* Age */}
                     <div>
-                      <label className="block text-[10px] font-semibold text-gray-500 mb-0.5">
+                      <label className="block text-[10px] font-semibold text-[#64748B] mb-0.5">
                         {isHindi ? "आयु (Age)" : "Age"}
                       </label>
                       <input
                         type="number"
                         value={m.profile.age}
                         onChange={(e) => handleUpdateMember(m.id, "age", parseInt(e.target.value) || 18)}
-                        className="w-full p-2 bg-white rounded-lg border border-gray-200 text-xs font-medium outline-none"
+                        className="w-full p-2 bg-white rounded-xl border border-[#CBD5E1] text-xs font-medium text-[#0C1924] focus:ring-2 focus:ring-[#1D5F49]/20 focus:border-[#1D5F49] outline-none"
                       />
                     </div>
 
                     {/* Gender */}
                     <div>
-                      <label className="block text-[10px] font-semibold text-gray-500 mb-0.5">
+                      <label className="block text-[10px] font-semibold text-[#64748B] mb-0.5">
                         {isHindi ? "लिंग (Gender)" : "Gender"}
                       </label>
                       <select
                         value={m.profile.gender}
                         onChange={(e) => handleUpdateMember(m.id, "gender", e.target.value as Gender)}
-                        className="w-full p-2 bg-white rounded-lg border border-gray-200 text-xs font-medium outline-none"
+                        className="w-full p-2 bg-white rounded-xl border border-[#CBD5E1] text-xs font-medium text-[#0C1924] focus:ring-2 focus:ring-[#1D5F49]/20 focus:border-[#1D5F49] outline-none"
                       >
                         <option value="male">{isHindi ? "पुरुष (Male)" : "Male"}</option>
                         <option value="female">{isHindi ? "महिला (Female)" : "Female"}</option>
@@ -324,13 +329,13 @@ export const HouseholdClaimView: React.FC<HouseholdClaimViewProps> = ({
 
                     {/* Occupation */}
                     <div>
-                      <label className="block text-[10px] font-semibold text-gray-500 mb-0.5">
+                      <label className="block text-[10px] font-semibold text-[#64748B] mb-0.5">
                         {isHindi ? "व्यवसाय (Occupation)" : "Occupation"}
                       </label>
                       <select
                         value={m.profile.occupation}
                         onChange={(e) => handleUpdateMember(m.id, "occupation", e.target.value as Occupation)}
-                        className="w-full p-2 bg-white rounded-lg border border-gray-200 text-xs font-medium outline-none"
+                        className="w-full p-2 bg-white rounded-xl border border-[#CBD5E1] text-xs font-medium text-[#0C1924] focus:ring-2 focus:ring-[#1D5F49]/20 focus:border-[#1D5F49] outline-none"
                       >
                         <option value="farmer">{isHindi ? "किसान (Farmer)" : "Farmer"}</option>
                         <option value="student">{isHindi ? "विद्यार्थी (Student)" : "Student"}</option>
@@ -351,7 +356,7 @@ export const HouseholdClaimView: React.FC<HouseholdClaimViewProps> = ({
               type="button"
               onClick={handleEvaluateClaim}
               disabled={isLoading}
-              className="w-full py-3.5 rounded-2xl bg-[#165D51] hover:bg-[#114E43] text-white font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-75"
+              className="w-full py-3.5 rounded-xl bg-[#1D5F49] hover:bg-[#174E3C] text-white font-semibold text-sm shadow-xs hover:shadow-md transition-all flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-75 active:scale-95"
             >
               {isLoading ? (
                 <span>{isHindi ? "पारिवारिक लाभ की गणना हो रही है..." : "Computing Household Claim..."}</span>
@@ -368,14 +373,14 @@ export const HouseholdClaimView: React.FC<HouseholdClaimViewProps> = ({
         {/* Right Column: Consolidated Roadmap & Analytics (7 Cols) */}
         <div className="lg:col-span-7 space-y-6">
           {!evalResult ? (
-            <div className="bg-white rounded-3xl border border-gray-200 p-8 sm:p-12 text-center space-y-4">
-              <div className="w-16 h-16 rounded-3xl bg-emerald-50 text-[#165D51] flex items-center justify-center mx-auto shadow-inner">
+            <div className="bg-white rounded-3xl border border-[#E2E8F0] p-8 sm:p-12 text-center space-y-4 shadow-subtle">
+              <div className="w-16 h-16 rounded-2xl bg-[#1D5F49]/10 text-[#1D5F49] flex items-center justify-center mx-auto">
                 <ShieldCheck className="w-8 h-8" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900">
+              <h3 className="text-lg font-bold text-[#0C1924]">
                 {isHindi ? "पारिवारिक दावा दृश्य अनलॉक करने के लिए तैयार" : "Ready to Unlock Household View"}
               </h3>
-              <p className="text-xs text-gray-500 max-w-md mx-auto leading-relaxed">
+              <p className="text-xs text-[#525B64] max-w-md mx-auto leading-relaxed">
                 {isHindi
                   ? "बाएं पैनल में परिवार के सदस्यों की जांच करें और 'पारिवारिक दावा मूल्यांकन करें' पर क्लिक करें। आपको कुल वार्षिक मूल्य और डी-डुप्लिकेटेड रोडमैप तुरंत प्राप्त होगा।"
                   : "Review your household members on the left and hit 'Evaluate Household Combined Claim' to view the aggregate benefits and deduplicated schemes."}
@@ -383,7 +388,7 @@ export const HouseholdClaimView: React.FC<HouseholdClaimViewProps> = ({
               <button
                 type="button"
                 onClick={handleEvaluateClaim}
-                className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-[#165D51] text-white text-xs font-bold hover:bg-[#114E43] cursor-pointer"
+                className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-[#1D5F49] hover:bg-[#174E3C] text-white text-xs font-semibold shadow-xs hover:shadow-md transition-all active:scale-95 cursor-pointer"
               >
                 <span>{isHindi ? "अभी मूल्यांकन करें" : "Evaluate Now"}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -391,58 +396,58 @@ export const HouseholdClaimView: React.FC<HouseholdClaimViewProps> = ({
             </div>
           ) : (
             <div className="space-y-6">
-              {/* Financial Highlight Cards */}
+              {/* Financial Highlight Cards (Landing Page Category Card Style) */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="bg-gradient-to-br from-emerald-50 to-emerald-100/50 p-4 rounded-2xl border border-emerald-200">
+                <div className="bg-emerald-50/50 p-5 rounded-2xl border border-emerald-200/80 shadow-subtle space-y-1">
                   <div className="flex items-center space-x-2 text-emerald-800 text-xs font-bold mb-1">
                     <IndianRupee className="w-4 h-4" />
                     <span>{isHindi ? "वार्षिक नकद डीबीटी" : "Annual Cash DBT"}</span>
                   </div>
-                  <div className="text-2xl font-black text-[#165D51]">
+                  <div className="text-2xl sm:text-3xl font-black text-[#1D5F49] tracking-tight">
                     ₹{evalResult.total_annual_cash_value.toLocaleString("en-IN")}
                   </div>
-                  <div className="text-[10px] text-gray-500 mt-1">
+                  <div className="text-[11px] text-[#64748B]">
                     {isHindi ? "प्रति वर्ष परिवार के खातों में" : "Per year direct to accounts"}
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-rose-50 to-rose-100/50 p-4 rounded-2xl border border-rose-200">
+                <div className="bg-rose-50/50 p-5 rounded-2xl border border-rose-200/80 shadow-subtle space-y-1">
                   <div className="flex items-center space-x-2 text-rose-800 text-xs font-bold mb-1">
                     <HeartPulse className="w-4 h-4" />
                     <span>{isHindi ? "पारिवारिक स्वास्थ्य कवच" : "Family Health Cover"}</span>
                   </div>
-                  <div className="text-2xl font-black text-rose-700">
+                  <div className="text-2xl sm:text-3xl font-black text-rose-700 tracking-tight">
                     ₹{(evalResult.total_health_cover_value / 100000).toFixed(1)} लाख
                   </div>
-                  <div className="text-[10px] text-gray-500 mt-1">
+                  <div className="text-[11px] text-[#64748B]">
                     {isHindi ? "कैशलेस अस्पताल सुरक्षा" : "Cashless hospital insurance"}
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 p-4 rounded-2xl border border-blue-200">
+                <div className="bg-blue-50/50 p-5 rounded-2xl border border-blue-200/80 shadow-subtle space-y-1">
                   <div className="flex items-center space-x-2 text-blue-800 text-xs font-bold mb-1">
                     <Landmark className="w-4 h-4" />
                     <span>{isHindi ? "रियायती ऋण पहुंच" : "Subsidized Credit"}</span>
                   </div>
-                  <div className="text-2xl font-black text-blue-700">
+                  <div className="text-2xl sm:text-3xl font-black text-blue-700 tracking-tight">
                     ₹{(evalResult.total_loan_credit_access / 100000).toFixed(1)} लाख
                   </div>
-                  <div className="text-[10px] text-gray-500 mt-1">
+                  <div className="text-[11px] text-[#64748B]">
                     {isHindi ? "बिना गारंटी व्यावसायिक ऋण" : "Collateral-free working capital"}
                   </div>
                 </div>
               </div>
 
               {/* Tabs */}
-              <div className="bg-white rounded-3xl border border-gray-200 p-6 shadow-xs space-y-5">
-                <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+              <div className="bg-white rounded-3xl border border-[#E2E8F0] p-6 shadow-subtle space-y-5">
+                <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-3">
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => setActiveTab("overview")}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                         activeTab === "overview"
-                          ? "bg-[#165D51] text-white"
-                          : "text-gray-600 hover:bg-gray-100"
+                          ? "bg-[#1D5F49] text-white shadow-xs"
+                          : "text-[#525B64] hover:text-[#0C1924] hover:bg-[#F1F5F9]"
                       }`}
                     >
                       {isHindi ? "संयुक्त योजनाएं (Deduplicated)" : "Deduplicated Benefits"} (
@@ -450,10 +455,10 @@ export const HouseholdClaimView: React.FC<HouseholdClaimViewProps> = ({
                     </button>
                     <button
                       onClick={() => setActiveTab("members")}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                         activeTab === "members"
-                          ? "bg-[#165D51] text-white"
-                          : "text-gray-600 hover:bg-gray-100"
+                          ? "bg-[#1D5F49] text-white shadow-xs"
+                          : "text-[#525B64] hover:text-[#0C1924] hover:bg-[#F1F5F9]"
                       }`}
                     >
                       {isHindi ? "सदस्यवार विवरण" : "Member Breakdown"} ({evalResult.members_breakdown.length})
@@ -463,7 +468,7 @@ export const HouseholdClaimView: React.FC<HouseholdClaimViewProps> = ({
 
                 {activeTab === "overview" && (
                   <div className="space-y-4">
-                    <div className="p-3 bg-amber-50/70 border border-amber-200 rounded-xl text-xs text-amber-800">
+                    <div className="p-3 bg-amber-50/70 border border-amber-200 rounded-xl text-xs text-amber-900 font-medium leading-relaxed">
                       💡{" "}
                       {isHindi
                         ? "स्मार्ट डी-डुप्लिकेशन सक्रिय: एक ही परिवार के एकाधिक सदस्य होने पर भी परिवार-स्तरीय योजनाओं को केवल 1 बार गिना गया है।"
@@ -474,19 +479,19 @@ export const HouseholdClaimView: React.FC<HouseholdClaimViewProps> = ({
                       {evalResult.deduplicated_benefits.map((b) => (
                         <div
                           key={b.scheme_id}
-                          className="p-4 rounded-2xl border border-gray-200 hover:border-[#165D51]/50 transition-all bg-white shadow-2xs space-y-2"
+                          className="p-5 rounded-2xl border border-[#E2E8F0] hover:border-[#1D5F49]/40 hover:shadow-card-hover transition-all bg-white space-y-2.5"
                         >
                           <div className="flex items-start justify-between gap-2">
                             <div>
                               <div className="flex items-center gap-2">
-                                <h4 className="text-sm font-bold text-gray-900">
+                                <h4 className="text-sm sm:text-base font-bold text-[#0C1924]">
                                   {isHindi ? b.scheme_name_hi : b.scheme_name_en}
                                 </h4>
                                 <span
-                                  className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                                  className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
                                     b.claim_level === "family_shared"
-                                      ? "bg-purple-100 text-purple-700"
-                                      : "bg-emerald-100 text-emerald-700"
+                                      ? "bg-purple-50 text-purple-700 border border-purple-200"
+                                      : "bg-emerald-50 text-emerald-700 border border-emerald-200"
                                   }`}
                                 >
                                   {b.claim_level === "family_shared"
@@ -498,7 +503,7 @@ export const HouseholdClaimView: React.FC<HouseholdClaimViewProps> = ({
                                     : "Individual Claim"}
                                 </span>
                               </div>
-                              <p className="text-xs text-gray-500 mt-1">
+                              <p className="text-xs text-[#525B64] mt-1 leading-relaxed">
                                 {isHindi ? b.rationale_hi : b.rationale_en}
                               </p>
                             </div>
@@ -506,20 +511,20 @@ export const HouseholdClaimView: React.FC<HouseholdClaimViewProps> = ({
                             <button
                               type="button"
                               onClick={() => onViewSchemeDetail(b.scheme_id)}
-                              className="px-3 py-1 text-xs font-semibold text-[#165D51] hover:underline cursor-pointer shrink-0"
+                              className="px-3 py-1 text-xs font-semibold text-[#1D5F49] hover:text-[#174E3C] hover:underline cursor-pointer shrink-0 transition-colors"
                             >
                               {isHindi ? "विवरण देखें" : "View"}
                             </button>
                           </div>
 
-                          <div className="flex items-center justify-between text-xs pt-2 border-t border-gray-100">
-                            <span className="text-gray-600 font-medium">
+                          <div className="flex items-center justify-between text-xs pt-3 border-t border-[#E2E8F0]/70">
+                            <span className="text-[#525B64] font-medium">
                               {isHindi ? "पात्र सदस्य:" : "Beneficiaries:"}{" "}
-                              <span className="font-bold text-gray-900">
+                              <span className="font-bold text-[#0C1924]">
                                 {b.beneficiary_member_names.join(", ")}
                               </span>
                             </span>
-                            <span className="font-bold text-[#165D51]">
+                            <span className="font-extrabold text-[#1D5F49]">
                               {b.benefit_amount_text}
                             </span>
                           </div>
@@ -534,30 +539,30 @@ export const HouseholdClaimView: React.FC<HouseholdClaimViewProps> = ({
                     {evalResult.members_breakdown.map((m) => (
                       <div
                         key={m.member_id}
-                        className="p-4 rounded-2xl border border-gray-200 bg-gray-50/50 space-y-3"
+                        className="p-4 rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC]/60 space-y-3"
                       >
                         <div className="flex items-center justify-between">
                           <div>
-                            <span className="text-sm font-bold text-gray-900">{m.member_name}</span>
-                            <span className="text-xs text-gray-500 ml-2">({m.relation})</span>
+                            <span className="text-sm font-bold text-[#0C1924]">{m.member_name}</span>
+                            <span className="text-xs text-[#737C85] ml-2">({m.relation})</span>
                           </div>
-                          <span className="px-2.5 py-1 rounded-xl bg-emerald-100 text-[#165D51] text-xs font-bold">
+                          <span className="px-2.5 py-1 rounded-xl bg-[#1D5F49]/10 text-[#1D5F49] border border-[#1D5F49]/20 text-xs font-bold">
                             {m.eligible_schemes_count} {isHindi ? "योजनाएं पात्र" : "Schemes Unlocked"}
                           </span>
                         </div>
 
-                        <div className="flex flex-wrap gap-1.5">
+                        <div className="flex flex-wrap gap-2">
                           {m.eligible_schemes.slice(0, 5).map((s) => (
                             <span
                               key={s.scheme_id}
                               onClick={() => onViewSchemeDetail(s.scheme_id)}
-                              className="px-2.5 py-1 rounded-lg bg-white border border-gray-200 text-xs font-medium text-gray-700 hover:border-[#165D51] cursor-pointer"
+                              className="px-3 py-1.5 rounded-xl bg-white border border-[#CBD5E1] text-xs font-medium text-[#334155] hover:border-[#1D5F49] hover:text-[#1D5F49] cursor-pointer transition-colors shadow-2xs"
                             >
                               {isHindi ? s.scheme_name_hi : s.scheme_name_en}
                             </span>
                           ))}
                           {m.eligible_schemes.length > 5 && (
-                            <span className="px-2 py-1 text-xs text-gray-400">
+                            <span className="px-2 py-1 text-xs text-[#737C85]">
                               +{m.eligible_schemes.length - 5} {isHindi ? "और" : "more"}
                             </span>
                           )}
@@ -570,6 +575,17 @@ export const HouseholdClaimView: React.FC<HouseholdClaimViewProps> = ({
             </div>
           )}
         </div>
+      </div>
+
+      {/* ======================================================== */}
+      {/* BOTTOM MOTTO DIVIDER MATCHING LANDING PAGE               */}
+      {/* ======================================================== */}
+      <div className="mt-14 sm:mt-20 pt-4 flex items-center justify-center">
+        <div className="w-20 sm:w-36 h-[1px] bg-[#E2E8F0]" />
+        <span className="px-4 sm:px-6 text-[10px] sm:text-[11px] font-semibold tracking-[0.25em] text-[#64748B] uppercase text-center select-none">
+          {isHindi ? "अधिक जागरूक • सशक्त भारत" : "A MORE INFORMED. A STRONGER INDIA."}
+        </span>
+        <div className="w-20 sm:w-36 h-[1px] bg-[#E2E8F0]" />
       </div>
     </div>
   );

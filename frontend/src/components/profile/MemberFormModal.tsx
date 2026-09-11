@@ -159,34 +159,34 @@ export const MemberFormModal: React.FC<MemberFormModalProps> = ({
       role="dialog"
     >
       <div
-        className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-gray-100 flex flex-col max-h-[92vh] overflow-hidden animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-[#E2E8F0] flex flex-col max-h-[92vh] overflow-hidden animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-5 sm:p-6 bg-gradient-to-r from-[#0D684E] to-[#148364] text-white shrink-0 relative">
+        <div className="p-5 sm:p-6 bg-white border-b border-[#E2E8F0] shrink-0 relative">
           <button
             onClick={onClose}
-            className="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-white transition-colors cursor-pointer"
+            className="absolute top-5 right-5 w-8 h-8 rounded-full border border-[#CBD5E1] bg-white hover:bg-gray-100 flex items-center justify-center text-[#525B64] hover:text-[#0C1924] transition-colors cursor-pointer"
             aria-label="Close"
           >
-            <X className="w-5 h-5 stroke-[2.2]" />
+            <X className="w-4 h-4 stroke-[2.2]" />
           </button>
 
           <div className="flex items-center space-x-2 mb-2">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-300/25 text-emerald-100 border border-emerald-300/30">
+            <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-semibold bg-[#1D5F49]/10 text-[#1D5F49] border border-[#1D5F49]/20">
               <Heart className="w-3.5 h-3.5" />
               <span>{isHindi ? "परिवार एवं लाभार्थी सदस्य" : "Family & Beneficiary"}</span>
             </span>
           </div>
 
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+          <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-[#0C1924] flex items-center gap-2">
             {isEditing ? (
               <span>{isHindi ? "सदस्य विवरण संपादित करें" : "Edit Member Details"}</span>
             ) : (
               <span>{isHindi ? "नया सदस्य जोड़ें (Add Member)" : "Add Family Member"}</span>
             )}
           </h2>
-          <p className="text-xs sm:text-sm text-emerald-100/90 mt-1 leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#525B64] mt-1 leading-relaxed">
             {isHindi
               ? "सदस्य की जानकारी दर्ज करें ताकि सीधे उनके नाम पर सरकारी योजनाओं की जांच की जा सके।"
               : "Save member details to instantly check tailored government schemes for them without extra forms."}
@@ -215,7 +215,7 @@ export const MemberFormModal: React.FC<MemberFormModalProps> = ({
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder={isHindi ? "उदा. रमेश शर्मा" : "e.g. Ramesh Sharma"}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-[#0D684E] focus:ring-2 focus:ring-[#0D684E]/20 text-xs sm:text-sm outline-hidden transition-all"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-[#1D5F49] focus:ring-2 focus:ring-[#1D5F49]/20 text-xs sm:text-sm outline-hidden transition-all"
                 />
                 <User className="absolute right-3 top-3 w-4 h-4 text-gray-400 pointer-events-none" />
               </div>
@@ -228,7 +228,7 @@ export const MemberFormModal: React.FC<MemberFormModalProps> = ({
               <select
                 value={relationship}
                 onChange={(e) => handleRelationshipChange(e.target.value as MemberRelationship)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-[#0D684E] focus:ring-2 focus:ring-[#0D684E]/20 text-xs sm:text-sm outline-hidden transition-all bg-white"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-[#1D5F49] focus:ring-2 focus:ring-[#1D5F49]/20 text-xs sm:text-sm outline-hidden transition-all bg-white"
               >
                 {RELATIONSHIPS.map((rel) => (
                   <option key={rel.key} value={rel.key}>
@@ -253,7 +253,7 @@ export const MemberFormModal: React.FC<MemberFormModalProps> = ({
                 value={age}
                 onChange={(e) => setAge(e.target.value === "" ? "" : Number(e.target.value))}
                 placeholder="उदा. 45"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-[#0D684E] focus:ring-2 focus:ring-[#0D684E]/20 text-xs sm:text-sm outline-hidden transition-all"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-[#1D5F49] focus:ring-2 focus:ring-[#1D5F49]/20 text-xs sm:text-sm outline-hidden transition-all"
               />
             </div>
 
@@ -273,7 +273,7 @@ export const MemberFormModal: React.FC<MemberFormModalProps> = ({
                     onClick={() => setGender(g.key)}
                     className={`py-2 px-2 text-xs font-semibold rounded-xl border transition-all cursor-pointer text-center ${
                       gender === g.key
-                        ? "bg-[#0D684E] text-white border-[#0D684E] shadow-2xs"
+                        ? "bg-[#1D5F49] text-white border-[#1D5F49] shadow-2xs"
                         : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
                     }`}
                   >
@@ -297,7 +297,7 @@ export const MemberFormModal: React.FC<MemberFormModalProps> = ({
                   const dists = INDIAN_DISTRICTS[e.target.value] || [];
                   setDistrict(dists[0] || "");
                 }}
-                className="w-full px-3 py-2 rounded-xl border border-gray-300 text-xs outline-hidden bg-white focus:border-[#0D684E]"
+                className="w-full px-3 py-2 rounded-xl border border-gray-300 text-xs outline-hidden bg-white focus:border-[#1D5F49] focus:ring-1 focus:ring-[#1D5F49]"
               >
                 {availableStates.map((s) => (
                   <option key={s} value={s}>
@@ -314,7 +314,7 @@ export const MemberFormModal: React.FC<MemberFormModalProps> = ({
               <select
                 value={district || availableDistricts[0] || ""}
                 onChange={(e) => setDistrict(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-gray-300 text-xs outline-hidden bg-white focus:border-[#0D684E]"
+                className="w-full px-3 py-2 rounded-xl border border-gray-300 text-xs outline-hidden bg-white focus:border-[#1D5F49] focus:ring-1 focus:ring-[#1D5F49]"
               >
                 {availableDistricts.map((d) => (
                   <option key={d} value={d}>
@@ -331,7 +331,7 @@ export const MemberFormModal: React.FC<MemberFormModalProps> = ({
               <select
                 value={areaType}
                 onChange={(e) => setAreaType(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-gray-300 text-xs outline-hidden bg-white focus:border-[#0D684E]"
+                className="w-full px-3 py-2 rounded-xl border border-gray-300 text-xs outline-hidden bg-white focus:border-[#1D5F49] focus:ring-1 focus:ring-[#1D5F49]"
               >
                 <option value="rural">{isHindi ? "ग्रामीण (Rural)" : "Rural"}</option>
                 <option value="urban">{isHindi ? "शहरी (Urban)" : "Urban"}</option>
@@ -349,7 +349,7 @@ export const MemberFormModal: React.FC<MemberFormModalProps> = ({
               <select
                 value={occupation}
                 onChange={(e) => setOccupation(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-[#0D684E] focus:ring-2 focus:ring-[#0D684E]/20 text-xs sm:text-sm outline-hidden transition-all bg-white"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-[#1D5F49] focus:ring-2 focus:ring-[#1D5F49]/20 text-xs sm:text-sm outline-hidden transition-all bg-white"
               >
                 <option value="farmer">{isHindi ? "किसान / कृषक (Farmer)" : "Farmer / Agriculture"}</option>
                 <option value="student">{isHindi ? "छात्र / विद्यार्थी (Student)" : "Student"}</option>
@@ -371,7 +371,7 @@ export const MemberFormModal: React.FC<MemberFormModalProps> = ({
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-[#0D684E] focus:ring-2 focus:ring-[#0D684E]/20 text-xs sm:text-sm outline-hidden transition-all bg-white"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-[#1D5F49] focus:ring-2 focus:ring-[#1D5F49]/20 text-xs sm:text-sm outline-hidden transition-all bg-white"
               >
                 <option value="general">{isHindi ? "सामान्य (General / Open)" : "General / Open"}</option>
                 <option value="obc">{isHindi ? "ओबीसी (OBC)" : "OBC (Other Backward Class)"}</option>
@@ -396,7 +396,7 @@ export const MemberFormModal: React.FC<MemberFormModalProps> = ({
                   value={annualIncome}
                   onChange={(e) => setAnnualIncome(e.target.value === "" ? "" : Number(e.target.value))}
                   placeholder="उदा. 120000"
-                  className="w-full pl-8 pr-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-[#0D684E] focus:ring-2 focus:ring-[#0D684E]/20 text-xs sm:text-sm outline-hidden transition-all"
+                  className="w-full pl-8 pr-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-[#1D5F49] focus:ring-2 focus:ring-[#1D5F49]/20 text-xs sm:text-sm outline-hidden transition-all"
                 />
                 <IndianRupee className="absolute left-2.5 top-3 w-4 h-4 text-gray-400 pointer-events-none" />
               </div>
@@ -413,7 +413,7 @@ export const MemberFormModal: React.FC<MemberFormModalProps> = ({
                 value={landHoldingAcres}
                 onChange={(e) => setLandHoldingAcres(e.target.value === "" ? "" : Number(e.target.value))}
                 placeholder="उदा. 2.5 (भूमिहीन होने पर 0 छोड़ें)"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-[#0D684E] focus:ring-2 focus:ring-[#0D684E]/20 text-xs sm:text-sm outline-hidden transition-all"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-[#1D5F49] focus:ring-2 focus:ring-[#1D5F49]/20 text-xs sm:text-sm outline-hidden transition-all"
               />
             </div>
           </div>
@@ -427,7 +427,7 @@ export const MemberFormModal: React.FC<MemberFormModalProps> = ({
               <select
                 value={rationCardType}
                 onChange={(e) => setRationCardType(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-gray-300 text-xs outline-hidden bg-white focus:border-[#0D684E]"
+                className="w-full px-3 py-2 rounded-xl border border-gray-300 text-xs outline-hidden bg-white focus:border-[#1D5F49] focus:ring-1 focus:ring-[#1D5F49]"
               >
                 <option value="none">{isHindi ? "कोई नहीं (None)" : "None"}</option>
                 <option value="bpl">{isHindi ? "बीपीएल (BPL)" : "BPL (Below Poverty Line)"}</option>
@@ -442,7 +442,7 @@ export const MemberFormModal: React.FC<MemberFormModalProps> = ({
                   type="checkbox"
                   checked={isDifferentlyAbled}
                   onChange={(e) => setIsDifferentlyAbled(e.target.checked)}
-                  className="w-4 h-4 rounded-sm text-[#0D684E] focus:ring-[#0D684E] border-gray-300 cursor-pointer"
+                  className="w-4 h-4 rounded-sm text-[#1D5F49] focus:ring-[#1D5F49] border-gray-300 cursor-pointer accent-[#1D5F49]"
                 />
                 <span className="text-xs font-bold text-gray-800">
                   {isHindi ? "दिव्यांगजन / PwD (Differently Abled)" : "Differently Abled (PwD)"}
@@ -464,8 +464,20 @@ export const MemberFormModal: React.FC<MemberFormModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="py-2.5 px-5 rounded-xl bg-[#0D684E] hover:bg-[#094D3A] text-white font-bold text-xs flex items-center space-x-1.5 shadow-xs transition-all hover:scale-[1.01] cursor-pointer disabled:opacity-50"
+              className="py-2.5 px-5 rounded-xl bg-[#1D5F49] hover:bg-[#174E3C] text-white font-bold text-xs flex items-center space-x-1.5 shadow-xs transition-all hover:scale-[1.01] cursor-pointer disabled:opacity-50"
             >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>{isHindi ? "सहेज रहे हैं..." : "Saving..."}</span>
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>{isEditing ? (isHindi ? "अपडेट करें" : "Update Member") : (isHindi ? "सदस्य जोड़ें" : "Save Member")}</span>
+                </>
+              )}
+            </button>
               {isSubmitting ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
