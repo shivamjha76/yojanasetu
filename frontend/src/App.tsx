@@ -16,6 +16,7 @@ import { SetuSahayakDrawer } from "@/components/assistant/SetuSahayakDrawer";
 import { CscLocator } from "@/components/csc/CscLocator";
 import { Scheme, CitizenProfile } from "@/types/schema";
 import { api } from "@/services/api";
+import { ALL_SCHEMES } from "@/services/ruleEngine";
 
 // Sample scheme for preview in component showcase
 const SAMPLE_SCHEME: Scheme = {
@@ -65,8 +66,10 @@ const SAMPLE_SCHEME: Scheme = {
 };
 
 const MainContent: React.FC = () => {
-  const { setIsAssistantOpen } = useApp();
+  const { setIsAssistantOpen, language } = useApp();
+  const isHindi = language === "hi";
   const [currentView, setCurrentView] = useState("home");
+  const [previousView, setPreviousView] = useState<string>("schemes");
   const [selectedScheme, setSelectedScheme] = useState<Scheme | null>(null);
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -78,10 +81,20 @@ const MainContent: React.FC = () => {
       const scheme = await api.getSchemeById(schemeId);
       setSelectedScheme(scheme);
     } catch {
-      if (schemeId === SAMPLE_SCHEME.id) {
+      const found =
+        ALL_SCHEMES.find((s) => s.id === schemeId) ||
+        ALL_SCHEMES.find(
+          (s) =>
+            s.id.toLowerCase().includes(schemeId.toLowerCase()) ||
+            schemeId.toLowerCase().includes(s.id.toLowerCase())
+        );
+      if (found) {
+        setSelectedScheme(found);
+      } else if (schemeId === SAMPLE_SCHEME.id) {
         setSelectedScheme(SAMPLE_SCHEME);
       }
     }
+    setPreviousView(currentView);
     setCurrentView("scheme_detail");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -158,7 +171,19 @@ const MainContent: React.FC = () => {
         <main id="main-content" className="flex-1">
           <SchemeDetailPage
             scheme={selectedScheme || SAMPLE_SCHEME}
-            onBack={() => setCurrentView("schemes")}
+            onBack={() => {
+              setCurrentView(previousView === "wizard" ? "wizard" : "schemes");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+            backLabel={
+              previousView === "wizard"
+                ? isHindi
+                  ? "परिणाम पर वापस जाएं"
+                  : "Back to Results"
+                : isHindi
+                ? "योजनाओं पर वापस जाएं"
+                : "Back to Schemes"
+            }
             onCheckEligibility={handleGetStarted}
             onLocateCsc={() => {
               setCurrentView("csc");
