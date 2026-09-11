@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useApp } from "@/context/AppContext";
 import { Scheme } from "@/types/schema";
 import { api } from "@/services/api";
-import { Search, Mic, X, ChevronRight, Building2, Coins, Sparkles } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Search, Mic, X, ChevronRight, Building2, Coins, Sparkles, ArrowRight } from "lucide-react";
 
 interface OmniSearchBarProps {
   onSearch?: (query: string) => void;
@@ -31,7 +30,7 @@ export const OmniSearchBar: React.FC<OmniSearchBarProps> = ({
     ? [
         { label: "पीएम किसान", q: "kisan" },
         { label: "आयुष्मान कार्ड", q: "ayushman" },
-        { label: "छात्रवृत्ति (Scholarship)", q: "scholarship" },
+        { label: "छात्रवृत्ति", q: "scholarship" },
         { label: "लाड़ली बहना", q: "ladli" },
         { label: "मुद्रा लोन", q: "mudra" },
         { label: "वृद्धावस्था पेंशन", q: "pension" },
@@ -95,15 +94,17 @@ export const OmniSearchBar: React.FC<OmniSearchBarProps> = ({
 
   return (
     <div ref={containerRef} className="relative w-full max-w-2xl mx-auto z-30">
-      {/* Omni-Search Box */}
+      {/* Omni-Search Box matching light theme */}
       <form
         onSubmit={handleSubmit}
-        className="relative flex items-center bg-card border-2 border-border/80 rounded-2xl shadow-md hover:border-primary/50 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all duration-200"
+        className="relative flex items-center bg-white border border-[#CBD5E1] hover:border-[#1D5F49]/60 focus-within:border-[#1D5F49] focus-within:ring-4 focus-within:ring-[#1D5F49]/10 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-1.5"
       >
-        <div className="pl-4 pr-2 text-muted-foreground">
-          <Search className="w-5 h-5 text-primary" />
+        {/* Search Icon */}
+        <div className="pl-3.5 pr-2.5 text-[#1D5F49] flex items-center shrink-0">
+          <Search className="w-5 h-5 stroke-[2.2]" />
         </div>
 
+        {/* Input */}
         <input
           type="text"
           value={query}
@@ -116,7 +117,7 @@ export const OmniSearchBar: React.FC<OmniSearchBarProps> = ({
               ? "योजना का नाम, मंत्रालय, या अपनी जरूरत खोजें (उदा. किसान, छात्रवृत्ति, आवास)..."
               : "Search by scheme name, ministry, or need (e.g. Kisan, Scholarship, Housing)..."
           }
-          className="w-full py-3.5 pr-20 bg-transparent text-sm sm:text-base text-foreground placeholder:text-muted-foreground/70 focus:outline-none"
+          className="w-full py-2.5 px-2 bg-transparent text-sm sm:text-base text-[#0C1924] placeholder:text-[#94A3B8] font-normal focus:outline-none"
         />
 
         {/* Clear Query Button */}
@@ -124,7 +125,7 @@ export const OmniSearchBar: React.FC<OmniSearchBarProps> = ({
           <button
             type="button"
             onClick={() => setQuery("")}
-            className="p-1.5 mr-1 text-muted-foreground hover:text-foreground rounded-full hover:bg-muted"
+            className="p-1.5 mr-1 text-[#94A3B8] hover:text-[#0C1924] rounded-full hover:bg-gray-100 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -134,50 +135,59 @@ export const OmniSearchBar: React.FC<OmniSearchBarProps> = ({
         <button
           type="button"
           onClick={onVoiceClick}
-          className="mr-2.5 p-2 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary transition-colors flex items-center justify-center shrink-0"
+          className="p-2.5 rounded-xl bg-[#EAF6EE] hover:bg-[#D8EFE0] text-[#1D5F49] transition-all flex items-center justify-center shrink-0 shadow-2xs mr-1 cursor-pointer"
           title={isHindi ? "बोलकर खोजें / Search by Voice" : "Search by Voice"}
         >
-          <Mic className="w-4 h-4 text-primary" />
+          <Mic className="w-4 h-4 text-[#1D5F49]" />
+        </button>
+
+        {/* Search CTA Button */}
+        <button
+          type="submit"
+          className="hidden sm:inline-flex items-center gap-1.5 bg-[#1D5F49] hover:bg-[#174E3C] text-white px-5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm shadow-xs transition-all cursor-pointer shrink-0"
+        >
+          <span>{isHindi ? "खोजें" : "Search"}</span>
+          <ArrowRight className="w-3.5 h-3.5" />
         </button>
       </form>
 
       {/* Debounced Suggestion Dropdown */}
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
-          <div className="p-2 border-b border-border/60 text-[11px] font-semibold text-muted-foreground flex items-center justify-between">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-[#E2E8F0] rounded-2xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150 z-40">
+          <div className="p-3 bg-[#F8FAF9] border-b border-[#E2E8F0] text-xs font-semibold text-[#64748B] flex items-center justify-between">
             <span>{isHindi ? "सुझाई गई योजनाएं" : "Suggested Schemes"}</span>
-            {isLoading && <span className="animate-spin text-primary">●</span>}
+            {isLoading && <span className="animate-spin text-[#1D5F49]">●</span>}
           </div>
 
           {suggestions.length > 0 ? (
-            <div className="divide-y divide-border/60">
+            <div className="divide-y divide-[#F1F5F9]">
               {suggestions.map((scheme) => (
                 <div
                   key={scheme.id}
                   onClick={() => handleSelect(scheme.id)}
-                  className="p-3 hover:bg-muted/60 cursor-pointer transition-colors flex items-center justify-between group"
+                  className="p-3.5 hover:bg-[#F0FDF4] cursor-pointer transition-colors flex items-center justify-between group"
                 >
-                  <div className="space-y-0.5">
-                    <div className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+                  <div className="space-y-1 min-w-0 pr-3">
+                    <div className="text-sm font-bold text-[#0C1924] group-hover:text-[#1D5F49] transition-colors truncate">
                       {isHindi ? scheme.name_hi : scheme.name_en}
                     </div>
-                    <div className="flex items-center space-x-3 text-xs text-muted-foreground">
-                      <span className="flex items-center">
-                        <Building2 className="w-3 h-3 mr-1 text-primary/70" />
-                        <span className="truncate max-w-[200px]">{scheme.ministry}</span>
+                    <div className="flex items-center space-x-3 text-xs text-[#64748B]">
+                      <span className="flex items-center truncate">
+                        <Building2 className="w-3 h-3 mr-1 text-[#1D5F49] shrink-0" />
+                        <span className="truncate max-w-[220px]">{scheme.ministry}</span>
                       </span>
-                      <span className="flex items-center text-primary font-medium">
-                        <Coins className="w-3 h-3 mr-1" />
+                      <span className="flex items-center text-[#1D5F49] font-semibold shrink-0">
+                        <Coins className="w-3 h-3 mr-1 shrink-0" />
                         <span>{scheme.benefit_amount_text}</span>
                       </span>
                     </div>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                  <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#1D5F49] group-hover:translate-x-0.5 transition-all shrink-0" />
                 </div>
               ))}
             </div>
           ) : (
-            <div className="p-4 text-center text-xs text-muted-foreground">
+            <div className="p-4 text-center text-xs text-[#64748B]">
               {isHindi ? "कोई योजना नहीं मिली। अलग शब्द खोजें।" : "No schemes found matching this query."}
             </div>
           )}
@@ -185,25 +195,27 @@ export const OmniSearchBar: React.FC<OmniSearchBarProps> = ({
       )}
 
       {/* Trending Search Keywords */}
-      <div className="mt-3 flex flex-wrap items-center justify-center gap-1.5 text-xs">
-        <span className="text-muted-foreground flex items-center mr-1">
-          <Sparkles className="w-3 h-3 mr-1 text-amber-500" />
+      <div className="mt-3.5 flex flex-wrap items-center justify-center gap-2 text-xs">
+        <span className="text-[#64748B] font-medium flex items-center mr-1">
+          <Sparkles className="w-3.5 h-3.5 mr-1.5 text-amber-500 fill-amber-400" />
           <span>{isHindi ? "लोकप्रिय:" : "Popular:"}</span>
         </span>
         {trendingSearches.map((item, idx) => (
-          <Badge
+          <button
             key={idx}
-            variant="secondary"
+            type="button"
             onClick={() => {
               setQuery(item.label);
               onSearch(item.q);
             }}
-            className="cursor-pointer hover:bg-primary/10 hover:text-primary transition-colors py-0.5 px-2.5 text-[11px]"
+            className="px-3 py-1 rounded-full bg-white hover:bg-[#EAF6EE] text-[#475569] hover:text-[#1D5F49] border border-[#E2E8F0] hover:border-[#1D5F49]/40 text-xs font-medium transition-all shadow-2xs cursor-pointer hover:scale-[1.02]"
           >
             {item.label}
-          </Badge>
+          </button>
         ))}
       </div>
     </div>
   );
 };
+
+export default OmniSearchBar;
