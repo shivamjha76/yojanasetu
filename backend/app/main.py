@@ -50,6 +50,7 @@ from app.api.assistant import router as assistant_router
 from app.api.csc import router as csc_router
 from app.api.documents import router as documents_router
 from app.api.operator import router as operator_router
+from app.api.household import router as household_router
 
 app.include_router(auth_router, prefix="/api", tags=["Authentication & Citizen Accounts"])
 app.include_router(schemes_router, prefix="/api", tags=["Schemes"])
@@ -59,6 +60,7 @@ app.include_router(assistant_router, prefix="/api", tags=["AI Assistant"])
 app.include_router(csc_router, prefix="/api", tags=["Jan Seva Kendra / CSC"])
 app.include_router(documents_router, prefix="/api", tags=["Document Verification"])
 app.include_router(operator_router, prefix="/api", tags=["Assisted Mode / Operator"])
+app.include_router(household_router, prefix="/api", tags=["Household Combined Claim"])
 
 
 @app.get("/", tags=["System"])

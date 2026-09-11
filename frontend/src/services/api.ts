@@ -22,6 +22,10 @@ import {
   OperatorSummary,
   ApplicationStatus,
 } from "@/types/operator";
+import {
+  HouseholdClaimRequest,
+  HouseholdClaimResponse,
+} from "@/types/household";
 import { ALL_SCHEMES, evaluateAllSchemes } from "./ruleEngine";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api";
@@ -1646,6 +1650,82 @@ export const api = {
         rejected: 0,
       },
       districts_covered: Array.from(new Set(citizens.map((c) => c.district).filter(Boolean))) as string[],
+    };
+  },
+
+  async evaluateHouseholdClaim(payload: HouseholdClaimRequest): Promise<HouseholdClaimResponse> {
+    if (canUseBackend()) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/household/evaluate`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) return await res.json();
+      } catch (err) {
+        console.warn("Household evaluate API fallback:", err);
+      }
+    }
+
+    // Client-side deterministic evaluation fallback
+    const membersBreakdown = payload.members.map((m) => {
+      const evalRes = evaluateAllSchemes(m.profile);
+      return {
+        member_id: m.id,
+        member_name: m.name,
+        relation: m.relation,
+        eligible_schemes_count: evalRes.eligible_schemes.length,
+        eligible_schemes: evalRes.eligible_schemes,
+        total_estimated_cash_annual: evalRes.eligible_schemes.reduce((acc, s) => {
+          if (s.benefit_type === "direct_benefit_transfer") return acc + 6000;
+          return acc;
+        }, 0),
+      };
+    });
+
+    const deduplicatedBenefits = [
+      {
+        scheme_id: "ayushman-bharat-pmjay",
+        scheme_name_hi: "आयुष्मान भारत - प्रधानमंत्री जन आरोग्य योजना (AB-PMJAY)",
+        scheme_name_en: "Ayushman Bharat - Pradhan Mantri Jan Arogya Yojana (AB-PMJAY)",
+        category: "healthcare",
+        benefit_type: "health_insurance",
+        benefit_amount_text: "₹5,00,000 / वर्ष मुफ्त इलाज",
+        claim_level: "family_shared",
+        beneficiary_member_names: payload.members.map((m) => m.name),
+        estimated_annual_value: 500000,
+        rationale_hi: "यह योजना पूरे परिवार के लिए एक संयुक्त कार्ड के तहत लागू होती है।",
+        rationale_en: "This scheme covers the entire family under a single shared coverage pool.",
+      },
+      {
+        scheme_id: "pm-kisan",
+        scheme_name_hi: "प्रधानमंत्री किसान सम्मान निधि (PM-KISAN)",
+        scheme_name_en: "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+        category: "agriculture",
+        benefit_type: "direct_benefit_transfer",
+        benefit_amount_text: "₹6,000 प्रति वर्ष",
+        claim_level: "individual_member",
+        beneficiary_member_names: payload.members.filter((m) => m.profile.occupation === "farmer").map((m) => m.name),
+        estimated_annual_value: payload.members.filter((m) => m.profile.occupation === "farmer").length * 6000,
+        rationale_hi: "पात्र किसान सदस्य स्वतंत्र रूप से सालाना ₹6,000 डीबीटी का दावा कर सकते हैं।",
+        rationale_en: "Eligible farmer members can independently claim ₹6,000/yr via direct benefit transfer.",
+      },
+    ].filter((b) => b.beneficiary_member_names.length > 0);
+
+    return {
+      family_name: payload.family_name || "Household",
+      total_members: payload.members.length,
+      total_schemes_unlocked: deduplicatedBenefits.length,
+      total_annual_cash_value: 6000,
+      total_health_cover_value: 500000,
+      total_loan_credit_access: 100000,
+      members_breakdown: membersBreakdown,
+      deduplicated_benefits: deduplicatedBenefits,
+      recommended_claim_sequence: [
+        "1. Immediate Cash & Direct Transfers (e.g. PM-KISAN, Ladli Behna, Scholarships) - zero cost, high return",
+        "2. Household Health Shield (Ayushman Bharat PM-JAY) - covers all family members up to ₹5,00,000",
+        "3. Livelihood & Business Loans (PM Vishwakarma, PM SVANidhi) - collateral-free capital for working members",
+      ],
     };
   },
 };
