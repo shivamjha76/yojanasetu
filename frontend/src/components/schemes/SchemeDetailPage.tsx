@@ -5,6 +5,7 @@ import { Scheme } from "@/types/schema";
 import { DocumentChecklist } from "./DocumentChecklist";
 import { WhyYouQualifyAccordion } from "./WhyYouQualifyAccordion";
 import { HowToApplySection } from "./HowToApplySection";
+import { DocumentVerificationModal } from "./DocumentVerificationModal";
 import {
   ArrowLeft,
   Building2,
@@ -61,6 +62,8 @@ export const SchemeDetailPage: React.FC<SchemeDetailPageProps> = ({
 
   const [activeTab, setActiveTab] = useState<TabType>("overview");
   const [isCopied, setIsCopied] = useState(false);
+  const [isDocModalOpen, setIsDocModalOpen] = useState(false);
+  const [isDocsVerified, setIsDocsVerified] = useState(false);
 
   const isSaved = isSchemeSaved(scheme.id);
 
@@ -816,7 +819,23 @@ export const SchemeDetailPage: React.FC<SchemeDetailPageProps> = ({
             {/* ==================================================== */}
             {/* SIDEBAR CARD 2: Eligibility Callout Banner           */}
             {/* ==================================================== */}
-            {isEligibleUser && (
+            {isDocsVerified ? (
+              <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-[#0D684E] rounded-2xl p-4 flex items-center gap-3.5 shadow-sm animate-in zoom-in-95">
+                <div className="w-10 h-10 rounded-full bg-[#0D684E] text-white flex items-center justify-center shrink-0 shadow-xs">
+                  <Sparkles className="w-5 h-5 text-amber-300 stroke-[2.5]" />
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-[#0D684E] flex items-center gap-1.5">
+                    <span>{isHindi ? "दस्तावेज़ AI सत्यापित: 100% Ready to Apply" : "Documents AI Verified: 100% Ready to Apply"}</span>
+                  </div>
+                  <div className="text-xs text-emerald-800 font-medium mt-0.5">
+                    {isHindi
+                      ? "आपके सभी अनिवार्य कागजात सत्यापित हैं।"
+                      : "All mandatory credentials verified successfully."}
+                  </div>
+                </div>
+              </div>
+            ) : isEligibleUser ? (
               <div className="bg-[#EAF7F0] border border-[#BFE8CF] rounded-2xl p-4 flex items-center gap-3.5 shadow-2xs">
                 <div className="w-9 h-9 rounded-full bg-[#137351] text-white flex items-center justify-center shrink-0 shadow-xs">
                   <CheckCircle2 className="w-5 h-5 stroke-[2.5]" />
@@ -832,7 +851,7 @@ export const SchemeDetailPage: React.FC<SchemeDetailPageProps> = ({
                   </div>
                 </div>
               </div>
-            )}
+            ) : null}
 
             {/* ==================================================== */}
             {/* SIDEBAR CARD 3: Action Buttons (Apply & Save)        */}
@@ -844,11 +863,38 @@ export const SchemeDetailPage: React.FC<SchemeDetailPageProps> = ({
                 href={scheme.official_portal_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-3.5 px-6 rounded-xl bg-[#0D684E] hover:bg-[#094D3A] text-white font-bold text-sm shadow-sm flex items-center justify-center space-x-2 transition-all hover:scale-[1.01] cursor-pointer"
+                className={`w-full py-3.5 px-6 rounded-xl text-white font-bold text-sm shadow-sm flex items-center justify-center space-x-2 transition-all hover:scale-[1.01] cursor-pointer ${
+                  isDocsVerified
+                    ? "bg-gradient-to-r from-[#0D684E] to-[#148364] hover:from-[#094D3A] hover:to-[#0D684E] ring-2 ring-emerald-500/40"
+                    : "bg-[#0D684E] hover:bg-[#094D3A]"
+                }`}
               >
                 <span>{isHindi ? "अभी आवेदन करें" : "Apply Now"}</span>
                 <ArrowLeft className="w-4 h-4 rotate-180 stroke-[2.5]" />
               </a>
+
+              {/* AI Document Verification Button */}
+              <button
+                type="button"
+                onClick={() => setIsDocModalOpen(true)}
+                className={`w-full py-3 px-5 rounded-xl font-bold text-sm flex items-center justify-center space-x-2 shadow-xs transition-all hover:scale-[1.01] cursor-pointer group ${
+                  isDocsVerified
+                    ? "bg-emerald-100/90 hover:bg-emerald-200/80 border-2 border-emerald-600 text-emerald-950"
+                    : "bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-100 hover:from-emerald-100 hover:to-teal-100 border-2 border-[#0D684E] text-[#0D684E]"
+                }`}
+              >
+                {isDocsVerified ? (
+                  <CheckCircle2 className="w-4 h-4 text-emerald-700 stroke-[2.5]" />
+                ) : (
+                  <Sparkles className="w-4 h-4 text-[#0D684E] group-hover:rotate-12 transition-transform" />
+                )}
+                <span>
+                  {isDocsVerified
+                    ? isHindi ? "दस्तावेज़ सत्यापित (समीक्षा करें)" : "Documents Verified (Review)"
+                    : isHindi ? "AI दस्तावेज़ सत्यापन" : "Verify Documents with AI"}
+                </span>
+                <ShieldCheck className="w-4 h-4 text-[#0D684E] ml-1" />
+              </button>
 
               {/* Secondary Save for Later Button */}
               <button
@@ -921,6 +967,14 @@ export const SchemeDetailPage: React.FC<SchemeDetailPageProps> = ({
         </div>
 
       </div>
+
+      {/* AI Document Verification Modal */}
+      <DocumentVerificationModal
+        isOpen={isDocModalOpen}
+        onClose={() => setIsDocModalOpen(false)}
+        scheme={scheme}
+        onVerificationComplete={(allVerified) => setIsDocsVerified(allVerified)}
+      />
     </div>
   );
 };

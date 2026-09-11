@@ -2,16 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useApp } from "@/context/AppContext";
 import { api } from "@/services/api";
 import { CscCenter } from "@/types/schema";
+import { CscInteractiveMap } from "./CscInteractiveMap";
 import {
   MapPin,
   Search,
   ChevronDown,
-  Plus,
-  Minus,
-  Crosshair,
-  Info,
   ArrowRight,
-  Check,
   ShieldCheck,
   Users,
   FileText,
@@ -291,9 +287,6 @@ export const CscLocator: React.FC<CscLocatorProps> = () => {
 
   // Active selected center for map tooltip
   const [selectedCenterId, setSelectedCenterId] = useState<string>("csc-rj-jai-001");
-
-  // Map view controls
-  const [zoomLevel, setZoomLevel] = useState<number>(1);
   const [isLearnMoreOpen, setIsLearnMoreOpen] = useState<boolean>(false);
 
   // Center dataset
@@ -652,141 +645,17 @@ export const CscLocator: React.FC<CscLocatorProps> = () => {
           )}
         </div>
 
-        {/* RIGHT COLUMN: Interactive Jaipur Map View */}
+        {/* RIGHT COLUMN: Interactive Leaflet Map View */}
         <div className="lg:col-span-6 sticky top-24">
-          <div className="rounded-3xl border border-gray-200/90 overflow-hidden relative shadow-xs bg-[#EAF3EC] min-h-[520px] sm:min-h-[580px] flex flex-col justify-between select-none">
-            {/* Map Canvas Background Image */}
-            <div
-              className="absolute inset-0 w-full h-full bg-cover bg-center transition-transform duration-300"
-              style={{
-                backgroundImage: `url('/images/csc_map_view@2x.png')`,
-                transform: `scale(${zoomLevel})`,
-              }}
-            />
-
-            {/* Subtle Map Ambient Overlay */}
-            <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/5 via-transparent to-black/10" />
-
-            {/* TOP OVERLAYS: "Show only open centers" + Zoom Controls */}
-            <div className="relative z-20 p-4 flex items-start justify-between">
-              {/* Show only open centers checkbox pill */}
-              <button
-                onClick={() => setShowOnlyOpen(!showOnlyOpen)}
-                className="bg-white/95 backdrop-blur-sm rounded-xl px-3.5 py-2 border border-gray-200/80 text-xs font-semibold text-[#111827] shadow-xs flex items-center gap-2 cursor-pointer transition-all hover:bg-white"
-              >
-                <div
-                  className={`w-4 h-4 rounded-[5px] flex items-center justify-center transition-colors ${
-                    showOnlyOpen ? "bg-[#107152] text-white" : "border border-gray-400 bg-white"
-                  }`}
-                >
-                  {showOnlyOpen && <Check className="w-3 h-3 stroke-[3]" />}
-                </div>
-                <span>{isHindi ? "केवल खुले केंद्र दिखाएं" : "Show only open centers"}</span>
-              </button>
-
-              {/* Map Zoom / Controls Stack */}
-              <div className="flex flex-col space-y-1 bg-white/95 backdrop-blur-sm rounded-xl border border-gray-200/80 p-1 shadow-xs">
-                <button
-                  onClick={() => setZoomLevel((z) => Math.min(z + 0.15, 1.6))}
-                  title="Zoom In"
-                  aria-label="Zoom In"
-                  className="w-7 h-7 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-700 transition-colors cursor-pointer"
-                >
-                  <Plus className="w-4 h-4" />
-                </button>
-                <div className="h-px bg-gray-200 mx-1" />
-                <button
-                  onClick={() => setZoomLevel((z) => Math.max(z - 0.15, 0.9))}
-                  title="Zoom Out"
-                  aria-label="Zoom Out"
-                  className="w-7 h-7 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-700 transition-colors cursor-pointer"
-                >
-                  <Minus className="w-4 h-4" />
-                </button>
-                <div className="h-px bg-gray-200 mx-1" />
-                <button
-                  onClick={() => setZoomLevel(1)}
-                  title="Recenter"
-                  aria-label="Recenter Map"
-                  className="w-7 h-7 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-700 transition-colors cursor-pointer"
-                >
-                  <Crosshair className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
-
-            {/* INTERACTIVE PINS LAYER OVER MAP */}
-            <div className="absolute inset-0 pointer-events-auto">
-              {displayedCenters.map((center) => {
-                const isSelected = center.id === activeCenter.id;
-                const posX = center.map_x || 50;
-                const posY = center.map_y || 50;
-
-                return (
-                  <div
-                    key={center.id}
-                    onClick={() => setSelectedCenterId(center.id)}
-                    style={{
-                      left: `${posX}%`,
-                      top: `${posY}%`,
-                      transform: `translate(-50%, -100%) scale(${isSelected ? 1.05 : 0.95})`,
-                    }}
-                    className="absolute cursor-pointer transition-all duration-200 group z-10 hover:z-30"
-                  >
-                    {/* Active Pin Card Popup */}
-                    {isSelected && (
-                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-white rounded-xl px-3 py-2 shadow-lg border border-gray-200/90 text-left min-w-[125px] animate-in fade-in zoom-in-95 duration-150 pointer-events-none">
-                        <div className="text-[10px] font-semibold text-gray-400 leading-none uppercase tracking-wider">
-                          CSC Center
-                        </div>
-                        <div className="text-xs font-bold text-[#111827] mt-0.5 truncate">
-                          {center.center_name.replace("CSC Center – ", "").replace("CSC Center - ", "")}
-                        </div>
-                        <div className="text-[11px] font-medium text-[#107152] mt-0.5">
-                          {center.distance || "1.2 km"} away
-                        </div>
-                        {/* Triangle Tail */}
-                        <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-white" />
-                      </div>
-                    )}
-
-                    {/* Pin Graphic */}
-                    <div
-                      className={`w-7 h-7 rounded-full flex items-center justify-center shadow-md transition-transform ${
-                        isSelected
-                          ? "bg-[#107152] text-white scale-110 ring-4 ring-[#107152]/30 animate-pulse"
-                          : "bg-[#0E5B42] text-white hover:scale-110"
-                      }`}
-                    >
-                      <MapPin className="w-4 h-4 fill-white text-transparent" />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* BOTTOM INFO BANNER OVERLAY ON MAP */}
-            <div className="relative z-20 mx-3 mb-3 p-3 sm:px-4 sm:py-3 bg-white/95 backdrop-blur-sm rounded-2xl border border-gray-200/80 shadow-xs flex items-center justify-between gap-3 text-xs">
-              <div className="flex items-center gap-2.5 text-[#374151]">
-                <div className="w-5 h-5 rounded-full bg-[#EAF7F0] text-[#107152] flex items-center justify-center shrink-0">
-                  <Info className="w-3.5 h-3.5" />
-                </div>
-                <span className="line-clamp-2 leading-relaxed font-medium">
-                  {isHindi
-                    ? "CSC केंद्र योजना आवेदन, दस्तावेज़ सत्यापन आदि में निःशुल्क/निर्धारित शुल्क पर सहायता प्रदान करते हैं।"
-                    : "CSC centers provide assistance with scheme applications, document verification, and more."}
-                </span>
-              </div>
-
-              <button
-                onClick={() => setIsLearnMoreOpen(true)}
-                className="text-[#107152] font-bold hover:underline shrink-0 flex items-center gap-1 cursor-pointer"
-              >
-                <span>{isHindi ? "और जानें" : "Learn More"}</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
+          <CscInteractiveMap
+            centers={displayedCenters}
+            activeCenterId={selectedCenterId || activeCenter.id}
+            onSelectCenter={(id) => setSelectedCenterId(id)}
+            showOnlyOpen={showOnlyOpen}
+            onToggleShowOnlyOpen={() => setShowOnlyOpen(!showOnlyOpen)}
+            onOpenLearnMore={() => setIsLearnMoreOpen(true)}
+            isHindi={isHindi}
+          />
         </div>
       </div>
 
