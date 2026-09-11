@@ -112,7 +112,7 @@ const MainContent: React.FC = () => {
           />
         </main>
       ) : currentView === "wizard" ? (
-        <main id="main-content" className="flex-1 py-8 bg-muted/20">
+        <main id="main-content" className="flex-1 bg-[#F8FAF9]">
           <WizardContainer
             initialData={wizardInitialProfile}
             onSubmit={(_profile) => {}}

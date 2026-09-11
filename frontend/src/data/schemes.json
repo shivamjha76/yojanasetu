@@ -111,7 +111,10 @@
       {
         "field": "ration_card_type",
         "operator": "IN",
-        "value": ["bpl", "antyodaya"],
+        "value": [
+          "bpl",
+          "antyodaya"
+        ],
         "description_hi": "परिवार के पास BPL या अंत्योदय राशन कार्ड होना चाहिए",
         "description_en": "Family must hold BPL or Antyodaya ration card"
       }
@@ -158,6 +161,70 @@
     ]
   },
   {
+    "id": "rajasthan-youth-skill-employment",
+    "name_hi": "राजस्थान युवा संबल एवं कौशल योजना",
+    "name_en": "Rajasthan Youth Skill & Employment Scheme",
+    "short_summary_hi": "राजस्थान के युवाओं के लिए कौशल विकास और मासिक वित्तीय प्रशिक्षण भत्ता सहायता।",
+    "short_summary_en": "Skill development support and monthly training allowance for youth of Rajasthan.",
+    "detailed_description_hi": "राजस्थान सरकार द्वारा राज्य के शिक्षित युवाओं को रोजगारोन्मुख कौशल प्रशिक्षण एवं ₹10,000 तक की वित्तीय सहायता प्रदान की जाती है।",
+    "detailed_description_en": "A dedicated initiative by the Government of Rajasthan providing skill enhancement, industrial training, and monthly allowances to youth seeking livelihood and entrepreneurship.",
+    "ministry": "Government of Rajasthan",
+    "level": "state",
+    "applicable_state": "Rajasthan",
+    "category": "skills_employment",
+    "benefit_amount_text": "Upto ₹10,000",
+    "benefit_type": "direct_benefit_transfer",
+    "official_portal_url": "https://skill.rajasthan.gov.in/",
+    "rules": [
+      {
+        "field": "state",
+        "operator": "==",
+        "value": "Rajasthan",
+        "description_hi": "आवेदक राजस्थान का निवासी होना चाहिए",
+        "description_en": "Must be a resident of Rajasthan"
+      },
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "description_hi": "आयु 18 वर्ष या अधिक",
+        "description_en": "Age must be 18 years or above"
+      },
+      {
+        "field": "age",
+        "operator": "<=",
+        "value": 35,
+        "description_hi": "आयु 35 वर्ष से कम",
+        "description_en": "Age must be 35 years or below"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड / जन आधार",
+        "name_en": "Aadhaar / Jan Aadhaar Card",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI / Govt of Rajasthan"
+      },
+      {
+        "id": "domicile",
+        "name_hi": "मूल निवास प्रमाण पत्र",
+        "name_en": "Rajasthan Domicile Certificate",
+        "is_mandatory": true,
+        "issuing_authority": "तहसीलदार / उपखंड अधिकारी"
+      }
+    ],
+    "application_steps_hi": [
+      "1. एसएसओ पोर्टल पर जाएं",
+      "2. कौशल विभाग में ऑनलाइन आवेदन करें"
+    ],
+    "application_steps_en": [
+      "1. Visit Rajasthan SSO portal",
+      "2. Submit application online"
+    ],
+    "faqs": []
+  },
+  {
     "id": "pm-mudra-yojana",
     "name_hi": "प्रधानमंत्री मुद्रा योजना (PMMY)",
     "name_en": "Pradhan Mantri MUDRA Yojana (PMMY)",
@@ -183,7 +250,13 @@
       {
         "field": "occupation",
         "operator": "IN",
-        "value": ["business_self_employed", "unemployed", "artisan_craftsperson", "employed_private", "other"],
+        "value": [
+          "business_self_employed",
+          "unemployed",
+          "artisan_craftsperson",
+          "employed_private",
+          "other"
+        ],
         "description_hi": "आवेदक छोटा व्यापारी, स्वरोजगारी, कारीगर या नया व्यवसाय शुरू करने वाला होना चाहिए",
         "description_en": "Applicant must be a micro-entrepreneur, artisan, or self-employed individual"
       }
@@ -262,7 +335,10 @@
       {
         "field": "gender",
         "operator": "IN",
-        "value": ["female", "all"],
+        "value": [
+          "female",
+          "all"
+        ],
         "description_hi": "योजना केवल बालिकाओं (लड़कियों) के नाम पर लागू है",
         "description_en": "Scheme is specifically for female child beneficiaries"
       },
@@ -433,7 +509,11 @@
       {
         "field": "category",
         "operator": "IN",
-        "value": ["sc", "st", "obc"],
+        "value": [
+          "sc",
+          "st",
+          "obc"
+        ],
         "description_hi": "आवेदक SC, ST या OBC वर्ग से होना चाहिए",
         "description_en": "Applicant must belong to SC, ST, or OBC category"
       },
@@ -550,7 +630,11 @@
       {
         "field": "occupation",
         "operator": "IN",
-        "value": ["student", "unemployed", "other"],
+        "value": [
+          "student",
+          "unemployed",
+          "other"
+        ],
         "description_hi": "आवेदक प्रशिक्षुता की तलाश में छात्र या बेरोजगार युवा होना चाहिए",
         "description_en": "Applicant must be a student or job-seeker looking for apprenticeships"
       }
@@ -737,7 +821,12 @@
       {
         "field": "occupation",
         "operator": "IN",
-        "value": ["unemployed", "student", "daily_wage_laborer", "other"],
+        "value": [
+          "unemployed",
+          "student",
+          "daily_wage_laborer",
+          "other"
+        ],
         "description_hi": "आवेदक नए कौशल सीखने का इच्छुक युवा या बेरोजगार होना चाहिए",
         "description_en": "Applicant must be a job-seeker or aspiring learner"
       }
@@ -811,7 +900,10 @@
       {
         "field": "category",
         "operator": "IN",
-        "value": ["sc", "obc"],
+        "value": [
+          "sc",
+          "obc"
+        ],
         "description_hi": "आवेदक SC या OBC वर्ग का होना चाहिए",
         "description_en": "Applicant must belong to SC or OBC category"
       },
@@ -1026,7 +1118,10 @@
       {
         "field": "ration_card_type",
         "operator": "IN",
-        "value": ["bpl", "antyodaya"],
+        "value": [
+          "bpl",
+          "antyodaya"
+        ],
         "description_hi": "आवेदक बीपीएल या अंत्योदय परिवार से होना चाहिए",
         "description_en": "Applicant must belong to a BPL or Antyodaya household"
       }
@@ -1112,7 +1207,10 @@
       {
         "field": "ration_card_type",
         "operator": "IN",
-        "value": ["bpl", "antyodaya"],
+        "value": [
+          "bpl",
+          "antyodaya"
+        ],
         "description_hi": "आवेदक बीपीएल या अंत्योदय राशन कार्ड धारक परिवार से होना चाहिए",
         "description_en": "Applicant must belong to BPL or Antyodaya family"
       }
@@ -1190,14 +1288,22 @@
       {
         "field": "occupation",
         "operator": "IN",
-        "value": ["daily_wage_laborer", "business_self_employed", "artisan_craftsperson", "other"],
+        "value": [
+          "daily_wage_laborer",
+          "business_self_employed",
+          "artisan_craftsperson",
+          "other"
+        ],
         "description_hi": "आवेदक रेहड़ी, पटरी, ठेला, फेरी लगाने वाला वेंडर या कारीगर होना चाहिए",
         "description_en": "Applicant must be a street vendor or petty trader"
       },
       {
         "field": "area_type",
         "operator": "IN",
-        "value": ["urban", "semi-urban"],
+        "value": [
+          "urban",
+          "semi-urban"
+        ],
         "description_hi": "वेंडिंग कार्य शहरी या अर्ध-शहरी क्षेत्र में होना चाहिए",
         "description_en": "Vending activity must be in urban or peri-urban areas"
       }
@@ -1277,7 +1383,12 @@
       {
         "field": "occupation",
         "operator": "IN",
-        "value": ["farmer", "business_self_employed", "unemployed", "other"],
+        "value": [
+          "farmer",
+          "business_self_employed",
+          "unemployed",
+          "other"
+        ],
         "description_hi": "आवेदक मछली पालक, किसान, उद्यमी या बेरोजगार युवा होना चाहिए",
         "description_en": "Applicant must be a fish farmer, entrepreneur, or progressive agriculturist"
       }

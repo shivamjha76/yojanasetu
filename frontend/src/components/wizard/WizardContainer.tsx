@@ -36,14 +36,14 @@ export interface WizardContainerProps {
 
 const DEFAULT_PROFILE: CitizenProfile = {
   age: 21,
-  gender: "female",
+  gender: "male",
   state: "Rajasthan",
   district: "Jaipur",
-  area_type: "rural",
+  area_type: "urban",
   occupation: "student",
   land_holding_acres: 0,
-  category: "general",
-  annual_income: 180000,
+  category: "obc",
+  annual_income: 250000,
   marital_status: "single",
   is_differently_abled: false,
   ration_card_type: "none",
@@ -238,7 +238,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   // If already evaluated, show full results view
   if (evaluationResult) {
     return (
-      <div className="max-w-5xl mx-auto py-8 px-4 sm:px-6">
+      <div className="w-full max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
         <WizardResultsView
           results={evaluationResult}
           profile={formData}
