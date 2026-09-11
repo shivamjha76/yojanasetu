@@ -12,19 +12,10 @@ import { WizardResultsView } from "./WizardResultsView";
 import { AdaptiveInterview } from "./AdaptiveInterview";
 import { getAllIndianStates } from "@/data/indianDistricts";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import {
   ArrowLeft,
   ArrowRight,
-  Sparkles,
   ShieldCheck,
   Check,
-  Send,
   Loader2,
   CheckCircle2,
   Bot,
@@ -162,12 +153,6 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [evaluationResult, setEvaluationResult] = useState<EligibilityResponse | null>(null);
 
-  // AI Voice / Text Autofill modal state
-  const [isAiModalOpen, setIsAiModalOpen] = useState<boolean>(false);
-  const [aiInputText, setAiInputText] = useState<string>("");
-  const [isExtracting, setIsExtracting] = useState<boolean>(false);
-  const [aiError, setAiError] = useState<string | null>(null);
-
   // Load backend states if available
   useEffect(() => {
     async function loadStates() {
@@ -252,31 +237,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     }
   };
 
-  const handleAiExtract = async () => {
-    if (!aiInputText.trim()) return;
-    setIsExtracting(true);
-    setAiError(null);
-    try {
-      const res = await api.extractProfile(aiInputText.trim());
-      if (res && res.extracted_profile) {
-        setFormData((prev) => ({
-          ...prev,
-          ...res.extracted_profile,
-        }));
-        setIsAiModalOpen(false);
-        setAiInputText("");
-      }
-    } catch (err) {
-      console.error("AI extraction error:", err);
-      setAiError(
-        isHindi
-          ? "विवरण समझने में समस्या हुई। कृपया दोबारा प्रयास करें।"
-          : "Could not extract details. Please try again or fill manually."
-      );
-    } finally {
-      setIsExtracting(false);
-    }
-  };
+
 
   // If already evaluated, show full results view
   if (evaluationResult) {
@@ -496,19 +457,11 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
             <div className="bg-white rounded-3xl border border-gray-200/70 shadow-sm p-6 sm:p-10 relative">
               
               {/* Top Row: Step Indicator & Optional AI Voice Pill */}
+              {/* Top Row: Step Indicator */}
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-semibold text-[#165D51] tracking-wide">
                   {isHindi ? `चरण ${currentStep} / 5` : `Step ${currentStep} of 5`}
                 </span>
-
-                <button
-                  type="button"
-                  onClick={() => setIsAiModalOpen(true)}
-                  className="flex items-center space-x-1.5 px-3 py-1 rounded-full bg-[#F0F8F4] border border-[#2D7A58]/30 text-[#165D51] hover:bg-[#E2F2E9] transition-colors text-xs font-semibold cursor-pointer select-none"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse" />
-                  <span>{isHindi ? "AI से भरें" : "AI Voice Autofill"}</span>
-                </button>
               </div>
 
               {/* Card Title & Subtitle */}
@@ -680,89 +633,6 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
       </div>
 
-      {/* ======================================================== */}
-      {/* AI Voice / Prompt Extraction Dialog                      */}
-      {/* ======================================================== */}
-      <Dialog open={isAiModalOpen} onOpenChange={setIsAiModalOpen}>
-        <DialogContent className="max-w-lg bg-white rounded-2xl p-6">
-          <DialogHeader>
-            <div className="inline-flex items-center space-x-1.5 text-xs text-[#165D51] font-bold mb-1">
-              <Sparkles className="w-4 h-4 text-amber-500" />
-              <span>{isHindi ? "सेतु सहायक AI वॉइस इनपुट" : "Setu Sahayak AI Voice"}</span>
-            </div>
-            <DialogTitle className="text-lg font-bold text-gray-900">
-              {isHindi ? "बोलकर या लिखकर अपनी जानकारी बताएं" : "Tell Us About Yourself"}
-            </DialogTitle>
-            <DialogDescription className="text-xs text-gray-500">
-              {isHindi
-                ? "अपनी भाषा (हिंदी, Hinglish या English) में बताएं। AI इसे समझकर आपके फॉर्म के सभी चरणों को स्वतः भर देगा।"
-                : "Speak or type in your words. AI will extract your demographic details and auto-fill the wizard."}
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4 pt-2">
-            <div className="relative">
-              <textarea
-                rows={4}
-                value={aiInputText}
-                onChange={(e) => setAiInputText(e.target.value)}
-                placeholder={
-                  isHindi
-                    ? "उदा: 'मैं 21 साल की छात्रा हूं, राजस्थान के जयपुर में रहती हूं, ग्रामीण क्षेत्र से हूं और परिवार की सालाना आय 1.8 लाख है...'"
-                    : "e.g., 'I am a 21-year-old female student living in rural Jaipur, Rajasthan with annual income 1.8 lakh...'"
-                }
-                className="w-full p-3.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#165D51]/20 focus:border-[#165D51] resize-none"
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  setAiInputText(
-                    isHindi
-                      ? "मैं 21 वर्ष की छात्रा हूं, राजस्थान के जयपुर के ग्रामीण क्षेत्र में रहती हूं, सामान्य श्रेणी और परिवार की वार्षिक आय 1.8 लाख है।"
-                      : "I am a 21-year-old female student from rural Jaipur, Rajasthan, general category with annual family income 1.8 lakh."
-                  );
-                }}
-                className="absolute right-3 bottom-3 text-[11px] text-[#165D51] hover:underline font-medium cursor-pointer"
-              >
-                {isHindi ? "नमूना भरें" : "Insert sample"}
-              </button>
-            </div>
-
-            {aiError && (
-              <p className="text-xs text-rose-600 font-medium">{aiError}</p>
-            )}
-
-            <div className="flex items-center justify-between pt-2">
-              <button
-                type="button"
-                onClick={() => setIsAiModalOpen(false)}
-                className="px-4 py-2 text-xs font-semibold text-gray-500 hover:text-gray-700 cursor-pointer"
-              >
-                {isHindi ? "रद्द करें" : "Cancel"}
-              </button>
-
-              <button
-                type="button"
-                onClick={handleAiExtract}
-                disabled={isExtracting || !aiInputText.trim()}
-                className="bg-[#165D51] hover:bg-[#114E43] text-white rounded-xl px-4 py-2 text-xs font-semibold shadow-xs flex items-center space-x-1.5 cursor-pointer disabled:opacity-50"
-              >
-                {isExtracting ? (
-                  <>
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                    <span>{isHindi ? "पहचान की जा रही है..." : "Extracting..."}</span>
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-3.5 h-3.5" />
-                    <span>{isHindi ? "फॉर्म में भरें" : "Extract & Auto-Fill"}</span>
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
