@@ -1,14 +1,7 @@
 import React from "react";
 import { useApp } from "@/context/AppContext";
-import { Button } from "@/components/ui/button";
-import {
-  ArrowRight,
-  ShieldCheck,
-  Sparkles,
-  Compass,
-  Mic,
-} from "lucide-react";
-import { OmniSearchBar } from "./OmniSearchBar";
+import { ArrowRight } from "lucide-react";
+import { ParliamentWatermark } from "./ParliamentWatermark";
 
 interface HeroSectionProps {
   onStartWizard?: () => void;
@@ -20,147 +13,210 @@ interface HeroSectionProps {
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onStartWizard = () => {},
-  onExploreSchemes = () => {},
-  onOpenAssistant = () => {},
-  onSearch = () => {},
-  onSelectScheme = () => {},
 }) => {
   const { language } = useApp();
   const isHindi = language === "hi";
 
   return (
-    <section className="relative overflow-hidden py-12 sm:py-20 lg:py-24 border-b border-border/60 bg-gradient-to-b from-primary/5 via-background to-background">
-      {/* Background Decorative Grid Pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none"
-        style={{
-          backgroundImage: `radial-gradient(currentColor 1px, transparent 1px)`,
-          backgroundSize: "24px 24px",
-        }}
-      />
+    <section className="relative overflow-hidden bg-white dark:bg-background pt-6 sm:pt-10 pb-16 transition-colors">
+      <div className="container mx-auto px-4 sm:px-8 max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-4 items-center min-h-[580px]">
+          
+          {/* ======================================================== */}
+          {/* LEFT COLUMN: Clean High-Conversion Headline & CTA        */}
+          {/* ======================================================== */}
+          <div className="lg:col-span-5 space-y-6 sm:space-y-7 z-20 text-left">
+            {/* Main Headline (Exact Typography matching reference) */}
+            <h1 className="text-4xl sm:text-6xl lg:text-[64px] font-extrabold tracking-tight text-gray-900 dark:text-white leading-[1.08]">
+              {isHindi ? (
+                <>
+                  खोजें सरकारी <br />
+                  योजनाएं{" "}
+                  <span className="text-[#1a4d36] dark:text-emerald-400">
+                    खास
+                  </span>
+                  <br />
+                  <span className="text-[#1a4d36] dark:text-emerald-400">
+                    आपके लिए
+                  </span>
+                </>
+              ) : (
+                <>
+                  Find Government <br />
+                  Schemes{" "}
+                  <span className="text-[#1a4d36] dark:text-emerald-400">
+                    Made
+                  </span>
+                  <br />
+                  <span className="text-[#1a4d36] dark:text-emerald-400">
+                    For You
+                  </span>
+                </>
+              )}
+            </h1>
 
-      <div className="container mx-auto px-4 sm:px-8 relative z-10">
-        <div className="max-w-4xl mx-auto text-center space-y-6">
-          {/* Official Trust Badge */}
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold shadow-subtle animate-in fade-in slide-in-from-top-3 duration-500">
-            <ShieldCheck className="w-4 h-4 text-primary shrink-0" />
-            <span>
+            {/* Subtitle Paragraph */}
+            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed max-w-md font-normal">
               {isHindi
-                ? "100% प्रत्यक्ष नागरिक कल्याण सेतु • कोई बिचौलिया नहीं"
-                : "100% Direct-to-Citizen Welfare Bridge • Zero Middlemen"}
-            </span>
+                ? "बस अपने बारे में थोड़ा बताएं। Scheme Sarathi आपको उन सभी योजनाओं को खोजने में मदद करता है जिनके आप पात्र हैं और आगे के चरणों में आपका मार्गदर्शन करता है।"
+                : "Just tell us about yourself. Scheme Sarathi helps you find the schemes you may qualify for and guide you on the next steps."}
+            </p>
+
+            {/* Primary Action Button */}
+            <div className="pt-1 space-y-3">
+              <button
+                onClick={onStartWizard}
+                className="bg-[#1a4d36] hover:bg-[#143f2c] text-white px-8 py-3.5 rounded-xl font-semibold text-base shadow-sm hover:shadow-md transition-all duration-200 inline-flex items-center space-x-2 active:scale-95 group"
+              >
+                <span>{isHindi ? "शुरू करें" : "Get Started"}</span>
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </button>
+
+              <div className="text-xs sm:text-sm text-gray-400 dark:text-gray-400 font-medium">
+                {isHindi
+                  ? "सरल। व्यक्तिगत। आपकी अपनी भाषा में।"
+                  : "Simple. Personal. In your language."}
+              </div>
+            </div>
           </div>
 
-          {/* High-Impact Main Headline */}
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-foreground leading-[1.15] sm:leading-[1.15]">
-            {isHindi ? (
-              <>
-                जानिए आप <span className="text-primary underline decoration-primary/30 decoration-wavy">किन सरकारी योजनाओं</span> के हकदार हैं
-              </>
-            ) : (
-              <>
-                Know what government welfare you{" "}
-                <span className="text-primary underline decoration-primary/30 decoration-wavy">
-                  truly qualify for
-                </span>
-              </>
-            )}
-          </h1>
-
-          {/* Subtitle & Golden Rule Pledge */}
-          <p className="text-base sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-normal">
-            {isHindi
-              ? "बिना किसी दलाल या रिश्वत के, 15+ केंद्रीय और राज्य योजनाओं में अपनी पात्रता 2 मिनट में निःशुल्क जांचें। सटीक और निष्पक्ष।"
-              : "Zero commission, zero middlemen. Evaluate your exact eligibility in 2 minutes across 15+ central & state schemes with 100% mathematical precision."}
-          </p>
-
-          {/* OmniSearchBar (Step 34) */}
-          <div className="pt-2 pb-2 max-w-2xl mx-auto">
-            <OmniSearchBar
-              onSearch={onSearch}
-              onSelectScheme={onSelectScheme}
-              onVoiceClick={onOpenAssistant}
+          {/* ======================================================== */}
+          {/* RIGHT COLUMN: Interactive Hero Composition               */}
+          {/* (Student Image + Organic Blob + Chat Bubbles + Tiranga) */}
+          {/* ======================================================== */}
+          <div className="lg:col-span-7 relative flex items-center justify-center min-h-[460px] sm:min-h-[540px]">
+            
+            {/* 1. Organic Mint/Sage Soft Background Shape */}
+            <div
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] sm:w-[460px] lg:w-[500px] h-[340px] sm:h-[460px] lg:h-[500px] bg-[#eef6f1] dark:bg-emerald-950/20 pointer-events-none -z-10 transition-all"
+              style={{
+                borderRadius: "44% 56% 62% 38% / 42% 48% 52% 58%",
+              }}
             />
-          </div>
 
-          {/* Primary Action Buttons */}
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3.5 max-w-md sm:max-w-none mx-auto">
-            {/* Primary CTA: 2-Minute Eligibility Wizard */}
-            <Button
-              size="lg"
-              onClick={onStartWizard}
-              className="w-full sm:w-auto h-12 px-8 text-base font-semibold shadow-lg shadow-primary/20 bg-primary hover:bg-primary/90 text-white rounded-xl transition-all duration-150 hover:scale-[1.02]"
-            >
-              <span>{isHindi ? "अपनी पात्रता जांचें (2 मिनट)" : "Check Your Eligibility (2 min)"}</span>
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
+            {/* 2. Architectural Landmark Watermark (Parliament Dome & Flag) */}
+            <div className="absolute right-[-10px] sm:right-[-20px] bottom-0 w-[240px] sm:w-[320px] lg:w-[360px] pointer-events-none opacity-80 z-0">
+              <ParliamentWatermark className="w-full h-auto" />
+            </div>
 
-            {/* Secondary CTA: Explore Schemes */}
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={onExploreSchemes}
-              className="w-full sm:w-auto h-12 px-6 text-base font-medium rounded-xl hover:border-primary/40"
-            >
-              <Compass className="w-4 h-4 mr-2 text-primary" />
-              <span>{isHindi ? "सभी योजनाएं देखें" : "Explore All Schemes"}</span>
-            </Button>
+            {/* 3. Center Photographic Cutout of Indian Student with Smartphone */}
+            <div className="relative z-10 max-w-[280px] sm:max-w-[340px] lg:max-w-[370px]">
+              <img
+                src="/images/hero-student.png"
+                alt="Young Indian citizen discovering welfare schemes on smartphone"
+                className="w-full h-auto object-contain mx-auto select-none pointer-events-none drop-shadow-sm"
+              />
+              {/* Bottom Subtle Gradient Mask for Smooth Cutout Fade */}
+              <div className="absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-t from-white dark:from-background via-white/40 dark:via-background/40 to-transparent pointer-events-none" />
+            </div>
 
-            {/* Voice Assistant Mic Quick Trigger */}
-            <Button
-              variant="secondary"
-              size="lg"
-              onClick={onOpenAssistant}
-              className="w-full sm:w-auto h-12 px-5 text-sm font-medium rounded-xl border border-border text-foreground hover:border-primary/40 space-x-2"
-              title="बोलकर बताएं / Speak via Voice"
-            >
-              <Mic className="w-4 h-4 text-primary animate-pulse" />
-              <span>{isHindi ? "बोलकर बताएं" : "Speak to AI"}</span>
-            </Button>
-          </div>
+            {/* 4. Top-Right Cursive Callout: "Sarkari Yojana, Ab Sabke Liye" + Tiranga */}
+            <div className="absolute top-2 sm:top-6 right-2 sm:right-6 z-20 select-none text-right">
+              <div
+                className="text-2xl sm:text-3xl lg:text-[34px] font-bold text-[#165337] dark:text-emerald-300 leading-[1.05] tracking-tight -rotate-3"
+                style={{
+                  fontFamily: "'Caveat', 'Kalam', cursive",
+                }}
+              >
+                <div>Sarkari</div>
+                <div>Yojana,</div>
+                <div>Ab Sabke Liye</div>
+              </div>
 
-          {/* Quick Voice / Language Assurance Pill */}
-          <div className="pt-2 text-xs text-muted-foreground flex items-center justify-center space-x-2">
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            <span>
-              {isHindi
-                ? "हिंदी, English या Hinglish में बोलकर या लिखकर पूछें — सेतु सहायक AI समझता है"
-                : "Ask in Hindi, English, or Hinglish via voice or text — Setu Sahayak understands"}
-            </span>
-          </div>
-
-          {/* Trust Statistics Strip */}
-          <div className="pt-10 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto border-t border-border/60">
-            <div className="p-3 text-center">
-              <div className="text-2xl sm:text-3xl font-extrabold text-foreground">15+</div>
-              <div className="text-xs text-muted-foreground mt-0.5">
-                {isHindi ? "सत्यापित फ्लैगशिप योजनाएं" : "Verified Schemes"}
+              {/* Hand-drawn styled Indian Tricolor Brush Underline */}
+              <div className="flex justify-end mt-1.5 -rotate-3">
+                <svg
+                  width="115"
+                  height="12"
+                  viewBox="0 0 115 12"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  {/* Saffron line */}
+                  <path
+                    d="M 5 3 Q 55 1 110 3"
+                    stroke="#ff9933"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                  />
+                  {/* White subtle line */}
+                  <path
+                    d="M 12 6 Q 55 4 105 6"
+                    stroke="#ffffff"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                  />
+                  {/* Green line */}
+                  <path
+                    d="M 20 9 Q 60 7 112 8"
+                    stroke="#138808"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
               </div>
             </div>
 
-            <div className="p-3 text-center">
-              <div className="text-2xl sm:text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">
-                100%
-              </div>
-              <div className="text-xs text-muted-foreground mt-0.5">
-                {isHindi ? "गणितीय नियम सटीकता" : "Deterministic Precision"}
+            {/* 5. Floating Conversational Chat Bubbles */}
+
+            {/* --- Chat Bubble 1: Assistant Greeting (Top Right of Student) --- */}
+            <div className="absolute top-[14%] sm:top-[16%] right-[6%] sm:right-[10%] lg:right-[14%] z-20 animate-in fade-in slide-in-from-top-3 duration-500">
+              <div className="bg-white dark:bg-card border border-gray-100 dark:border-border rounded-2xl rounded-bl-xs p-3 sm:p-3.5 shadow-lg shadow-black/5 max-w-[190px] sm:max-w-[220px]">
+                <div className="font-bold text-xs sm:text-sm text-gray-900 dark:text-white flex items-center gap-1">
+                  <span>Hi! 👋</span>
+                </div>
+                <div className="text-xs sm:text-[13px] text-gray-600 dark:text-gray-300 mt-0.5 leading-snug">
+                  {isHindi ? "अपने बारे में बताइए।" : "Tell me about yourself."}
+                </div>
               </div>
             </div>
 
-            <div className="p-3 text-center">
-              <div className="text-2xl sm:text-3xl font-extrabold text-primary">₹0</div>
-              <div className="text-xs text-muted-foreground mt-0.5">
-                {isHindi ? "निःशुल्क एवं सुरक्षित" : "Zero Middleman Fees"}
+            {/* --- Chat Bubble 2: Citizen Response (Middle Right) --- */}
+            <div className="absolute top-[40%] sm:top-[42%] right-[1%] sm:right-[3%] lg:right-[4%] z-20 animate-in fade-in slide-in-from-right-3 duration-700">
+              <div className="bg-[#dcfce7] border border-[#bbf7d0] dark:bg-emerald-950/70 dark:border-emerald-800 text-[#14532d] dark:text-emerald-200 rounded-2xl rounded-tr-xs p-3 sm:p-3.5 shadow-sm max-w-[210px] sm:max-w-[240px]">
+                <div className="text-xs sm:text-[13px] font-medium leading-snug">
+                  {isHindi
+                    ? "मैं राजस्थान से 21 वर्षीय छात्र हूँ।"
+                    : "I am a student from Rajasthan, 21 years old."}
+                </div>
               </div>
             </div>
 
-            <div className="p-3 text-center">
-              <div className="text-2xl sm:text-3xl font-extrabold text-foreground">2 min</div>
-              <div className="text-xs text-muted-foreground mt-0.5">
-                {isHindi ? "त्वरित पात्रता परिणाम" : "Instant Evaluation"}
+            {/* --- Chat Bubble 3: Recommended Result (Bottom Right) --- */}
+            <div className="absolute bottom-[10%] sm:bottom-[12%] right-[4%] sm:right-[8%] lg:right-[10%] z-20 animate-in fade-in slide-in-from-bottom-3 duration-900">
+              <div className="bg-white dark:bg-card border border-gray-100 dark:border-border rounded-2xl rounded-tl-xs p-3 sm:p-3.5 shadow-lg shadow-black/5 max-w-[210px] sm:max-w-[240px] space-y-1.5">
+                <div className="font-bold text-xs sm:text-sm text-gray-900 dark:text-white">
+                  {isHindi ? "शानदार!" : "Great!"}
+                </div>
+                <div className="text-xs sm:text-[13px] text-gray-600 dark:text-gray-300 leading-snug">
+                  {isHindi
+                    ? "ये रहीं वे योजनाएं जिनके आप पात्र हैं:"
+                    : "Here are the schemes you may qualify for."}
+                </div>
+
+                {/* Animated Typing Dots */}
+                <div className="flex items-center space-x-1 pt-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#165337] animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#165337] animate-pulse [animation-delay:200ms]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#165337] animate-pulse [animation-delay:400ms]" />
+                </div>
               </div>
             </div>
+
           </div>
+        </div>
+
+        {/* ======================================================== */}
+        {/* BOTTOM MOTTO DIVIDER: "A MORE INFORMED. A STRONGER INDIA." */}
+        {/* ======================================================== */}
+        <div className="mt-16 sm:mt-20 pt-8 flex items-center justify-center">
+          <div className="w-16 sm:w-32 h-[1px] bg-gray-200 dark:bg-gray-700" />
+          <span className="px-4 sm:px-6 text-[10px] sm:text-xs font-semibold tracking-[0.25em] text-gray-500 dark:text-gray-400 uppercase text-center select-none">
+            {isHindi
+              ? "अधिक जागरूक • सशक्त भारत"
+              : "A MORE INFORMED. A STRONGER INDIA."}
+          </span>
+          <div className="w-16 sm:w-32 h-[1px] bg-gray-200 dark:bg-gray-700" />
         </div>
       </div>
     </section>
