@@ -478,18 +478,6 @@ export const MemberFormModal: React.FC<MemberFormModalProps> = ({
                 </>
               )}
             </button>
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>{isHindi ? "सहेज रहे हैं..." : "Saving..."}</span>
-                </>
-              ) : (
-                <>
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>{isEditing ? (isHindi ? "अपडेट करें" : "Update Member") : (isHindi ? "सदस्य जोड़ें" : "Save Member")}</span>
-                </>
-              )}
-            </button>
           </div>
         </form>
       </div>
