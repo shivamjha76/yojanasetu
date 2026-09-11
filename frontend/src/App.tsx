@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { AppProvider, useApp } from "@/context/AppContext";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/home/HeroSection";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { LoginPage } from "@/components/auth/LoginPage";
@@ -186,9 +185,6 @@ const MainContent: React.FC = () => {
           window.scrollTo({ top: 0, behavior: "smooth" });
         }}
       />
-
-      {/* Footer is only displayed on non-landing views, excluding auth pages */}
-      {currentView !== "home" && currentView !== "login" && currentView !== "register" && <Footer />}
 
       {/* Global Citizen Authentication Modal (Sign In / Register) */}
       <AuthModal />

@@ -17,12 +17,14 @@ class EligibilityCheckResponse(BaseModel):
     citizen_summary: Dict[str, Any] = Field(..., description="Summary of evaluated profile")
     total_schemes_evaluated: int = Field(..., description="Total schemes scanned")
     eligible_count: int = Field(..., description="Count of schemes citizen qualifies for")
+    ineligible_count: int = Field(default=0, description="Count of schemes citizen does not qualify for")
     eligible_schemes: List[EligibilityResult] = Field(
         default_factory=list, description="Ranked eligible schemes with match evidence"
     )
     ineligible_schemes: Optional[List[EligibilityResult]] = Field(
         default=None, description="Ineligible schemes with failure reasons (if requested)"
     )
+
 
 
 @router.post(
@@ -78,6 +80,7 @@ def check_eligibility(
         citizen_summary=citizen_summary,
         total_schemes_evaluated=len(all_schemes),
         eligible_count=len(eligible_results),
+        ineligible_count=len(ineligible_results),
         eligible_schemes=eligible_results,
         ineligible_schemes=ineligible_results if include_ineligible else None,
     )
