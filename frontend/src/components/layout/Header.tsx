@@ -13,7 +13,7 @@ export const Header: React.FC<HeaderProps> = ({
   onNavigate = () => {},
 }) => {
   const { language, toggleLanguage } = useApp();
-  const { user, isAuthenticated, logout, openAuthModal, savedSchemeIds } = useAuth();
+  const { user, isAuthenticated, logout, savedSchemeIds } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
@@ -187,7 +187,7 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           ) : (
             <button
-              onClick={() => openAuthModal("login")}
+              onClick={() => onNavigate("login")}
               className="text-[13.5px] font-semibold text-[#1D5F49] hover:text-[#174E3C] px-3.5 py-2 rounded-xl hover:bg-[#1D5F49]/5 transition-colors cursor-pointer"
             >
               {isHindi ? "लॉग इन" : "Sign In"}
@@ -196,7 +196,13 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Primary CTA Button: Get Started */}
           <button
-            onClick={() => onNavigate("wizard")}
+            onClick={() => {
+              if (!isAuthenticated) {
+                onNavigate("login");
+              } else {
+                onNavigate("wizard");
+              }
+            }}
             className="bg-[#1D5F49] hover:bg-[#174E3C] text-white px-5 py-2.5 rounded-xl text-[14px] font-semibold shadow-2xs hover:shadow-xs transition-all duration-150 active:scale-95 cursor-pointer"
           >
             {isHindi ? "शुरू करें" : "Get Started"}
@@ -275,10 +281,10 @@ export const Header: React.FC<HeaderProps> = ({
             {!isAuthenticated && (
               <button
                 onClick={() => {
-                  openAuthModal("login");
+                  onNavigate("login");
                   setIsMobileMenuOpen(false);
                 }}
-                className="w-full border border-[#1D5F49] text-[#1D5F49] py-2.5 rounded-xl font-semibold text-sm"
+                className="w-full border border-[#1D5F49] text-[#1D5F49] py-2.5 rounded-xl font-semibold text-sm cursor-pointer"
               >
                 {isHindi ? "लॉग इन / खाता बनाएं" : "Sign In / Register"}
               </button>
@@ -286,10 +292,14 @@ export const Header: React.FC<HeaderProps> = ({
 
             <button
               onClick={() => {
-                onNavigate("wizard");
+                if (!isAuthenticated) {
+                  onNavigate("login");
+                } else {
+                  onNavigate("wizard");
+                }
                 setIsMobileMenuOpen(false);
               }}
-              className="w-full bg-[#1D5F49] text-white py-2.5 rounded-xl font-semibold text-sm shadow-xs"
+              className="w-full bg-[#1D5F49] text-white py-2.5 rounded-xl font-semibold text-sm shadow-xs cursor-pointer"
             >
               {isHindi ? "शुरू करें" : "Get Started"}
             </button>

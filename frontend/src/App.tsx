@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { AppProvider, useApp } from "@/context/AppContext";
-import { AuthProvider } from "@/context/AuthContext";
+import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/home/HeroSection";
 import { AuthModal } from "@/components/auth/AuthModal";
+import { LoginPage } from "@/components/auth/LoginPage";
 import { WizardContainer } from "@/components/wizard/WizardContainer";
 import { SchemesExplorePage } from "@/components/schemes/SchemesExplorePage";
 import { SchemeDetailPage } from "@/components/schemes/SchemeDetailPage";
@@ -62,6 +63,7 @@ const SAMPLE_SCHEME: Scheme = {
 
 const MainContent: React.FC = () => {
   const { setIsAssistantOpen } = useApp();
+  const { isAuthenticated } = useAuth();
   const [currentView, setCurrentView] = useState("home");
   const [selectedScheme, setSelectedScheme] = useState<Scheme | null>(null);
   const [selectedCategoryFilter] = useState<string>("all");
@@ -86,11 +88,34 @@ const MainContent: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // When clicking Get Started: redirect to Login if not logged in, otherwise open Wizard
+  const handleGetStarted = () => {
+    if (!isAuthenticated) {
+      setCurrentView("login");
+    } else {
+      setCurrentView("wizard");
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-200 overflow-x-hidden">
       <Header currentView={currentView} onNavigate={setCurrentView} />
 
-      {currentView === "wizard" ? (
+      {currentView === "login" ? (
+        <main id="main-content" className="flex-1">
+          <LoginPage
+            onSuccess={() => {
+              setCurrentView("wizard");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+            onBackToHome={() => {
+              setCurrentView("home");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          />
+        </main>
+      ) : currentView === "wizard" ? (
         <main id="main-content" className="flex-1 py-8 bg-muted/20">
           <WizardContainer
             initialData={wizardInitialProfile}
@@ -106,7 +131,7 @@ const MainContent: React.FC = () => {
         <main id="main-content" className="flex-1">
           <SchemesExplorePage
             onSelectScheme={handleOpenSchemeDetail}
-            onStartWizard={() => setCurrentView("wizard")}
+            onStartWizard={handleGetStarted}
             initialCategory={selectedCategoryFilter}
           />
         </main>
@@ -115,7 +140,7 @@ const MainContent: React.FC = () => {
           <SchemeDetailPage
             scheme={selectedScheme || SAMPLE_SCHEME}
             onBack={() => setCurrentView("schemes")}
-            onCheckEligibility={() => setCurrentView("wizard")}
+            onCheckEligibility={handleGetStarted}
             onLocateCsc={() => {
               setCurrentView("csc");
               window.scrollTo({ top: 0, behavior: "smooth" });
@@ -126,16 +151,13 @@ const MainContent: React.FC = () => {
         <main id="main-content" className="flex-1">
           <CscLocator
             onSelectScheme={handleOpenSchemeDetail}
-            onCheckEligibility={() => {
-              setCurrentView("wizard");
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
+            onCheckEligibility={handleGetStarted}
           />
         </main>
       ) : (
         <main id="main-content" className="flex-1">
           <HeroSection
-            onStartWizard={() => setCurrentView("wizard")}
+            onStartWizard={handleGetStarted}
             onExploreSchemes={() => setCurrentView("schemes")}
             onOpenAssistant={() => setIsAssistantOpen(true)}
             onSearch={handleSearch}
