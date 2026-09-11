@@ -33,6 +33,8 @@ import {
   Users,
 } from "lucide-react";
 
+import { getLocalizedBenefit } from "@/utils/schemeLocalization";
+
 interface WizardResultsViewProps {
   results: EligibilityResponse;
   profile: CitizenProfile;
@@ -187,7 +189,7 @@ export const WizardResultsView: React.FC<WizardResultsViewProps> = ({
       summary: isHindi ? scheme.scheme_name_hi : scheme.scheme_name_en,
       tags: [scheme.category.replace(/_/g, " "), "Direct Support"],
       benefitLabel: isHindi ? "सरकारी लाभ" : "Government Benefit",
-      benefitAmount: scheme.benefit_amount_text || "As per norms",
+      benefitAmount: getLocalizedBenefit(scheme, isHindi) || (isHindi ? "मानदंड अनुसार" : "As per norms"),
     };
   };
 

@@ -35,11 +35,14 @@ function getProfileFieldValue(profile: CitizenProfile, fieldName: string): any {
   return null;
 }
 
-function formatValueDisplay(val: any): string {
+function formatValueDisplay(val: any, isHindi: boolean = true): string {
   if (typeof val === "number") {
     if (val >= 100000) {
       const lakhs = val / 100000;
-      return lakhs % 1 !== 0 ? `₹${lakhs.toFixed(2)} लाख` : `₹${Math.round(lakhs)} लाख`;
+      if (isHindi) {
+        return lakhs % 1 !== 0 ? `₹${lakhs.toFixed(2)} लाख` : `₹${Math.round(lakhs)} लाख`;
+      }
+      return lakhs % 1 !== 0 ? `₹${lakhs.toFixed(2)} Lakh` : `₹${Math.round(lakhs)} Lakh`;
     }
     if (val >= 1000) {
       return `₹${val.toLocaleString("en-IN")}`;
@@ -50,16 +53,17 @@ function formatValueDisplay(val: any): string {
     return val.map((x) => String(x).toUpperCase()).join(", ");
   }
   if (typeof val === "boolean") {
-    return val ? "हाँ (Yes)" : "नहीं (No)";
+    return isHindi ? (val ? "हाँ" : "नहीं") : (val ? "Yes" : "No");
   }
   if (val === null || val === undefined) {
-    return "लागू नहीं (Not Provided)";
+    return isHindi ? "लागू नहीं" : "Not Provided";
   }
   return String(val);
 }
 
 function buildEvidence(rule: Rule, userVal: any, isMatched: boolean): RuleMatchEvidence {
-  const targetStr = formatValueDisplay(rule.value);
+  const targetStrHi = formatValueDisplay(rule.value, true);
+  const targetStrEn = formatValueDisplay(rule.value, false);
   const prefixHi = isMatched ? "✓ " : "✗ ";
   const prefixEn = isMatched ? "✓ " : "✗ ";
 
@@ -68,54 +72,57 @@ function buildEvidence(rule: Rule, userVal: any, isMatched: boolean): RuleMatchE
 
   if (rule.field === "age") {
     if (isMatched) {
-      evidenceHi = `${prefixHi}आपकी आयु ${userVal} वर्ष है (नियम: ${rule.description_hi || `${rule.operator} ${targetStr}`})`;
-      evidenceEn = `${prefixEn}Your age is ${userVal} (Required: ${rule.description_en || `${rule.operator} ${targetStr}`})`;
+      evidenceHi = `${prefixHi}आपकी आयु ${userVal} वर्ष है (नियम: ${rule.description_hi || `${rule.operator} ${targetStrHi}`})`;
+      evidenceEn = `${prefixEn}Your age is ${userVal} (Required: ${rule.description_en || `${rule.operator} ${targetStrEn}`})`;
     } else {
-      evidenceHi = `${prefixHi}आपकी आयु ${userVal} वर्ष है, जो कि आवश्यक सीमा (${rule.description_hi || `${rule.operator} ${targetStr}`}) में नहीं आती`;
-      evidenceEn = `${prefixEn}Your age is ${userVal}, which does not satisfy the requirement (${rule.description_en || `${rule.operator} ${targetStr}`})`;
+      evidenceHi = `${prefixHi}आपकी आयु ${userVal} वर्ष है, जो कि आवश्यक सीमा (${rule.description_hi || `${rule.operator} ${targetStrHi}`}) में नहीं आती`;
+      evidenceEn = `${prefixEn}Your age is ${userVal}, which does not satisfy the requirement (${rule.description_en || `${rule.operator} ${targetStrEn}`})`;
     }
   } else if (rule.field === "gender") {
-    const gText = userVal === "female" ? "महिला (Female)" : userVal === "male" ? "पुरुष (Male)" : String(userVal);
+    const gTextHi = userVal === "female" ? "महिला" : userVal === "male" ? "पुरुष" : String(userVal);
+    const gTextEn = userVal === "female" ? "Female" : userVal === "male" ? "Male" : String(userVal);
     if (isMatched) {
-      evidenceHi = `${prefixHi}लिंग: ${gText} (नियम: ${rule.description_hi || targetStr})`;
-      evidenceEn = `${prefixEn}Gender: ${gText} matches criteria (${rule.description_en || targetStr})`;
+      evidenceHi = `${prefixHi}लिंग: ${gTextHi} (नियम: ${rule.description_hi || targetStrHi})`;
+      evidenceEn = `${prefixEn}Gender: ${gTextEn} matches criteria (${rule.description_en || targetStrEn})`;
     } else {
-      evidenceHi = `${prefixHi}यह योजना केवल ${rule.description_hi || targetStr} के लिए है (आप: ${gText})`;
-      evidenceEn = `${prefixEn}Scheme is intended for ${rule.description_en || targetStr} (You: ${gText})`;
+      evidenceHi = `${prefixHi}यह योजना केवल ${rule.description_hi || targetStrHi} के लिए है (आप: ${gTextHi})`;
+      evidenceEn = `${prefixEn}Scheme is intended for ${rule.description_en || targetStrEn} (You: ${gTextEn})`;
     }
   } else if (rule.field === "annual_income") {
-    const incDisp = formatValueDisplay(userVal);
+    const incDispHi = formatValueDisplay(userVal, true);
+    const incDispEn = formatValueDisplay(userVal, false);
     if (isMatched) {
-      evidenceHi = `${prefixHi}पारिवारिक वार्षिक आय ${incDisp} है (सीमा: ${rule.description_hi || `${rule.operator} ${targetStr}`})`;
-      evidenceEn = `${prefixEn}Annual income is ${incDisp} (Limit: ${rule.description_en || `${rule.operator} ${targetStr}`})`;
+      evidenceHi = `${prefixHi}पारिवारिक वार्षिक आय ${incDispHi} है (सीमा: ${rule.description_hi || `${rule.operator} ${targetStrHi}`})`;
+      evidenceEn = `${prefixEn}Annual income is ${incDispEn} (Limit: ${rule.description_en || `${rule.operator} ${targetStrEn}`})`;
     } else {
-      evidenceHi = `${prefixHi}आपकी वार्षिक आय ${incDisp} निर्धारित आय सीमा (${rule.description_hi || `${rule.operator} ${targetStr}`}) से अधिक है`;
-      evidenceEn = `${prefixEn}Annual income ${incDisp} exceeds the maximum limit (${rule.description_en || `${rule.operator} ${targetStr}`})`;
+      evidenceHi = `${prefixHi}आपकी वार्षिक आय ${incDispHi} निर्धारित आय सीमा (${rule.description_hi || `${rule.operator} ${targetStrHi}`}) से अधिक है`;
+      evidenceEn = `${prefixEn}Annual income ${incDispEn} exceeds the maximum limit (${rule.description_en || `${rule.operator} ${targetStrEn}`})`;
     }
   } else if (rule.field === "occupation") {
     if (isMatched) {
-      evidenceHi = `${prefixHi}पेशा: ${userVal} (पात्र व्यवसाय: ${rule.description_hi || targetStr})`;
-      evidenceEn = `${prefixEn}Occupation: ${userVal} matches required criteria (${rule.description_en || targetStr})`;
+      evidenceHi = `${prefixHi}पेशा: ${userVal} (पात्र व्यवसाय: ${rule.description_hi || targetStrHi})`;
+      evidenceEn = `${prefixEn}Occupation: ${userVal} matches required criteria (${rule.description_en || targetStrEn})`;
     } else {
-      evidenceHi = `${prefixHi}यह योजना ${rule.description_hi || targetStr} के लिए है (आपका पेशा: ${userVal})`;
-      evidenceEn = `${prefixEn}Scheme requires occupation to be ${rule.description_en || targetStr} (Your occupation: ${userVal})`;
+      evidenceHi = `${prefixHi}यह योजना ${rule.description_hi || targetStrHi} के लिए है (आपका पेशा: ${userVal})`;
+      evidenceEn = `${prefixEn}Scheme requires occupation to be ${rule.description_en || targetStrEn} (Your occupation: ${userVal})`;
     }
   } else if (rule.field === "state") {
     if (isMatched) {
-      evidenceHi = `${prefixHi}राज्य: ${userVal} (योजना क्षेत्र: ${targetStr})`;
+      evidenceHi = `${prefixHi}राज्य: ${userVal} (योजना क्षेत्र: ${targetStrHi})`;
       evidenceEn = `${prefixEn}Resident of ${userVal} (Matches scheme territory)`;
     } else {
-      evidenceHi = `${prefixHi}यह राज्य योजना केवल ${targetStr} के निवासियों के लिए है (आपका राज्य: ${userVal})`;
-      evidenceEn = `${prefixEn}State scheme only applicable to residents of ${targetStr} (Your state: ${userVal})`;
+      evidenceHi = `${prefixHi}यह राज्य योजना केवल ${targetStrHi} के निवासियों के लिए है (आपका राज्य: ${userVal})`;
+      evidenceEn = `${prefixEn}State scheme only applicable to residents of ${targetStrEn} (Your state: ${userVal})`;
     }
   } else {
-    const uStr = formatValueDisplay(userVal);
+    const uStrHi = formatValueDisplay(userVal, true);
+    const uStrEn = formatValueDisplay(userVal, false);
     if (isMatched) {
-      evidenceHi = `${prefixHi}${rule.description_hi || `${rule.field}: ${uStr} (${rule.operator} ${targetStr})`}`;
-      evidenceEn = `${prefixEn}${rule.description_en || `${rule.field}: ${uStr} (${rule.operator} ${targetStr})`}`;
+      evidenceHi = `${prefixHi}${rule.description_hi || `${rule.field}: ${uStrHi} (${rule.operator} ${targetStrHi})`}`;
+      evidenceEn = `${prefixEn}${rule.description_en || `${rule.field}: ${uStrEn} (${rule.operator} ${targetStrEn})`}`;
     } else {
-      evidenceHi = `${prefixHi}${rule.description_hi || `${rule.field}: ${uStr} (${rule.operator} ${targetStr} आवश्यक)`}`;
-      evidenceEn = `${prefixEn}${rule.description_en || `${rule.field}: ${uStr} (${rule.operator} ${targetStr} required)`}`;
+      evidenceHi = `${prefixHi}${rule.description_hi || `${rule.field}: ${uStrHi} (${rule.operator} ${targetStrHi} आवश्यक)`}`;
+      evidenceEn = `${prefixEn}${rule.description_en || `${rule.field}: ${uStrEn} (${rule.operator} ${targetStrEn} required)`}`;
     }
   }
 

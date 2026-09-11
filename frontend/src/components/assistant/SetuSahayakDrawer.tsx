@@ -29,6 +29,7 @@ import {
   Building2,
   Coins,
 } from "lucide-react";
+import { getLocalizedBenefit } from "@/utils/schemeLocalization";
 
 interface EmbeddedSchemeSummary {
   id: string;
@@ -179,6 +180,16 @@ export const SetuSahayakDrawer: React.FC<SetuSahayakDrawerProps> = ({
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
+
+  // Update initial welcome message if language toggles and chat is untouched
+  useEffect(() => {
+    setMessages((prev) => {
+      if (prev.length === 1 && prev[0].id === "welcome") {
+        return initialMessages;
+      }
+      return prev;
+    });
+  }, [language]);
 
   // Copy text to clipboard
   const handleCopyText = (id: string, text: string) => {
@@ -576,7 +587,7 @@ export const SetuSahayakDrawer: React.FC<SetuSahayakDrawerProps> = ({
 
                         <div className="flex items-center space-x-2 text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-1.5 rounded-xl">
                           <Coins className="w-3.5 h-3.5 shrink-0" />
-                          <span>{msg.embeddedScheme.benefit_amount_text}</span>
+                          <span>{getLocalizedBenefit({ id: msg.embeddedScheme.id, benefit_amount_text: msg.embeddedScheme.benefit_amount_text }, isHindi)}</span>
                         </div>
 
                         <div className="pt-1 flex flex-wrap items-center gap-1.5">

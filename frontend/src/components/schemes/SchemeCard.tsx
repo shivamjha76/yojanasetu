@@ -12,6 +12,7 @@ import {
   Coins,
   ArrowRight,
 } from "lucide-react";
+import { getLocalizedBenefit } from "@/utils/schemeLocalization";
 
 interface SchemeCardProps {
   scheme: Scheme;
@@ -234,7 +235,7 @@ export const SchemeCard: React.FC<SchemeCardProps> = ({
             {isHindi ? "लाभ" : "Benefit"}
           </div>
           <div className="text-sm sm:text-[15px] font-bold text-[#165D51] mt-0.5">
-            {scheme.benefit_amount_text}
+            {getLocalizedBenefit(scheme, isHindi)}
           </div>
         </div>
 

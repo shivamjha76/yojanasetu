@@ -525,7 +525,7 @@ export const api = {
     const localUser: User = {
       id: `offline-${Date.now()}`,
       email: credentials.email,
-      full_name: credentials.email.split("@")[0] || "नागरिक (Citizen)",
+      full_name: credentials.email.split("@")[0] || "Citizen",
       created_at: new Date().toISOString(),
     };
     localStorage.setItem(LOCAL_STORAGE_USER_KEY, JSON.stringify(localUser));

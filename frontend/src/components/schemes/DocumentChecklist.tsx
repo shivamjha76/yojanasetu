@@ -11,6 +11,7 @@ import {
   ShieldAlert,
   Building,
 } from "lucide-react";
+import { getLocalizedAuthority } from "@/utils/schemeLocalization";
 
 interface DocumentChecklistProps {
   documents: DocumentRequirement[];
@@ -117,10 +118,12 @@ export const DocumentChecklist: React.FC<DocumentChecklistProps> = ({
                       {isHindi ? doc.name_hi : doc.name_en}
                     </span>
 
-                    {/* Secondary name in parenthesis */}
-                    <span className="text-xs text-muted-foreground">
-                      ({isHindi ? doc.name_en : doc.name_hi})
-                    </span>
+                    {/* Secondary name in parenthesis (only in Hindi mode to show English equivalent) */}
+                    {isHindi && (
+                      <span className="text-xs text-muted-foreground">
+                        ({doc.name_en})
+                      </span>
+                    )}
 
                     {/* Mandatory vs Optional Pill */}
                     {doc.is_mandatory ? (
@@ -140,7 +143,7 @@ export const DocumentChecklist: React.FC<DocumentChecklistProps> = ({
                       <Building className="w-3 h-3 mr-1 text-primary/70 shrink-0" />
                       <span>
                         {isHindi ? "जारीकर्ता प्राधिकरण: " : "Issuing Authority: "}
-                        {doc.issuing_authority}
+                        {getLocalizedAuthority(doc.issuing_authority, isHindi)}
                       </span>
                     </div>
                   )}

@@ -1,22 +1,63 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useApp } from "@/context/AppContext";
 import { useAuth } from "@/context/AuthContext";
-import { Globe, ChevronDown, Menu, X, User as UserIcon, LogOut, Bookmark } from "lucide-react";
+import {
+  Globe,
+  ChevronDown,
+  Menu,
+  X,
+  User as UserIcon,
+  LogOut,
+  Bookmark,
+  Check,
+  Sparkles,
+} from "lucide-react";
 
 interface HeaderProps {
   currentView?: string;
   onNavigate?: (view: string) => void;
 }
 
+// Top 5 additional Indian languages
+const TOP_5_ADDITIONAL_LANGUAGES = [
+  { code: "bn", name: "বাংলা", englishName: "Bengali" },
+  { code: "mr", name: "मराठी", englishName: "Marathi" },
+  { code: "te", name: "తెలుగు", englishName: "Telugu" },
+  { code: "ta", name: "தமிழ்", englishName: "Tamil" },
+  { code: "gu", name: "ગુજરાતી", englishName: "Gujarati" },
+];
+
 export const Header: React.FC<HeaderProps> = ({
   currentView = "home",
   onNavigate = () => {},
 }) => {
-  const { language, toggleLanguage } = useApp();
+  const { language, setLanguage, toggleLanguage } = useApp();
   const { user, isAuthenticated, logout, savedSchemeIds } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  const [showMoreLanguages, setShowMoreLanguages] = useState(false);
+  const [selectedOtherLang, setSelectedOtherLang] = useState<string | null>(null);
+  const [langToast, setLangToast] = useState<string | null>(null);
+  const langDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        langDropdownRef.current &&
+        !langDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsLangDropdownOpen(false);
+      }
+    };
+    if (isLangDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isLangDropdownOpen]);
 
   const isHindi = language === "hi";
 
@@ -90,40 +131,145 @@ export const Header: React.FC<HeaderProps> = ({
         {/* ======================================================== */}
         <div className="hidden md:flex items-center space-x-3.5">
           {/* Language Selector Pill */}
-          <div className="relative">
+          <div className="relative" ref={langDropdownRef}>
             <button
               onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-              className="flex items-center space-x-2 px-3.5 py-2 rounded-xl border border-gray-200/90 text-[13.5px] font-medium text-[#374151] hover:bg-gray-50 transition-colors bg-white shadow-2xs"
+              className="flex items-center space-x-2 px-3.5 py-2 rounded-xl border border-gray-200/90 text-[13.5px] font-medium text-[#374151] hover:bg-gray-50 transition-colors bg-white shadow-2xs cursor-pointer"
             >
               <Globe className="w-4 h-4 text-[#6B7280] stroke-[1.75]" />
-              <span>{isHindi ? "हिन्दी" : "English"}</span>
-              <ChevronDown className="w-3.5 h-3.5 text-[#9CA3AF] stroke-[1.75]" />
+              <span>
+                {selectedOtherLang
+                  ? `English (${selectedOtherLang})`
+                  : isHindi
+                  ? "हिन्दी"
+                  : "English"}
+              </span>
+              <ChevronDown
+                className={`w-3.5 h-3.5 text-[#9CA3AF] stroke-[1.75] transition-transform duration-150 ${
+                  isLangDropdownOpen ? "rotate-180" : ""
+                }`}
+              />
             </button>
 
             {isLangDropdownOpen && (
-              <div className="absolute right-0 mt-1.5 w-32 bg-white border border-gray-100 rounded-xl shadow-lg py-1 z-50 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-100 rounded-2xl shadow-xl py-2 z-50 animate-in fade-in zoom-in-95 duration-150">
+                <div className="px-3.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+                  {isHindi ? "उपलब्ध भाषाएं" : "Available Languages"}
+                </div>
+
+                {/* English */}
                 <button
                   onClick={() => {
-                    if (language !== "en") toggleLanguage();
+                    setLanguage("en");
+                    setSelectedOtherLang(null);
                     setIsLangDropdownOpen(false);
                   }}
-                  className={`w-full text-left px-3.5 py-2 text-xs font-medium hover:bg-gray-50 ${
-                    language === "en" ? "text-[#1D5F49] font-bold bg-[#1D5F49]/5" : "text-gray-700"
+                  className={`w-full text-left px-3.5 py-2.5 text-xs font-medium hover:bg-gray-50 flex items-center justify-between transition-colors cursor-pointer ${
+                    language === "en" && !selectedOtherLang
+                      ? "text-[#1D5F49] font-bold bg-[#1D5F49]/5"
+                      : "text-gray-700"
                   }`}
                 >
-                  English
+                  <div className="flex items-center gap-2">
+                    <span>English</span>
+                    <span className="text-[11px] text-gray-400 font-normal">(English)</span>
+                  </div>
+                  {language === "en" && !selectedOtherLang && (
+                    <Check className="w-3.5 h-3.5 text-[#1D5F49] stroke-[2.5]" />
+                  )}
                 </button>
+
+                {/* Hindi */}
                 <button
                   onClick={() => {
-                    if (language !== "hi") toggleLanguage();
+                    setLanguage("hi");
+                    setSelectedOtherLang(null);
                     setIsLangDropdownOpen(false);
                   }}
-                  className={`w-full text-left px-3.5 py-2 text-xs font-medium hover:bg-gray-50 ${
-                    language === "hi" ? "text-[#1D5F49] font-bold bg-[#1D5F49]/5" : "text-gray-700"
+                  className={`w-full text-left px-3.5 py-2.5 text-xs font-medium hover:bg-gray-50 flex items-center justify-between transition-colors cursor-pointer ${
+                    language === "hi"
+                      ? "text-[#1D5F49] font-bold bg-[#1D5F49]/5"
+                      : "text-gray-700"
                   }`}
                 >
-                  हिन्दी (Hindi)
+                  <div className="flex items-center gap-2">
+                    <span>हिन्दी</span>
+                    <span className="text-[11px] text-gray-400 font-normal">(Hindi)</span>
+                  </div>
+                  {language === "hi" && (
+                    <Check className="w-3.5 h-3.5 text-[#1D5F49] stroke-[2.5]" />
+                  )}
                 </button>
+
+                {/* Divider */}
+                <div className="my-1.5 border-t border-gray-100" />
+
+                {/* More Languages Accordion */}
+                <div className="px-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowMoreLanguages(!showMoreLanguages);
+                    }}
+                    className="w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-xs font-semibold text-[#1D5F49] bg-[#1D5F49]/5 hover:bg-[#1D5F49]/10 transition-colors cursor-pointer"
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-[#1D5F49]" />
+                      <span>
+                        {isHindi ? "अन्य प्रमुख भारतीय भाषाएं (5)" : "More Indian Languages (5)"}
+                      </span>
+                    </span>
+                    <ChevronDown
+                      className={`w-3.5 h-3.5 text-[#1D5F49] transition-transform duration-200 ${
+                        showMoreLanguages ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {/* Top 5 Languages List */}
+                  {showMoreLanguages && (
+                    <div className="mt-1 space-y-0.5 pt-1">
+                      <div className="px-1 py-1 text-[10.5px] text-gray-400">
+                        {isHindi
+                          ? "चुनने पर सामग्री English में रहेगी:"
+                          : "Selecting defaults to English:"}
+                      </div>
+                      {TOP_5_ADDITIONAL_LANGUAGES.map((lang) => {
+                        const isSelected = selectedOtherLang === lang.name;
+                        return (
+                          <button
+                            key={lang.code}
+                            onClick={() => {
+                              // As user requested: clicks default to English
+                              setLanguage("en");
+                              setSelectedOtherLang(lang.name);
+                              setIsLangDropdownOpen(false);
+                              setLangToast(
+                                isHindi
+                                  ? `${lang.name} (${lang.englishName}) सहायता जल्द आ रही है! अभी डिफ़ॉल्ट रूप से English सक्रिय है।`
+                                  : `${lang.englishName} (${lang.name}) support coming soon! Defaulted to English for now.`
+                              );
+                              setTimeout(() => setLangToast(null), 4000);
+                            }}
+                            className={`w-full text-left px-2.5 py-2 rounded-lg text-xs flex items-center justify-between hover:bg-gray-50 transition-colors cursor-pointer group ${
+                              isSelected ? "bg-emerald-50 text-[#1D5F49] font-bold" : "text-gray-700"
+                            }`}
+                          >
+                            <div className="flex items-center gap-1.5">
+                              <span className="font-semibold text-gray-900">{lang.name}</span>
+                              <span className="text-[11px] text-gray-400 font-normal">
+                                ({lang.englishName})
+                              </span>
+                            </div>
+                            <span className="text-[9.5px] px-1.5 py-0.5 rounded font-medium bg-gray-100 text-gray-500 group-hover:bg-emerald-100 group-hover:text-[#1D5F49] transition-colors">
+                              {isSelected ? "Active (EN)" : "Default EN"}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -208,7 +354,10 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Mobile Menu Hamburger */}
         <div className="flex items-center space-x-2 md:hidden">
           <button
-            onClick={toggleLanguage}
+            onClick={() => {
+              setSelectedOtherLang(null);
+              toggleLanguage();
+            }}
             className="px-2.5 py-1 text-xs font-bold border border-gray-200 rounded-lg text-[#1D5F49]"
           >
             {isHindi ? "EN" : "HI"}
@@ -242,6 +391,88 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             </div>
           )}
+
+          {/* Mobile Language Selector */}
+          <div className="p-3 bg-gray-50/80 rounded-2xl border border-gray-200/60 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-gray-700 flex items-center gap-1.5">
+                <Globe className="w-3.5 h-3.5 text-[#1D5F49]" />
+                {isHindi ? "भाषा चुनें" : "Select Language"}
+              </span>
+              <span className="text-[11px] text-gray-500 font-medium">
+                {selectedOtherLang ? `English (${selectedOtherLang})` : (isHindi ? "हिन्दी" : "English")}
+              </span>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => {
+                  setLanguage("en");
+                  setSelectedOtherLang(null);
+                }}
+                className={`py-1.5 px-3 rounded-xl text-xs font-semibold border transition-all ${
+                  language === "en" && !selectedOtherLang
+                    ? "bg-[#1D5F49] text-white border-[#1D5F49] shadow-2xs"
+                    : "bg-white text-gray-700 border-gray-200"
+                }`}
+              >
+                English
+              </button>
+              <button
+                onClick={() => {
+                  setLanguage("hi");
+                  setSelectedOtherLang(null);
+                }}
+                className={`py-1.5 px-3 rounded-xl text-xs font-semibold border transition-all ${
+                  language === "hi"
+                    ? "bg-[#1D5F49] text-white border-[#1D5F49] shadow-2xs"
+                    : "bg-white text-gray-700 border-gray-200"
+                }`}
+              >
+                हिन्दी
+              </button>
+            </div>
+            <button
+              onClick={() => setShowMoreLanguages(!showMoreLanguages)}
+              className="w-full text-center text-xs font-semibold text-[#1D5F49] pt-1 flex items-center justify-center gap-1 cursor-pointer"
+            >
+              <Sparkles className="w-3 h-3" />
+              <span>
+                {showMoreLanguages
+                  ? isHindi
+                    ? "कम भाषाएं दिखाएं"
+                    : "Show Less"
+                  : isHindi
+                  ? "+ और भाषाएं (Top 5)"
+                  : "+ More Languages (Top 5)"}
+              </span>
+              <ChevronDown
+                className={`w-3 h-3 transition-transform ${showMoreLanguages ? "rotate-180" : ""}`}
+              />
+            </button>
+            {showMoreLanguages && (
+              <div className="grid grid-cols-2 gap-1.5 pt-1">
+                {TOP_5_ADDITIONAL_LANGUAGES.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => {
+                      setLanguage("en");
+                      setSelectedOtherLang(lang.name);
+                      setLangToast(
+                        isHindi
+                          ? `${lang.name} (${lang.englishName}) सहायता जल्द आ रही है! डिफ़ॉल्ट रूप से English सक्रिय है।`
+                          : `${lang.englishName} (${lang.name}) support coming soon! Defaulted to English.`
+                      );
+                      setTimeout(() => setLangToast(null), 4000);
+                    }}
+                    className="py-1.5 px-2 bg-white rounded-lg border border-gray-200 text-left text-xs flex flex-col hover:border-[#1D5F49]/40 transition-colors"
+                  >
+                    <span className="font-semibold text-gray-800">{lang.name}</span>
+                    <span className="text-[10px] text-gray-400">Default EN</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           <nav className="flex flex-col space-y-2">
             <button
@@ -299,6 +530,22 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             )}
           </div>
+        </div>
+      )}
+
+      {/* Floating Language Notification Toast */}
+      {langToast && (
+        <div className="fixed bottom-6 right-6 z-50 max-w-sm bg-[#111827]/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl border border-gray-700/50 flex items-center gap-3 text-xs sm:text-sm animate-in fade-in slide-in-from-bottom-3 duration-200">
+          <div className="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+            <Globe className="w-4 h-4" />
+          </div>
+          <p className="font-medium leading-snug flex-1">{langToast}</p>
+          <button
+            onClick={() => setLangToast(null)}
+            className="p-1 text-gray-400 hover:text-white rounded-lg transition-colors cursor-pointer"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
         </div>
       )}
     </header>

@@ -34,6 +34,8 @@ import {
   Compass,
 } from "lucide-react";
 
+import { getLocalizedBenefit, getLocalizedMinistry } from "@/utils/schemeLocalization";
+
 interface SchemeDetailPageProps {
   scheme: Scheme;
   onBack: () => void;
@@ -165,16 +167,7 @@ export const SchemeDetailPage: React.FC<SchemeDetailPageProps> = ({
   const CategoryIcon = catMeta.icon;
 
   // Extract clean ministry name
-  const cleanMinistry = (() => {
-    const raw = scheme.ministry || "";
-    if (raw.includes("(") && raw.includes(")")) {
-      const parts = raw.match(/^(.*?)\s*\((.*?)\)$/);
-      if (parts) {
-        return isHindi ? parts[1].trim() : parts[2].trim();
-      }
-    }
-    return raw;
-  })();
+  const cleanMinistry = getLocalizedMinistry(scheme, isHindi);
 
   // Domain parser
   const cleanDomain = (() => {
@@ -512,7 +505,7 @@ export const SchemeDetailPage: React.FC<SchemeDetailPageProps> = ({
                       </div>
                       <div>
                         <div className="text-base sm:text-lg font-black text-gray-900">
-                          {scheme.benefit_amount_text}
+                          {getLocalizedBenefit(scheme, isHindi)}
                         </div>
                         <div className="text-xs text-gray-600 mt-0.5 leading-snug">
                           {isHindi
@@ -602,7 +595,7 @@ export const SchemeDetailPage: React.FC<SchemeDetailPageProps> = ({
                     {isHindi ? "अनुदान व राशि विवरण" : "Financial Support Breakdown"}
                   </div>
                   <div className="text-2xl sm:text-3xl font-black text-gray-900">
-                    {scheme.benefit_amount_text}
+                    {getLocalizedBenefit(scheme, isHindi)}
                   </div>
                   <div className="text-xs text-gray-600">
                     {isHindi ? "प्रकार: " : "Benefit Category: "}
@@ -774,7 +767,7 @@ export const SchemeDetailPage: React.FC<SchemeDetailPageProps> = ({
                     <span>{isHindi ? "लाभ राशि" : "Benefit Amount"}</span>
                   </div>
                   <div className="font-semibold text-gray-900 text-right">
-                    {scheme.benefit_amount_text}
+                    {getLocalizedBenefit(scheme, isHindi)}
                   </div>
                 </div>
 

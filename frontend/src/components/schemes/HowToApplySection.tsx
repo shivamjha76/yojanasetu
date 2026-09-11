@@ -217,7 +217,9 @@ export const HowToApplySection: React.FC<HowToApplySectionProps> = ({
             <span className="font-bold text-foreground">
               {isHindi ? "राष्ट्रीय हेल्पलाइन: " : "National Helpline: "}
             </span>
-            <span>1947 (UIDAI) • 155261 (DBT भारत)</span>
+            <span>
+              1947 (UIDAI) • 155261 {isHindi ? "(DBT भारत)" : "(DBT Bharat)"}
+            </span>
           </div>
         </div>
 
