@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "YojanaSetuSchemeDataset",
+  "description": "JSON Schema specification for YojanaSetu government welfare schemes dataset",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "name_hi",
+      "name_en",
+      "short_summary_hi",
+      "short_summary_en",
+      "detailed_description_hi",
+      "detailed_description_en",
+      "ministry",
+      "level",
+      "category",
+      "benefit_amount_text",
+      "benefit_type",
+      "official_portal_url",
+      "rules",
+      "documents",
+      "application_steps_hi",
+      "application_steps_en"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+$",
+        "description": "Unique lowercase hyphen-separated identifier"
+      },
+      "name_hi": { "type": "string" },
+      "name_en": { "type": "string" },
+      "short_summary_hi": { "type": "string" },
+      "short_summary_en": { "type": "string" },
+      "detailed_description_hi": { "type": "string" },
+      "detailed_description_en": { "type": "string" },
+      "ministry": { "type": "string" },
+      "level": {
+        "type": "string",
+        "enum": ["central", "state"]
+      },
+      "applicable_state": {
+        "type": ["string", "null"]
+      },
+      "category": {
+        "type": "string",
+        "enum": [
+          "agriculture",
+          "education_scholarships",
+          "healthcare",
+          "women_child",
+          "housing_urban",
+          "business_msme_loans",
+          "social_security_pensions",
+          "skills_employment"
+        ]
+      },
+      "benefit_amount_text": { "type": "string" },
+      "benefit_type": {
+        "type": "string",
+        "enum": [
+          "direct_benefit_transfer",
+          "health_insurance",
+          "loan_subsidy",
+          "scholarship",
+          "housing_grant",
+          "in_kind_goods"
+        ]
+      },
+      "official_portal_url": {
+        "type": "string",
+        "format": "uri"
+      },
+      "rules": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["field", "operator", "value"],
+          "properties": {
+            "field": { "type": "string" },
+            "operator": {
+              "type": "string",
+              "enum": [">=", "<=", "==", "!=", "IN", "NOT_IN", "BETWEEN"]
+            },
+            "value": {},
+            "description_hi": { "type": "string" },
+            "description_en": { "type": "string" }
+          }
+        }
+      },
+      "documents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["id", "name_hi", "name_en", "is_mandatory"],
+          "properties": {
+            "id": { "type": "string" },
+            "name_hi": { "type": "string" },
+            "name_en": { "type": "string" },
+            "is_mandatory": { "type": "boolean" },
+            "issuing_authority": { "type": "string" },
+            "how_to_get_url": { "type": "string" }
+          }
+        }
+      },
+      "application_steps_hi": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      "application_steps_en": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      "faqs": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["question_hi", "question_en", "answer_hi", "answer_en"],
+          "properties": {
+            "question_hi": { "type": "string" },
+            "question_en": { "type": "string" },
+            "answer_hi": { "type": "string" },
+            "answer_en": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}
