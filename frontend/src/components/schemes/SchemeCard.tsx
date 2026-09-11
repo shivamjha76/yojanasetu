@@ -100,6 +100,106 @@ export const SchemeCard: React.FC<SchemeCardProps> = ({
 
   const theme = getCategoryTheme(scheme.category);
 
+  // Curated concise 3-4 word taglines per scheme id (both English & Hindi)
+  const SCHEME_SHORT_TAGLINES: Record<string, { en: string; hi: string }> = {
+    "pm-kisan": {
+      en: "Direct Income Support",
+      hi: "प्रत्यक्ष आर्थिक सहायता",
+    },
+    "ayushman-bharat-pmjay": {
+      en: "Free Cashless Health Insurance",
+      hi: "मुफ्त कैशलेस स्वास्थ्य बीमा",
+    },
+    "rajasthan-youth-skill-employment": {
+      en: "Skill Development Support",
+      hi: "कौशल प्रशिक्षण एवं भत्ता",
+    },
+    "pm-mudra-yojana": {
+      en: "Collateral-Free Business Loans",
+      hi: "बिना गारंटी व्यवसाय ऋण",
+    },
+    "sukanya-samriddhi-yojana": {
+      en: "Girl Child Savings Scheme",
+      hi: "सुकन्या सुरक्षित बचत योजना",
+    },
+    "pm-awas-yojana-urban-gramin": {
+      en: "Pucca Housing Financial Aid",
+      hi: "पक्का मकान निर्माण सहायता",
+    },
+    "post-matric-scholarship-sc-st-obc": {
+      en: "Tuition Fee Reimbursement",
+      hi: "छात्रवृत्ति एवं फीस प्रतिपूर्ति",
+    },
+    "national-apprenticeship-promotion-scheme": {
+      en: "Industrial Apprenticeship & Stipend",
+      hi: "औद्योगिक प्रशिक्षण व स्टाइपेंड",
+    },
+    "central-sector-merit-scholarship-college": {
+      en: "Higher Education Merit Aid",
+      hi: "मेधावी छात्र शिक्षा सहायता",
+    },
+    "pm-kaushal-vikas-yojana": {
+      en: "Free Industry Skill Training",
+      hi: "मुफ्त उद्योग कौशल प्रशिक्षण",
+    },
+    "free-coaching-scheme-sc-obc": {
+      en: "Free Competitive Exam Coaching",
+      hi: "मुफ्त प्रतियोगी परीक्षा कोचिंग",
+    },
+    "ladli-behna-yojana-mp": {
+      en: "Monthly Women Financial Aid",
+      hi: "मासिक महिला आर्थिक सहायता",
+    },
+    "indira-gandhi-divyangjan-pension": {
+      en: "Monthly Disability Pension Support",
+      hi: "मासिक दिव्यांग पेंशन सहायता",
+    },
+    "indira-gandhi-old-age-pension": {
+      en: "Senior Citizen Monthly Pension",
+      hi: "वरिष्ठ नागरिक मासिक पेंशन",
+    },
+    "pm-svanidhi-street-vendors": {
+      en: "Street Vendor Micro Credit",
+      hi: "स्ट्रीट वेंडर सस्ता ऋण",
+    },
+    "pm-matsya-sampada-yojana": {
+      en: "Fisheries Government Capital Subsidy",
+      hi: "मत्स्य पालन सरकारी सब्सिडी",
+    },
+    "atal-pension-yojana": {
+      en: "Guaranteed Post-60 Monthly Pension",
+      hi: "निश्चित मासिक वृद्धावस्था पेंशन",
+    },
+  };
+
+  // Helper to strictly restrict description to 3-4 words max for any scheme
+  const getShortDescription = (text: string, maxWords: number = 4): string => {
+    if (!text) return "";
+    const words = text.trim().split(/\s+/);
+    if (words.length <= maxWords) return text;
+
+    let selected = words.slice(0, maxWords);
+    const danglingWords = new Set([
+      "of", "and", "in", "to", "for", "the", "a", "an", "per", "with", "by", "on", "at", "up", "or", "across",
+      "और", "एवं", "तथा", "व", "का", "के", "की", "को", "में", "से", "पर", "लिए", "हेतु"
+    ]);
+
+    if (selected.length > 3 && danglingWords.has(selected[selected.length - 1].toLowerCase())) {
+      selected = selected.slice(0, 3);
+    }
+
+    return selected.join(" ").replace(/[,;:\-–—\.\s]+$/, "");
+  };
+
+  const getDisplayDescription = (): string => {
+    const curated = SCHEME_SHORT_TAGLINES[scheme.id];
+    if (curated) {
+      return isHindi ? curated.hi : curated.en;
+    }
+    const rawText = isHindi ? scheme.short_summary_hi : scheme.short_summary_en;
+    return getShortDescription(rawText, 4);
+  };
+
   return (
     <div className="bg-white rounded-3xl border border-gray-200/80 hover:border-[#165D51]/30 hover:shadow-md transition-all p-6 flex flex-col justify-between min-h-[255px] space-y-4 group">
       <div>
@@ -121,9 +221,9 @@ export const SchemeCard: React.FC<SchemeCardProps> = ({
           {isHindi ? scheme.name_hi : scheme.name_en}
         </h3>
 
-        {/* Description */}
-        <p className="text-xs sm:text-[13px] text-gray-500 line-clamp-2 leading-relaxed mt-1.5">
-          {isHindi ? scheme.short_summary_hi : scheme.short_summary_en}
+        {/* Description - strictly 3 to 4 words max */}
+        <p className="text-xs sm:text-[13px] text-gray-500 line-clamp-1 leading-relaxed mt-1.5 font-medium">
+          {getDisplayDescription()}
         </p>
       </div>
 

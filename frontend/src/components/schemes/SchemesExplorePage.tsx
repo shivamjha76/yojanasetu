@@ -214,76 +214,25 @@ export const SchemesExplorePage: React.FC<SchemesExplorePageProps> = ({
         {/* ======================================================== */}
         {/* 1. TOP HERO BANNER: "Schemes for You"                    */}
         {/* ======================================================== */}
-        <div className="relative rounded-3xl bg-[#F4F9F5] border border-[#E0ECE3] p-6 sm:p-8 lg:p-10 overflow-hidden shadow-xs mb-8 sm:mb-10">
-          
-          {/* Subtle background circles */}
-          <div className="absolute -top-12 -right-12 w-64 h-64 rounded-full bg-[#EAF4ED]/60 pointer-events-none blur-xl" />
-          <div className="absolute -bottom-16 left-1/3 w-80 h-48 rounded-full bg-[#EBF5EE]/50 pointer-events-none blur-2xl" />
-
-          <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-6">
-            
-            {/* Left: Heading & Subtitle */}
-            <div className="space-y-2 w-full lg:max-w-xl text-left">
-              <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-gray-900 tracking-tight leading-tight">
-                {isHindi ? (
-                  <>
-                    योजनाएं <span className="text-[#165D51]">आपके लिए</span>
-                  </>
-                ) : (
-                  <>
-                    Schemes <span className="text-[#165D51]">for You</span>
-                  </>
-                )}
-              </h1>
-
-              <p className="text-sm sm:text-base text-gray-500 font-normal leading-relaxed">
-                {isHindi
-                  ? "उन सरकारी योजनाओं को खोजें जिनके आप पात्र हो सकते हैं।"
-                  : "Explore government schemes that you may be eligible for."}
-              </p>
-            </div>
-
-            {/* Right: Boy Illustration + Thought Callout + Slogan */}
-            <div className="relative hidden md:flex items-center justify-end shrink-0 select-none space-x-2">
-              
-              {/* Thought Bubble */}
-              <div className="relative bg-white/95 backdrop-blur-xs border border-gray-200/80 rounded-2xl px-4 py-2.5 shadow-xs max-w-[190px] text-left">
-                <p className="text-[11.5px] font-semibold text-gray-800 leading-snug">
-                  {isHindi
-                    ? "यहाँ कुछ योजनाएं हैं जो आपकी प्रोफाइल से मेल खाती हैं।"
-                    : "Here are some schemes that match your profile."}
-                </p>
-                <div className="absolute -top-1 -right-1 text-emerald-500 font-bold text-xs">✦</div>
-                <div className="absolute top-1/2 -right-2 -translate-y-1/2 w-0 h-0 border-y-6 border-y-transparent border-l-6 border-l-white" />
-              </div>
-
-              {/* Boy in Green Hoodie Illustration */}
-              <div className="w-32 h-32 sm:w-36 sm:h-36 flex items-center justify-center">
-                <img
-                  src="/images/results_boy_transparent.png"
-                  alt="Citizen"
-                  className="w-full h-full object-contain drop-shadow-xs"
-                />
-              </div>
-
-              {/* Slogan with Tricolor Underline */}
-              <div className="hidden lg:flex flex-col items-center justify-center pl-2">
-                <div className="text-center font-serif italic text-base font-bold text-[#165D51] leading-tight">
-                  Sarkari Yojana,
-                  <br />
-                  <span className="font-sans font-semibold text-sm text-[#165D51]">Ab Sabke Liye</span>
-                </div>
-                <div className="mt-1.5 flex flex-col items-center gap-0.5">
-                  <svg viewBox="0 0 80 8" className="w-20 h-2" fill="none">
-                    <path d="M 4 3 C 25 1, 55 6, 76 2" stroke="#FF9933" strokeWidth="2.5" strokeLinecap="round" />
-                    <path d="M 10 6 C 30 4, 60 7.5, 72 5" stroke="#138808" strokeWidth="2.5" strokeLinecap="round" />
-                  </svg>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
+        <div className="w-full mb-8 sm:mb-10 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xs border border-[#E0ECE3]/80 bg-[#F4F9F5] transition-all hover:shadow-sm">
+          <picture>
+            <source
+              srcSet="/images/schemes_hero_banner_transparent@2x.png 2x, /images/schemes_hero_banner_transparent.png 1x"
+            />
+            <img
+              src="/images/schemes_hero_banner_transparent.png"
+              alt={
+                isHindi
+                  ? "योजनाएं आपके लिए - सरकारी योजना, अब सबके लिए"
+                  : "Schemes for You - Sarkari Yojana, Ab Sabke Liye"
+              }
+              className="w-full h-auto object-contain select-none block"
+              loading="eager"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "/images/schemes_hero_banner.png";
+              }}
+            />
+          </picture>
         </div>
 
         {/* ======================================================== */}
