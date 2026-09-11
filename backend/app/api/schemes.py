@@ -68,3 +68,19 @@ def list_schemes(
         offset=offset,
         schemes=schemes,
     )
+
+
+@router.get(
+    "/schemes/{id}",
+    response_model=Scheme,
+    summary="Get single scheme detailed view",
+    description="Retrieve comprehensive details of a scheme including rules, documents, and application steps.",
+)
+def get_scheme_by_id(id: str):
+    scheme = scheme_service.get_by_id(id)
+    if not scheme:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Scheme with ID '{id}' not found",
+        )
+    return scheme

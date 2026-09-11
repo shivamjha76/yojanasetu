@@ -58,3 +58,28 @@ def test_pagination_params():
     assert len(data["schemes"]) == 4
     assert data["limit"] == 4
     assert data["offset"] == 2
+
+
+def test_get_scheme_by_id_success():
+    response = client.get("/api/schemes/pm-kisan")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["id"] == "pm-kisan"
+    assert "PM-KISAN" in data["name_en"]
+    assert len(data["rules"]) >= 1
+    assert len(data["documents"]) >= 1
+    assert "official_portal_url" in data
+    assert "application_steps_hi" in data
+    assert "faqs" in data
+
+
+def test_get_scheme_by_id_case_insensitive():
+    response = client.get("/api/schemes/PM-KISAN")
+    assert response.status_code == 200
+    assert response.json()["id"] == "pm-kisan"
+
+
+def test_get_scheme_by_id_not_found():
+    response = client.get("/api/schemes/non-existent-id-12345")
+    assert response.status_code == 404
+    assert "not found" in response.json()["detail"].lower()
