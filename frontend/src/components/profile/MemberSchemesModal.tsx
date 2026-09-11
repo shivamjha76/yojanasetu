@@ -127,34 +127,34 @@ export const MemberSchemesModal: React.FC<MemberSchemesModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-5 sm:p-6 bg-gradient-to-r from-[#0D684E] to-[#148364] text-white shrink-0 relative">
+        <div className="p-5 sm:p-6 bg-white border-b border-[#E2E8F0] shrink-0 relative">
           <button
             onClick={onClose}
-            className="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-white transition-colors cursor-pointer"
+            className="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
             aria-label="Close"
           >
             <X className="w-5 h-5 stroke-[2.2]" />
           </button>
 
           <div className="flex flex-wrap items-center gap-2 mb-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-semibold bg-emerald-300/25 text-emerald-100 border border-emerald-300/30">
+            <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-semibold bg-[#1D5F49]/10 text-[#1D5F49] border border-[#1D5F49]/20">
               <span>{getRelationshipBadge(member.relationship)}</span>
             </span>
-            <span className="text-xs text-emerald-200/90 font-medium">
+            <span className="text-xs text-[#525B64] font-medium">
               {member.age} {isHindi ? "वर्ष" : "yrs"} • {member.occupation} • {member.state || "India"}
             </span>
           </div>
 
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0C1924] flex items-center gap-2">
             <span>{member.name} {isHindi ? "के लिए पात्र योजनाएं" : "Eligible Schemes"}</span>
             {!isLoading && (
-              <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-400/30 text-white border border-white/20">
+              <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#1D5F49]/10 text-[#1D5F49] border border-[#1D5F49]/20">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>{eligibleSchemes.length} {isHindi ? "योजनाएं" : "Schemes"}</span>
               </span>
             )}
           </h2>
-          <p className="text-xs sm:text-sm text-emerald-100/90 mt-1 leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#525B64] mt-1 leading-relaxed">
             {isHindi
               ? `${member.name} की प्रोफ़ाइल (उम्र: ${member.age}, पेशा: ${member.occupation}, आय: ₹${Number(member.annual_income || 0).toLocaleString("en-IN")}) के आधार पर चुनी गई लाभकारी योजनाएं:`
               : `Government schemes evaluated specifically for ${member.name} based on their profile:`}
@@ -163,7 +163,7 @@ export const MemberSchemesModal: React.FC<MemberSchemesModalProps> = ({
 
         {/* Filter bar */}
         {!isLoading && eligibleSchemes.length > 0 && (
-          <div className="p-3 sm:px-6 bg-gray-50 border-b border-gray-200/80 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 shrink-0">
+          <div className="p-3 sm:px-6 bg-[#F8FAFC] border-b border-[#E2E8F0] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 shrink-0">
             {/* Search Input */}
             <div className="relative flex-1">
               <input
@@ -171,7 +171,7 @@ export const MemberSchemesModal: React.FC<MemberSchemesModalProps> = ({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={isHindi ? "योजना खोजें..." : "Search scheme by name..."}
-                className="w-full pl-8 pr-3 py-1.5 rounded-xl border border-gray-300 bg-white text-xs outline-hidden focus:border-[#0D684E] focus:ring-1 focus:ring-[#0D684E]"
+                className="w-full pl-8 pr-3 py-1.5 rounded-xl border border-gray-300 bg-white text-xs outline-hidden focus:border-[#1D5F49] focus:ring-1 focus:ring-[#1D5F49]"
               />
               <Search className="absolute left-2.5 top-2.5 w-3.5 h-3.5 text-gray-400" />
             </div>
@@ -181,7 +181,7 @@ export const MemberSchemesModal: React.FC<MemberSchemesModalProps> = ({
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-3 py-1.5 rounded-xl border border-gray-300 bg-white text-xs outline-hidden focus:border-[#0D684E] text-gray-700"
+                className="px-3 py-1.5 rounded-xl border border-gray-300 bg-white text-xs outline-hidden focus:border-[#1D5F49] text-gray-700"
               >
                 <option value="all">{isHindi ? "सभी श्रेणियां (All Categories)" : "All Categories"}</option>
                 {availableCategories.map((cat) => (
@@ -198,7 +198,7 @@ export const MemberSchemesModal: React.FC<MemberSchemesModalProps> = ({
         <div className="p-4 sm:p-6 overflow-y-auto flex-1 overscroll-contain space-y-3.5">
           {isLoading ? (
             <div className="text-center py-16 space-y-3">
-              <Loader2 className="w-8 h-8 mx-auto text-[#0D684E] animate-spin" />
+              <Loader2 className="w-8 h-8 mx-auto text-[#1D5F49] animate-spin" />
               <p className="text-xs sm:text-sm font-semibold text-gray-600">
                 {isHindi ? `${member.name} के लिए योजनाएं जांची जा रही हैं...` : "Evaluating scheme eligibility rules..."}
               </p>
@@ -226,12 +226,12 @@ export const MemberSchemesModal: React.FC<MemberSchemesModalProps> = ({
               {filteredSchemes.map((item) => (
                 <div
                   key={item.scheme_id}
-                  className="p-4 rounded-2xl bg-white border border-gray-200/90 shadow-2xs hover:shadow-xs hover:border-emerald-300 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                  className="p-4 rounded-2xl bg-white border border-[#E2E8F0] shadow-2xs hover:shadow-xs hover:border-[#1D5F49]/40 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
                 >
                   <div className="space-y-1.5 flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-[#0D684E] border border-emerald-200">
-                        <CheckCircle2 className="w-3 h-3 text-[#0D684E]" />
+                      <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#1D5F49]/10 text-[#1D5F49] border border-[#1D5F49]/20">
+                        <CheckCircle2 className="w-3 h-3 text-[#1D5F49]" />
                         <span>{item.match_percentage}% {isHindi ? "पात्रता" : "Match"}</span>
                       </span>
                       <span className="text-[11px] font-medium text-gray-400 capitalize">
@@ -239,7 +239,7 @@ export const MemberSchemesModal: React.FC<MemberSchemesModalProps> = ({
                       </span>
                     </div>
 
-                    <h3 className="text-sm sm:text-base font-bold text-gray-900 leading-snug group-hover:text-[#0D684E] transition-colors">
+                    <h3 className="text-sm sm:text-base font-bold text-[#0C1924] leading-snug group-hover:text-[#1D5F49] transition-colors">
                       {isHindi ? item.scheme_name_hi : item.scheme_name_en}
                     </h3>
 
@@ -251,7 +251,7 @@ export const MemberSchemesModal: React.FC<MemberSchemesModalProps> = ({
                             key={idx}
                             className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-md bg-gray-100 text-gray-700"
                           >
-                            <ShieldCheck className="w-3 h-3 text-emerald-600 shrink-0" />
+                            <ShieldCheck className="w-3 h-3 text-[#1D5F49] shrink-0" />
                             <span className="truncate max-w-[200px]">
                               {isHindi ? rule.evidence_text_hi : rule.evidence_text_en}
                             </span>
@@ -269,7 +269,7 @@ export const MemberSchemesModal: React.FC<MemberSchemesModalProps> = ({
                         onClose();
                         onSelectScheme(item.scheme_id);
                       }}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#0D684E] hover:bg-[#094D3A] text-white text-xs font-bold shadow-2xs hover:scale-[1.02] transition-all cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#1D5F49] hover:bg-[#174E3C] text-white text-xs font-bold shadow-2xs hover:scale-[1.02] transition-all cursor-pointer"
                     >
                       <span>{isHindi ? "विवरण देखें" : "View Details"}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
