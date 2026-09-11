@@ -281,9 +281,9 @@ class AIService:
             occupation = "farmer"
         elif any(w in text for w in ["student", "padhai", "college", "छात्र", "विद्यार्थी"]):
             occupation = "student"
-        elif any(w in text for w in ["ghar sambhalti", "homemaker", "housewife", "गृहणी"]):
+        elif any(w in text for w in ["ghar sambhalti", "ghar", "homemaker", "housewife", "गृहणी", "घर संभालती", "घर"]):
             occupation = "homemaker"
-        elif any(w in text for w in ["vendor", "thela", "dukan", "vendor", "रेहड़ी", "पटरी"]):
+        elif any(w in text for w in ["vendor", "thela", "dukan", "रेहड़ी", "पटरी", "मजदूर"]):
             occupation = "daily_wage_laborer"
         elif any(w in text for w in ["berojgar", "unemployed", "job search", "बेरोजगार"]):
             occupation = "unemployed"

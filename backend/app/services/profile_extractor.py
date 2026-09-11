@@ -69,6 +69,19 @@ OCCUPATION_SYNONYMS = {
     "company": "employed_private",
     "sarkari": "employed_government",
     "govt": "employed_government",
+    "किसान": "farmer",
+    "कृषक": "farmer",
+    "खेती": "farmer",
+    "छात्र": "student",
+    "विद्यार्थी": "student",
+    "गृहणी": "homemaker",
+    "घर संभालती": "homemaker",
+    "घर": "homemaker",
+    "मजदूर": "daily_wage_laborer",
+    "कारीगर": "artisan_craftsperson",
+    "बेरोजगार": "unemployed",
+    "दुकान": "business_self_employed",
+    "व्यापार": "business_self_employed",
 }
 
 VALID_CATEGORIES = {"general", "obc", "sc", "st", "ews"}
