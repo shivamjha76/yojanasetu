@@ -149,3 +149,25 @@ export interface EligibilityResult {
   ineligibility_reasons_en?: string[];
   required_documents: DocumentRequirement[];
 }
+
+// -------------------------------------------------------------
+// 7. CSC / Jan Seva Kendra Types
+// -------------------------------------------------------------
+export interface CscCenter {
+  id: string;
+  vle_name: string;
+  center_name: string;
+  csc_id: string;
+  state: string;
+  district: string;
+  pincode: string;
+  address: string;
+  landmark?: string;
+  phone: string;
+  email?: string;
+  timing: string;
+  latitude?: number;
+  longitude?: number;
+  rating: number;
+  services: string[];
+}

@@ -10,6 +10,7 @@ import { WizardContainer } from "@/components/wizard/WizardContainer";
 import { SchemesExplorePage } from "@/components/schemes/SchemesExplorePage";
 import { SchemeDetailPage } from "@/components/schemes/SchemeDetailPage";
 import { SetuSahayakDrawer } from "@/components/assistant/SetuSahayakDrawer";
+import { CscLocator } from "@/components/csc/CscLocator";
 import { SchemeCard } from "@/components/schemes/SchemeCard";
 import { DocumentChecklist } from "@/components/schemes/DocumentChecklist";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -30,7 +31,7 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 import { Sparkles, ShieldCheck, HelpCircle, ExternalLink, Building2, Coins } from "lucide-react";
-import { Scheme } from "@/types/schema";
+import { Scheme, CitizenProfile } from "@/types/schema";
 import { api } from "@/services/api";
 
 // Sample scheme for preview in component showcase
@@ -88,6 +89,7 @@ const MainContent: React.FC = () => {
   const isHindi = language === "hi";
 
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>("all");
+  const [wizardInitialProfile, setWizardInitialProfile] = useState<Partial<CitizenProfile> | undefined>(undefined);
 
   // Handle scheme selection: opens dedicated SchemeDetailPage
   const handleOpenSchemeDetail = async (schemeId: string) => {
@@ -121,8 +123,12 @@ const MainContent: React.FC = () => {
       {currentView === "wizard" ? (
         <main className="flex-1 py-8 bg-muted/20">
           <WizardContainer
+            initialData={wizardInitialProfile}
             onSubmit={(_profile) => {}}
-            onCancel={() => setCurrentView("home")}
+            onCancel={() => {
+              setWizardInitialProfile(undefined);
+              setCurrentView("home");
+            }}
             onViewSchemeDetail={handleOpenSchemeDetail}
           />
         </main>
@@ -140,6 +146,20 @@ const MainContent: React.FC = () => {
             scheme={selectedScheme || SAMPLE_SCHEME}
             onBack={() => setCurrentView("schemes")}
             onCheckEligibility={() => setCurrentView("wizard")}
+            onLocateCsc={() => {
+              setCurrentView("csc");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          />
+        </main>
+      ) : currentView === "csc" ? (
+        <main className="flex-1">
+          <CscLocator
+            onSelectScheme={handleOpenSchemeDetail}
+            onCheckEligibility={() => {
+              setCurrentView("wizard");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
           />
         </main>
       ) : (
@@ -389,10 +409,24 @@ const MainContent: React.FC = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Global Floating AI Assistant & Slide-over Drawer (Step 46) */}
+      {/* Global Floating AI Assistant & Slide-over Drawer (Step 46 & Step 47) */}
       <SetuSahayakDrawer
-        onStartWizard={() => setCurrentView("wizard")}
-        onExploreSchemes={() => setCurrentView("schemes")}
+        onStartWizard={(prefillProfile) => {
+          if (prefillProfile) {
+            setWizardInitialProfile(prefillProfile);
+          }
+          setCurrentView("wizard");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+        onExploreSchemes={() => {
+          setCurrentView("schemes");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+        onViewSchemeDetail={handleOpenSchemeDetail}
+        onLocateCsc={() => {
+          setCurrentView("csc");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
       />
 
       <Footer />

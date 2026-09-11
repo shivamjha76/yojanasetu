@@ -298,7 +298,7 @@ class AIService:
 
         # Occupation detection
         occupation = "other"
-        if any(w in text for w in ["kisan", "farmer", "kheti", "किसान", "कृषक"]):
+        if any(w in text for w in ["kisan", "farmer", "kheti", "किसान", "कृषक", "खेती"]):
             occupation = "farmer"
         elif any(w in text for w in ["student", "padhai", "college", "छात्र", "विद्यार्थी"]):
             occupation = "student"
@@ -326,7 +326,7 @@ class AIService:
 
         # Income detection
         income = 120000.0
-        income_match = re.search(r"(\d+(?:\.\d+)?)\s*(?:lakh|hazar|हजार|लाख)", text)
+        income_match = re.search(r"(\d+(?:\.\d+)?)\s*(?:lakh|hazar|हजार|लाख|रुपये|रुपए|inr|rs)", text)
         if income_match:
             val = float(income_match.group(1))
             if "lakh" in text or "लाख" in text:
@@ -335,6 +335,12 @@ class AIService:
                 income = val * 1000.0
                 if "mahine" in text or "monthly" in text or "per month" in text:
                     income *= 12
+            elif val > 1000:
+                income = val
+
+        # Land holding detection
+        land_match = re.search(r"(\d+(?:\.\d+)?)\s*(?:acre|एकड़|एकड)", text)
+        land = float(land_match.group(1)) if land_match else None
 
         # Differently abled detection
         is_divyang = any(w in text for w in ["divyang", "disability", "disabled", "handicapped", "विकलांग", "दिव्यांग"])
@@ -355,6 +361,7 @@ class AIService:
             "annual_income": income,
             "is_differently_abled": is_divyang,
             "ration_card_type": ration_card,
+            "land_holding_acres": land,
         }
 
         return json.dumps(profile, ensure_ascii=False)

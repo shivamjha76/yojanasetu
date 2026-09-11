@@ -176,3 +176,30 @@ class EligibilityResult(BaseModel):
     ineligibility_reasons_hi: List[str] = Field(default_factory=list)
     ineligibility_reasons_en: List[str] = Field(default_factory=list)
     required_documents: List[DocumentRequirement] = Field(default_factory=list)
+
+
+# -------------------------------------------------------------
+# 7. CSC / Jan Seva Kendra Schemas
+# -------------------------------------------------------------
+class CscCenter(BaseModel):
+    id: str
+    vle_name: str
+    center_name: str
+    csc_id: str
+    state: str
+    district: str
+    pincode: str
+    address: str
+    landmark: Optional[str] = None
+    phone: str
+    email: Optional[str] = None
+    timing: str = "09:00 AM - 06:30 PM"
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    rating: float = 4.8
+    services: List[str] = Field(default_factory=list)
+
+
+class CscSearchResponse(BaseModel):
+    total: int
+    centers: List[CscCenter]

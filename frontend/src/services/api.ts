@@ -3,7 +3,7 @@
  * Connects frontend to FastAPI backend REST endpoints.
  */
 
-import { Scheme, CitizenProfile, EligibilityResult } from "@/types/schema";
+import { Scheme, CitizenProfile, EligibilityResult, CscCenter } from "@/types/schema";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api";
 
@@ -120,6 +120,26 @@ export const api = {
       }),
     });
     if (!res.ok) throw new Error(`Scheme explanation failed: ${res.statusText}`);
+    return res.json();
+  },
+
+  /** Search or retrieve CSC Jan Seva Kendras */
+  async getCscCenters(params?: {
+    pincode?: string;
+    state?: string;
+    district?: string;
+    service?: string;
+    q?: string;
+  }): Promise<{ total: number; centers: CscCenter[] }> {
+    const query = new URLSearchParams();
+    if (params?.pincode) query.append("pincode", params.pincode);
+    if (params?.state) query.append("state", params.state);
+    if (params?.district) query.append("district", params.district);
+    if (params?.service) query.append("service", params.service);
+    if (params?.q) query.append("q", params.q);
+
+    const res = await fetch(`${API_BASE_URL}/csc/search?${query.toString()}`);
+    if (!res.ok) throw new Error("Failed to fetch CSC centers");
     return res.json();
   },
 };
