@@ -9,6 +9,7 @@ import { WizardStep3, Step3Data } from "./WizardStep3";
 import { WizardStep4, Step4Data } from "./WizardStep4";
 import { WizardStep5 } from "./WizardStep5";
 import { WizardResultsView } from "./WizardResultsView";
+import { AdaptiveInterview } from "./AdaptiveInterview";
 import { getAllIndianStates } from "@/data/indianDistricts";
 import {
   Dialog,
@@ -26,6 +27,8 @@ import {
   Send,
   Loader2,
   CheckCircle2,
+  Bot,
+  SlidersHorizontal,
 } from "lucide-react";
 
 export interface WizardContainerProps {
@@ -130,6 +133,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   const { user, isAuthenticated, saveCitizenDetails } = useAuth();
   const isHindi = language === "hi";
 
+  const [wizardMode, setWizardMode] = useState<"adaptive" | "classic">("adaptive");
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [formData, setFormData] = useState<CitizenProfile>(() => {
     let draft: Partial<CitizenProfile> = {};
@@ -310,26 +314,95 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       {/* ======================================================== */}
       {/* Main Content: 3-Column Layout Matching Design Screenshot */}
       {/* ======================================================== */}
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 py-8 lg:py-12 relative z-10 flex-1">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 py-8 lg:py-10 relative z-10 flex-1">
         
-        {/* Mobile Step Header (for small screens) */}
-        <div className="lg:hidden mb-6 bg-white rounded-2xl p-4 border border-gray-200/80 shadow-xs">
-          <div className="flex items-center justify-between text-xs font-semibold mb-2">
-            <span className="text-[#165D51]">
-              {isHindi ? `चरण ${currentStep} / 5` : `Step ${currentStep} of 5`}:{" "}
-              {isHindi ? currentMeta.titleHi : currentMeta.titleEn}
+        {/* Mode Switcher Banner */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-6 bg-white/80 backdrop-blur-xs p-2.5 sm:p-3 rounded-2xl border border-gray-200/80 shadow-2xs">
+          <div className="flex items-center space-x-2 text-xs font-semibold text-gray-700 px-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>
+              {isHindi
+                ? "पात्रता खोजने का तरीका चुनें:"
+                : "Choose profiling method:"}
             </span>
-            <span className="text-gray-500">{Math.round((currentStep / 5) * 100)}%</span>
           </div>
-          <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
-            <div
-              className="bg-[#165D51] h-2 rounded-full transition-all duration-300"
-              style={{ width: `${(currentStep / 5) * 100}%` }}
-            />
+
+          <div className="flex items-center bg-gray-100/90 p-1 rounded-xl">
+            <button
+              type="button"
+              onClick={() => setWizardMode("adaptive")}
+              className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                wizardMode === "adaptive"
+                  ? "bg-[#165D51] text-white shadow-xs"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              <Bot className="w-3.5 h-3.5 text-amber-300" />
+              <span>{isHindi ? "संवादात्मक 8-सवाल (नया)" : "Adaptive 8-Q Interview (Smart)"}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setWizardMode("classic")}
+              className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                wizardMode === "classic"
+                  ? "bg-[#165D51] text-white shadow-xs"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5" />
+              <span>{isHindi ? "क्लासिक फॉर्म विज़ार्ड" : "Classic Form Wizard"}</span>
+            </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {wizardMode === "adaptive" ? (
+          <AdaptiveInterview
+            initialData={formData}
+            availableStates={availableStates}
+            onComplete={async (completedProfile) => {
+              setFormData(completedProfile);
+              setIsSubmitting(true);
+              try {
+                if (isAuthenticated) {
+                  await saveCitizenDetails(completedProfile).catch(() => {});
+                }
+                try {
+                  localStorage.setItem("yojanasetu_draft_profile", JSON.stringify(completedProfile));
+                } catch {}
+                const res = await api.checkEligibility(completedProfile);
+                setEvaluationResult(res);
+                onSubmit(completedProfile);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              } catch (err) {
+                console.error("Adaptive eligibility check failed", err);
+                onSubmit(completedProfile);
+              } finally {
+                setIsSubmitting(false);
+              }
+            }}
+            onCancel={() => setWizardMode("classic")}
+          />
+        ) : (
+          <>
+            {/* Mobile Step Header (for small screens) */}
+            <div className="lg:hidden mb-6 bg-white rounded-2xl p-4 border border-gray-200/80 shadow-xs">
+              <div className="flex items-center justify-between text-xs font-semibold mb-2">
+                <span className="text-[#165D51]">
+                  {isHindi ? `चरण ${currentStep} / 5` : `Step ${currentStep} of 5`}:{" "}
+                  {isHindi ? currentMeta.titleHi : currentMeta.titleEn}
+                </span>
+                <span className="text-gray-500">{Math.round((currentStep / 5) * 100)}%</span>
+              </div>
+              <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                <div
+                  className="bg-[#165D51] h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${(currentStep / 5) * 100}%` }}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* ======================================================== */}
           {/* LEFT COLUMN: Vertical Connected Stepper + Trust Card    */}
@@ -600,10 +673,10 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                 </svg>
               </div>
             </div>
-
           </div>
-
         </div>
+        </>
+      )}
 
       </div>
 
