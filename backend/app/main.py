@@ -38,6 +38,11 @@ app.add_middleware(
 # Locate schemes dataset
 SCHEMES_FILE = Path(__file__).resolve().parent.parent.parent / "data" / "schemes.json"
 
+# Register API Routers
+from app.api.schemes import router as schemes_router
+
+app.include_router(schemes_router, prefix="/api", tags=["Schemes"])
+
 
 @app.get("/", tags=["System"])
 def root():
