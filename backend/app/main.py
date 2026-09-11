@@ -40,8 +40,10 @@ SCHEMES_FILE = Path(__file__).resolve().parent.parent.parent / "data" / "schemes
 
 # Register API Routers
 from app.api.schemes import router as schemes_router
+from app.api.eligibility import router as eligibility_router
 
 app.include_router(schemes_router, prefix="/api", tags=["Schemes"])
+app.include_router(eligibility_router, prefix="/api", tags=["Eligibility"])
 
 
 @app.get("/", tags=["System"])
