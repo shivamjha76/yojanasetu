@@ -40,7 +40,7 @@ export const SchemesExplorePage: React.FC<SchemesExplorePageProps> = ({
   initialCategory = "all",
   initialSearch = "",
 }) => {
-  const { language } = useApp();
+  const { language, isOnline, triggerOfflineToast } = useApp();
   const isHindi = language === "hi";
 
   const [schemes, setSchemes] = useState<Scheme[]>([]);
@@ -333,9 +333,23 @@ export const SchemesExplorePage: React.FC<SchemesExplorePageProps> = ({
                 {/* Ingest Scheme Prose Button */}
                 <button
                   type="button"
-                  onClick={() => setIsIngestModalOpen(true)}
-                  className="flex items-center space-x-1.5 px-3.5 py-2.5 rounded-2xl bg-emerald-50 text-[#165D51] hover:bg-emerald-100 border border-emerald-200/70 text-xs sm:text-sm font-bold shadow-2xs transition-colors cursor-pointer"
-                  title={isHindi ? "सरकारी गैजेट / गद्य से नई योजना जोड़ें" : "Ingest raw government prose into rules"}
+                  onClick={() => {
+                    if (isOnline) {
+                      setIsIngestModalOpen(true);
+                    } else {
+                      triggerOfflineToast(isHindi ? "सरकारी गैजेट AI पार्सिंग" : "Gazette AI Ingestion");
+                    }
+                  }}
+                  className={`flex items-center space-x-1.5 px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold shadow-2xs transition-colors cursor-pointer ${
+                    isOnline
+                      ? "bg-emerald-50 text-[#165D51] hover:bg-emerald-100 border border-emerald-200/70"
+                      : "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed"
+                  }`}
+                  title={
+                    isOnline
+                      ? isHindi ? "सरकारी गैजेट / गद्य से नई योजना जोड़ें" : "Ingest raw government prose into rules"
+                      : isHindi ? "ऑफ़लाइन मोड: AI पार्सिंग हेतु इंटरनेट आवश्यक है" : "Offline: Internet required for AI parsing"
+                  }
                 >
                   <Plus className="w-4 h-4" />
                   <span>{isHindi ? "गैजेट से जोड़ें" : "Ingest Gazette"}</span>

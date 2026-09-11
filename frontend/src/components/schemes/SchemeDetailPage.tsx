@@ -57,7 +57,7 @@ export const SchemeDetailPage: React.FC<SchemeDetailPageProps> = ({
   backLabel,
   isEligibleUser = true,
 }) => {
-  const { language } = useApp();
+  const { language, isOnline, triggerOfflineToast } = useApp();
   const { isSchemeSaved, toggleSaveScheme } = useAuth();
   const isHindi = language === "hi";
 
@@ -871,42 +871,66 @@ export const SchemeDetailPage: React.FC<SchemeDetailPageProps> = ({
             <div className="space-y-3">
               
               {/* Primary Apply Now Button */}
-              <a
-                href={scheme.official_portal_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`w-full py-3.5 px-6 rounded-xl text-white font-bold text-sm shadow-sm flex items-center justify-center space-x-2 transition-all hover:scale-[1.01] cursor-pointer ${
-                  isDocsVerified
-                    ? "bg-gradient-to-r from-[#0D684E] to-[#148364] hover:from-[#094D3A] hover:to-[#0D684E] ring-2 ring-emerald-500/40"
-                    : "bg-[#0D684E] hover:bg-[#094D3A]"
-                }`}
-              >
-                <span>{isHindi ? "अभी आवेदन करें" : "Apply Now"}</span>
-                <ArrowLeft className="w-4 h-4 rotate-180 stroke-[2.5]" />
-              </a>
+              {isOnline ? (
+                <a
+                  href={scheme.official_portal_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`w-full py-3.5 px-6 rounded-xl text-white font-bold text-sm shadow-sm flex items-center justify-center space-x-2 transition-all hover:scale-[1.01] cursor-pointer ${
+                    isDocsVerified
+                      ? "bg-gradient-to-r from-[#0D684E] to-[#148364] hover:from-[#094D3A] hover:to-[#0D684E] ring-2 ring-emerald-500/40"
+                      : "bg-[#0D684E] hover:bg-[#094D3A]"
+                  }`}
+                >
+                  <span>{isHindi ? "अभी आवेदन करें" : "Apply Now"}</span>
+                  <ArrowLeft className="w-4 h-4 rotate-180 stroke-[2.5]" />
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => triggerOfflineToast(isHindi ? "आधिकारिक पोर्टल आवेदन" : "External Official Portal Application")}
+                  className="w-full py-3.5 px-6 rounded-xl bg-gray-200 text-gray-500 font-bold text-sm shadow-2xs flex items-center justify-center space-x-2 cursor-not-allowed opacity-80"
+                  title={isHindi ? "ऑफ़लाइन मोड: सरकारी पोर्टल खोलने के लिए इंटरनेट आवश्यक है" : "Offline: Internet required to open external portal"}
+                >
+                  <span>{isHindi ? "आवेदन (इंटरनेट आवश्यक)" : "Apply (Requires Internet)"}</span>
+                  <ArrowLeft className="w-4 h-4 rotate-180 opacity-50" />
+                </button>
+              )}
 
               {/* AI Document Verification Button */}
-              <button
-                type="button"
-                onClick={() => setIsDocModalOpen(true)}
-                className={`w-full py-3 px-5 rounded-xl font-bold text-sm flex items-center justify-center space-x-2 shadow-xs transition-all hover:scale-[1.01] cursor-pointer group ${
-                  isDocsVerified
-                    ? "bg-emerald-100/90 hover:bg-emerald-200/80 border-2 border-emerald-600 text-emerald-950"
-                    : "bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-100 hover:from-emerald-100 hover:to-teal-100 border-2 border-[#0D684E] text-[#0D684E]"
-                }`}
-              >
-                {isDocsVerified ? (
-                  <CheckCircle2 className="w-4 h-4 text-emerald-700 stroke-[2.5]" />
-                ) : (
-                  <Sparkles className="w-4 h-4 text-[#0D684E] group-hover:rotate-12 transition-transform" />
-                )}
-                <span>
-                  {isDocsVerified
-                    ? isHindi ? "दस्तावेज़ सत्यापित (समीक्षा करें)" : "Documents Verified (Review)"
-                    : isHindi ? "AI दस्तावेज़ सत्यापन" : "Verify Documents with AI"}
-                </span>
-                <ShieldCheck className="w-4 h-4 text-[#0D684E] ml-1" />
-              </button>
+              {isOnline ? (
+                <button
+                  type="button"
+                  onClick={() => setIsDocModalOpen(true)}
+                  className={`w-full py-3 px-5 rounded-xl font-bold text-sm flex items-center justify-center space-x-2 shadow-xs transition-all hover:scale-[1.01] cursor-pointer group ${
+                    isDocsVerified
+                      ? "bg-emerald-100/90 hover:bg-emerald-200/80 border-2 border-emerald-600 text-emerald-950"
+                      : "bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-100 hover:from-emerald-100 hover:to-teal-100 border-2 border-[#0D684E] text-[#0D684E]"
+                  }`}
+                >
+                  {isDocsVerified ? (
+                    <CheckCircle2 className="w-4 h-4 text-emerald-700 stroke-[2.5]" />
+                  ) : (
+                    <Sparkles className="w-4 h-4 text-[#0D684E] group-hover:rotate-12 transition-transform" />
+                  )}
+                  <span>
+                    {isDocsVerified
+                      ? isHindi ? "दस्तावेज़ सत्यापित (समीक्षा करें)" : "Documents Verified (Review)"
+                      : isHindi ? "AI दस्तावेज़ सत्यापन" : "Verify Documents with AI"}
+                  </span>
+                  <ShieldCheck className="w-4 h-4 text-[#0D684E] ml-1" />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => triggerOfflineToast(isHindi ? "AI दस्तावेज़ सत्यापन" : "AI Document Verification")}
+                  className="w-full py-3 px-5 rounded-xl bg-gray-100 border border-gray-200 text-gray-500 font-bold text-sm flex items-center justify-center space-x-2 cursor-not-allowed opacity-80"
+                  title={isHindi ? "ऑफ़लाइन मोड: AI विज़न सत्यापन हेतु इंटरनेट आवश्यक है" : "Offline: Internet required for AI Vision verification"}
+                >
+                  <Sparkles className="w-4 h-4 text-gray-400" />
+                  <span>{isHindi ? "AI दस्तावेज़ सत्यापन (ऑफ़लाइन)" : "AI Document Verification (Offline)"}</span>
+                </button>
+              )}
 
               {/* Secondary Save for Later Button */}
               <button

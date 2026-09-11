@@ -12,6 +12,10 @@ interface AppContextType {
   toggleTheme: () => void;
   isAssistantOpen: boolean;
   setIsAssistantOpen: (open: boolean) => void;
+  isOnline: boolean;
+  triggerOfflineToast: (featureName?: string) => void;
+  offlineToast: string | null;
+  clearOfflineToast: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -31,6 +35,49 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   const [isAssistantOpen, setIsAssistantOpen] = useState(false);
+  const [isOnline, setIsOnline] = useState<boolean>(
+    typeof navigator !== "undefined" ? navigator.onLine : true
+  );
+  const [offlineToast, setOfflineToast] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOnline(true);
+      setOfflineToast(null);
+    };
+    const handleOffline = () => {
+      setIsOnline(false);
+    };
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  const triggerOfflineToast = (featureName?: string) => {
+    const isHi = language === "hi";
+    const msg = featureName
+      ? isHi
+        ? `⚠️ "${featureName}" के लिए इंटरनेट कनेक्शन आवश्यक है। कृपया नेटवर्क कनेक्ट होने पर प्रयास करें।`
+        : `⚠️ Internet connection is required to use "${featureName}". Please reconnect to try again.`
+      : isHi
+      ? "⚠️ इस सुविधा के लिए इंटरनेट कनेक्शन आवश्यक है। कृपया नेटवर्क कनेक्ट होने पर प्रयास करें।"
+      : "⚠️ Internet connection is required for this feature. Please reconnect to try again.";
+    setOfflineToast(msg);
+  };
+
+  const clearOfflineToast = () => setOfflineToast(null);
+
+  useEffect(() => {
+    if (offlineToast) {
+      const timer = setTimeout(() => {
+        setOfflineToast(null);
+      }, 4500);
+      return () => clearTimeout(timer);
+    }
+  }, [offlineToast]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -70,6 +117,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         toggleTheme,
         isAssistantOpen,
         setIsAssistantOpen,
+        isOnline,
+        triggerOfflineToast,
+        offlineToast,
+        clearOfflineToast,
       }}
     >
       {children}

@@ -16,6 +16,7 @@ import { HouseholdClaimView } from "@/components/profile/HouseholdClaimView";
 import { Scheme, CitizenProfile } from "@/types/schema";
 import { api } from "@/services/api";
 import { ALL_SCHEMES } from "@/services/ruleEngine";
+import { WifiOff, X } from "lucide-react";
 
 // Sample scheme for preview in component showcase
 const SAMPLE_SCHEME: Scheme = {
@@ -144,7 +145,7 @@ const getPathForView = (view: string, schemeId?: string): string => {
 };
 
 const MainContent: React.FC = () => {
-  const { setIsAssistantOpen, language } = useApp();
+  const { setIsAssistantOpen, language, offlineToast, clearOfflineToast } = useApp();
   const isHindi = language === "hi";
 
   const initialRoute = useMemo(() => getViewFromLocation(), []);
@@ -377,6 +378,28 @@ const MainContent: React.FC = () => {
 
       {/* Global Citizen Authentication Modal (Sign In / Register) */}
       <AuthModal />
+
+      {/* Offline Mode Feature Toast Notification */}
+      {offlineToast && (
+        <div className="fixed bottom-6 right-6 z-50 max-w-md bg-gray-900/95 text-white backdrop-blur-md px-4 py-3.5 rounded-2xl shadow-2xl border border-amber-500/40 flex items-start gap-3 text-xs sm:text-sm animate-in fade-in slide-in-from-bottom-4 duration-200">
+          <div className="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
+            <WifiOff className="w-4 h-4" />
+          </div>
+          <div className="flex-1 pr-1">
+            <p className="font-semibold text-amber-300 text-xs uppercase tracking-wide mb-0.5">
+              {isHindi ? "इंटरनेट कनेक्शन आवश्यक" : "Internet Connection Required"}
+            </p>
+            <p className="font-medium text-gray-200 leading-snug">{offlineToast}</p>
+          </div>
+          <button
+            onClick={clearOfflineToast}
+            className="p-1 text-gray-400 hover:text-white rounded-lg transition-colors cursor-pointer shrink-0"
+            aria-label="Close notification"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -133,7 +133,7 @@ export const SetuSahayakDrawer: React.FC<SetuSahayakDrawerProps> = ({
   onViewSchemeDetail = () => {},
   onLocateCsc = () => {},
 }) => {
-  const { language, isAssistantOpen, setIsAssistantOpen } = useApp();
+  const { language, isAssistantOpen, setIsAssistantOpen, isOnline } = useApp();
   const isHindi = language === "hi";
 
   const initialMessages: ChatMessage[] = [
@@ -473,17 +473,30 @@ export const SetuSahayakDrawer: React.FC<SetuSahayakDrawerProps> = ({
                 <div>
                   <SheetTitle className="text-base font-extrabold text-foreground flex items-center gap-1.5">
                     <span>{isHindi ? "सेतु सहायक AI" : "Setu Sahayak AI"}</span>
-                    <Badge
-                      variant="secondary"
-                      className="text-[10px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-none font-bold"
-                    >
-                      Online
-                    </Badge>
+                    {isOnline ? (
+                      <Badge
+                        variant="secondary"
+                        className="text-[10px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-none font-bold"
+                      >
+                        Online
+                      </Badge>
+                    ) : (
+                      <Badge
+                        variant="secondary"
+                        className="text-[10px] bg-amber-500/15 text-amber-700 dark:text-amber-400 border-none font-bold"
+                      >
+                        {isHindi ? "ऑफ़लाइन मोड" : "Offline Mode"}
+                      </Badge>
+                    )}
                   </SheetTitle>
                   <p className="text-[11px] text-muted-foreground">
-                    {isHindi
-                      ? "नागरिक कल्याण सलाहकार • हिंदी, Hinglish, English"
-                      : "Direct Citizen Welfare Advisor • Multilingual"}
+                    {isOnline
+                      ? isHindi
+                        ? "नागरिक कल्याण सलाहकार • हिंदी, Hinglish, English"
+                        : "Direct Citizen Welfare Advisor • Multilingual"
+                      : isHindi
+                      ? "स्थानीय ज्ञानकोष सक्रिय • ऑफ़लाइन सलाह"
+                      : "Local Knowledgebase Active • Offline Mode"}
                   </p>
                 </div>
               </div>
