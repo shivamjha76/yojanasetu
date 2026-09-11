@@ -9,6 +9,7 @@ import { HowItWorks } from "@/components/home/HowItWorks";
 import { WizardContainer } from "@/components/wizard/WizardContainer";
 import { SchemesExplorePage } from "@/components/schemes/SchemesExplorePage";
 import { SchemeDetailPage } from "@/components/schemes/SchemeDetailPage";
+import { SetuSahayakDrawer } from "@/components/assistant/SetuSahayakDrawer";
 import { SchemeCard } from "@/components/schemes/SchemeCard";
 import { DocumentChecklist } from "@/components/schemes/DocumentChecklist";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -387,6 +388,12 @@ const MainContent: React.FC = () => {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Global Floating AI Assistant & Slide-over Drawer (Step 46) */}
+      <SetuSahayakDrawer
+        onStartWizard={() => setCurrentView("wizard")}
+        onExploreSchemes={() => setCurrentView("schemes")}
+      />
 
       <Footer />
     </div>

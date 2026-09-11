@@ -2,6 +2,8 @@ import React from "react";
 import { useApp } from "@/context/AppContext";
 import { Scheme } from "@/types/schema";
 import { DocumentChecklist } from "./DocumentChecklist";
+import { WhyYouQualifyAccordion } from "./WhyYouQualifyAccordion";
+import { HowToApplySection } from "./HowToApplySection";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -10,9 +12,7 @@ import {
   Coins,
   ShieldCheck,
   ExternalLink,
-  CheckCircle2,
   FileText,
-  AlertTriangle,
   Sparkles,
 } from "lucide-react";
 
@@ -20,12 +20,14 @@ interface SchemeDetailPageProps {
   scheme: Scheme;
   onBack: () => void;
   onCheckEligibility?: () => void;
+  onLocateCsc?: () => void;
 }
 
 export const SchemeDetailPage: React.FC<SchemeDetailPageProps> = ({
   scheme,
   onBack,
   onCheckEligibility = () => {},
+  onLocateCsc = () => {},
 }) => {
   const { language } = useApp();
   const isHindi = language === "hi";
@@ -145,41 +147,17 @@ export const SchemeDetailPage: React.FC<SchemeDetailPageProps> = ({
               </p>
             </div>
 
-            {/* Application Steps */}
-            {scheme.application_steps_hi && scheme.application_steps_hi.length > 0 && (
-              <div className="p-6 rounded-2xl border border-border bg-card space-y-4">
-                <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                  <span>{isHindi ? "आवेदन कैसे करें (चरण दर चरण)" : "How to Apply (Step-by-Step)"}</span>
-                </h2>
+            {/* Step 44: Why You Qualify Accordion */}
+            <WhyYouQualifyAccordion
+              scheme={scheme}
+              onCheckEligibility={onCheckEligibility}
+            />
 
-                <div className="space-y-3">
-                  {(isHindi ? scheme.application_steps_hi : scheme.application_steps_en).map(
-                    (step, idx) => (
-                      <div key={idx} className="flex items-start space-x-3 text-sm">
-                        <div className="w-6 h-6 rounded-full bg-primary/10 text-primary font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
-                          {idx + 1}
-                        </div>
-                        <span className="text-foreground/90 leading-snug">{step}</span>
-                      </div>
-                    )
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* Zero Middleman Advisory */}
-            <div className="p-4 rounded-xl border border-amber-500/30 bg-amber-500/10 flex items-start space-x-3 text-xs">
-              <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-              <div className="text-amber-900 dark:text-amber-200 leading-relaxed">
-                <span className="font-bold">
-                  {isHindi ? "नागरिक सुरक्षा चेतावनी: " : "Citizen Security Advisory: "}
-                </span>
-                {isHindi
-                  ? "सरकारी योजनाओं के लिए किसी भी व्यक्ति को नकद कमीशन न दें। योजनासेतु पूर्णतः निःशुल्क सेवा है।"
-                  : "Never pay any middleman or agent for government welfare. YojanaSetu provides 100% direct citizen access for free."}
-              </div>
-            </div>
+            {/* Step 45: How To Apply Section */}
+            <HowToApplySection
+              scheme={scheme}
+              onLocateCsc={onLocateCsc}
+            />
           </div>
 
           {/* Right Col: Documents Checklist */}
