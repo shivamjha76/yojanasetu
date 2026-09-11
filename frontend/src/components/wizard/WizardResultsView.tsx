@@ -510,6 +510,17 @@ export const WizardResultsView: React.FC<WizardResultsViewProps> = ({
                           ))}
                         </div>
 
+                        {/* Processing Time Estimate Badge */}
+                        {(scheme.processing_time_hi || scheme.processing_time_en) && (
+                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-50 text-amber-900 border border-amber-200/70 text-xs font-semibold mt-2">
+                            <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                            <span>
+                              {isHindi ? "अनुमानित समय:" : "Estimated Timeline:"}{" "}
+                              {isHindi ? scheme.processing_time_hi : scheme.processing_time_en}
+                            </span>
+                          </div>
+                        )}
+
                       </div>
                     </div>
 

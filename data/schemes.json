@@ -83,7 +83,10 @@
         "answer_hi": "नहीं, संवैधानिक पद धारक, सरकारी कर्मचारी या ₹10,000 से अधिक मासिक पेंशन पाने वाले अपात्र हैं।",
         "answer_en": "No, constitutional post holders, govt employees, or pensioners drawing over ₹10,000/month are excluded."
       }
-    ]
+    ],
+    "processing_time_days": 30,
+    "processing_time_hi": "15 - 30 कार्य दिवस (राजस्व सत्यापन पश्चात)",
+    "processing_time_en": "15 - 30 working days (post revenue verification)"
   },
   {
     "id": "ayushman-bharat-pmjay",
@@ -158,7 +161,10 @@
         "answer_hi": "हाँ, पहले से मौजूद सभी बीमारियों का इलाज पहले दिन से ही कवर होता है।",
         "answer_en": "Yes, all pre-existing conditions are covered from day one of enrollment."
       }
-    ]
+    ],
+    "processing_time_days": 2,
+    "processing_time_hi": "तत्काल आयुष्मान कार्ड (24 - 48 घंटे)",
+    "processing_time_en": "Instant Ayushman Card (24 - 48 hours)"
   },
   {
     "id": "rajasthan-youth-skill-employment",
@@ -222,7 +228,10 @@
       "1. Visit Rajasthan SSO portal",
       "2. Submit application online"
     ],
-    "faqs": []
+    "faqs": [],
+    "processing_time_days": 15,
+    "processing_time_hi": "10 - 15 कार्य दिवस (दस्तावेज़ सत्यापन)",
+    "processing_time_en": "10 - 15 working days (document verification)"
   },
   {
     "id": "pm-mudra-yojana",
@@ -314,7 +323,10 @@
         "answer_hi": "नहीं, मुद्रा योजना के तहत किसी भी संपत्ति या गारंटी की आवश्यकता नहीं होती है।",
         "answer_en": "No, MUDRA loans do not require any collateral security or third-party guarantee."
       }
-    ]
+    ],
+    "processing_time_days": 14,
+    "processing_time_hi": "7 - 14 कार्य दिवस (बैंक शाखा मूल्यांकन)",
+    "processing_time_en": "7 - 14 working days (bank branch appraisal)"
   },
   {
     "id": "sukanya-samriddhi-yojana",
@@ -395,7 +407,10 @@
         "answer_hi": "एक परिवार में अधिकतम दो बेटियों के खाते खोले जा सकते हैं (जुड़वां के मामले में तीन)।",
         "answer_en": "Maximum of two accounts per family (or three in case of twin girls as second birth)."
       }
-    ]
+    ],
+    "processing_time_days": 1,
+    "processing_time_hi": "तत्काल खाता खोलना (1 - 2 कार्य दिवस)",
+    "processing_time_en": "Instant Account Opening (1 - 2 working days)"
   },
   {
     "id": "pm-awas-yojana-urban-gramin",
@@ -481,7 +496,10 @@
         "answer_hi": "नहीं, परिवार के किसी भी सदस्य के नाम पर देश में कहीं भी पक्का मकान नहीं होना चाहिए।",
         "answer_en": "No, the beneficiary family should not own a pucca house anywhere in India."
       }
-    ]
+    ],
+    "processing_time_days": 45,
+    "processing_time_hi": "30 - 45 कार्य दिवस (जियो-टैगिंग व ग्राम सभा अनुमोदन)",
+    "processing_time_en": "30 - 45 working days (geo-tagging & Gram Sabha approval)"
   },
   {
     "id": "post-matric-scholarship-sc-st-obc",
@@ -595,7 +613,10 @@
         "answer_hi": "हाँ, यदि प्राइवेट कॉलेज सरकार/UGC/AICTE से मान्यता प्राप्त है, तो छात्र पात्र हैं।",
         "answer_en": "Yes, as long as the private college is government-recognized and mapped on NSP."
       }
-    ]
+    ],
+    "processing_time_days": 30,
+    "processing_time_hi": "30 - 45 कार्य दिवस (संस्थान व नोडल अधिकारी सत्यापन)",
+    "processing_time_en": "30 - 45 working days (institute & nodal verification)"
   },
   {
     "id": "national-apprenticeship-promotion-scheme",
@@ -684,7 +705,10 @@
         "answer_hi": "हाँ, NCVT द्वारा प्रमाणित राष्ट्रीय शिक्षुता प्रमाण पत्र (National Apprenticeship Certificate) मिलता है।",
         "answer_en": "Yes, candidates receive a government-recognized National Apprenticeship Certificate (NAC)."
       }
-    ]
+    ],
+    "processing_time_days": 10,
+    "processing_time_hi": "7 - 10 कार्य दिवस (कंपनी अनुबंध अनुमोदन)",
+    "processing_time_en": "7 - 10 working days (company contract approval)"
   },
   {
     "id": "central-sector-merit-scholarship-college",
@@ -786,7 +810,10 @@
         "answer_hi": "नहीं, यह योजना केवल नियमित (Regular full-time) छात्रों के लिए है।",
         "answer_en": "No, this scheme is strictly for regular full-time undergraduate courses."
       }
-    ]
+    ],
+    "processing_time_days": 30,
+    "processing_time_hi": "30 - 45 कार्य दिवस (राष्ट्रीय छात्रवृत्ति पोर्टल)",
+    "processing_time_en": "30 - 45 working days (National Scholarship Portal)"
   },
   {
     "id": "pm-kaushal-vikas-yojana",
@@ -879,7 +906,10 @@
         "answer_hi": "नहीं, PMKVY के तहत पूरी ट्रेनिंग और परीक्षा शुल्क सरकार वहन करती है।",
         "answer_en": "No, the entire training, course material, and assessment fee is 100% funded by the Government."
       }
-    ]
+    ],
+    "processing_time_days": 7,
+    "processing_time_hi": "5 - 7 कार्य दिवस (प्रशिक्षण केंद्र आवंटन)",
+    "processing_time_en": "5 - 7 working days (training center allocation)"
   },
   {
     "id": "free-coaching-scheme-sc-obc",
@@ -984,7 +1014,10 @@
         "answer_hi": "प्रारंभिक और मुख्य परीक्षा के लिए छात्र को अधिकतम 2 बार कोचिंग का अवसर मिल सकता है।",
         "answer_en": "A candidate can avail coaching assistance a maximum of two times across attempts."
       }
-    ]
+    ],
+    "processing_time_days": 20,
+    "processing_time_hi": "15 - 20 कार्य दिवस (मेरिट सूची व संस्थान आवंटन)",
+    "processing_time_en": "15 - 20 working days (merit list & coaching allocation)"
   },
   {
     "id": "ladli-behna-yojana-mp",
@@ -1083,7 +1116,10 @@
         "answer_hi": "नहीं, परिवार के पास कुल 5 एकड़ से अधिक कृषि भूमि होने पर अपात्रता लागू होती है।",
         "answer_en": "No, families holding more than 5 acres of agricultural land are excluded."
       }
-    ]
+    ],
+    "processing_time_days": 20,
+    "processing_time_hi": "15 - 20 कार्य दिवस (डीबीटी खाता सक्रियण)",
+    "processing_time_en": "15 - 20 working days (DBT bank activation)"
   },
   {
     "id": "indira-gandhi-divyangjan-pension",
@@ -1179,7 +1215,10 @@
         "answer_hi": "केंद्रीय योजना के तहत न्यूनतम 80% गंभीर दिव्यांगता आवश्यक है (कुछ राज्य 40% पर भी राज्य पेंशन देते हैं)।",
         "answer_en": "Under the central IGNDPS scheme, 80% and above disability is required."
       }
-    ]
+    ],
+    "processing_time_days": 45,
+    "processing_time_hi": "30 - 45 कार्य दिवस (मेडिकल बोर्ड व समाज कल्याण सत्यापन)",
+    "processing_time_en": "30 - 45 working days (medical board & welfare sanction)"
   },
   {
     "id": "indira-gandhi-old-age-pension",
@@ -1260,7 +1299,10 @@
         "answer_hi": "हाँ, 80 वर्ष की आयु पूरी होने पर केंद्र और राज्य सरकार दोनों की ओर से पेंशन राशि में बढ़ोतरी होती है।",
         "answer_en": "Yes, both central and state components increase after the beneficiary turns 80."
       }
-    ]
+    ],
+    "processing_time_days": 30,
+    "processing_time_hi": "30 - 45 कार्य दिवस (तहसीलदार / एसडीओ सत्यापन)",
+    "processing_time_en": "30 - 45 working days (Tehsildar / SDO verification)"
   },
   {
     "id": "pm-svanidhi-street-vendors",
@@ -1355,7 +1397,10 @@
         "answer_hi": "हाँ, UPI/QR कोड से डिजिटल लेनदेन करने पर हर महीने ₹100 तक का कैशबैक सीधे खाते में मिलता है।",
         "answer_en": "Yes, vendors receive up to ₹1,200 annual cashback (₹100/month) for accepting digital payments."
       }
-    ]
+    ],
+    "processing_time_days": 10,
+    "processing_time_hi": "7 - 10 कार्य दिवस (शहरी निकाय सत्यापन पश्चात)",
+    "processing_time_en": "7 - 10 working days (post ULB verification)"
   },
   {
     "id": "pm-matsya-sampada-yojana",
@@ -1448,7 +1493,10 @@
         "answer_hi": "हाँ, न्यूनतम 7 से 10 वर्ष के पंजीकृत लीज एग्रीमेंट पर सब्सिडी का लाभ लिया जा सकता है।",
         "answer_en": "Yes, registered lease agreement for a minimum of 7-10 years is fully eligible."
       }
-    ]
+    ],
+    "processing_time_days": 40,
+    "processing_time_hi": "30 - 45 कार्य दिवस (जिला मत्स्य समिति अनुमोदन)",
+    "processing_time_en": "30 - 45 working days (district fisheries approval)"
   },
   {
     "id": "atal-pension-yojana",
@@ -1505,6 +1553,9 @@
       "1. Visit your bank branch",
       "2. Fill APY registration form"
     ],
-    "faqs": []
+    "faqs": [],
+    "processing_time_days": 1,
+    "processing_time_hi": "तत्काल बैंक पंजीकरण (24 घंटे में PRAN जनरेट)",
+    "processing_time_en": "Instant Bank Registration (PRAN generated in 24h)"
   }
 ]

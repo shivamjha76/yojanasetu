@@ -967,9 +967,16 @@ export const AssistedDashboard: React.FC<AssistedDashboardProps> = ({
                             >
                               <span>{isHindi ? res.scheme_name_hi : res.scheme_name_en}</span>
                             </h4>
-                            <p className="text-xs font-extrabold text-[#165D51]">
-                              {res.benefit_amount_text}
-                            </p>
+                            <div className="flex items-center gap-2 flex-wrap pt-0.5">
+                              <p className="text-xs font-extrabold text-[#165D51]">
+                                {res.benefit_amount_text}
+                              </p>
+                              {(res.processing_time_hi || res.processing_time_en) && (
+                                <span className="text-[10px] font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
+                                  ⏳ {isHindi ? res.processing_time_hi : res.processing_time_en}
+                                </span>
+                              )}
+                            </div>
                           </div>
 
                           <div className="flex items-center gap-2">
@@ -1177,7 +1184,14 @@ export const AssistedDashboard: React.FC<AssistedDashboardProps> = ({
                         <p className="font-bold text-gray-900">
                           {idx + 1}. {s.scheme_name_hi}
                         </p>
-                        <p className="text-[11px] text-gray-500">{s.scheme_name_en}</p>
+                        <p className="text-[11px] text-gray-500">
+                          {s.scheme_name_en}
+                          {(s.processing_time_hi || s.processing_time_en) && (
+                            <span className="text-amber-800 ml-2 font-medium">
+                              • अनुमानित समय: {s.processing_time_hi || s.processing_time_en}
+                            </span>
+                          )}
+                        </p>
                       </div>
                       <div className="text-right">
                         <span className="font-extrabold text-[#165D51] text-xs">

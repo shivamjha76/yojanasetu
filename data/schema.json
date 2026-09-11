@@ -73,6 +73,15 @@
         "type": "string",
         "format": "uri"
       },
+      "processing_time_days": {
+        "type": ["integer", "null"]
+      },
+      "processing_time_hi": {
+        "type": ["string", "null"]
+      },
+      "processing_time_en": {
+        "type": ["string", "null"]
+      },
       "rules": {
         "type": "array",
         "items": {

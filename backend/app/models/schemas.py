@@ -136,6 +136,9 @@ class Scheme(BaseModel):
         "in_kind_goods",
     ] = Field(..., description="Type of assistance")
     official_portal_url: str = Field(..., description="Verified direct government portal URL")
+    processing_time_days: Optional[int] = Field(default=None, description="Estimated processing time in days")
+    processing_time_hi: Optional[str] = Field(default=None, description="Honest estimated processing time in Hindi")
+    processing_time_en: Optional[str] = Field(default=None, description="Honest estimated processing time in English")
     rules: List[Rule] = Field(default_factory=list, description="Deterministic eligibility rules")
     documents: List[DocumentRequirement] = Field(
         default_factory=list, description="Required documents checklist"
@@ -169,6 +172,9 @@ class EligibilityResult(BaseModel):
     benefit_amount_text: str
     benefit_type: str
     official_portal_url: str
+    processing_time_days: Optional[int] = None
+    processing_time_hi: Optional[str] = None
+    processing_time_en: Optional[str] = None
     is_eligible: bool
     match_percentage: int = Field(..., ge=0, le=100)
     matched_rules: List[RuleMatchEvidence] = Field(default_factory=list)

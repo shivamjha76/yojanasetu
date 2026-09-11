@@ -33,6 +33,7 @@ import {
   Share2,
   Sparkles,
   Compass,
+  Clock,
 } from "lucide-react";
 
 import { getLocalizedBenefit, getLocalizedMinistry } from "@/utils/schemeLocalization";
@@ -292,6 +293,17 @@ export const SchemeDetailPage: React.FC<SchemeDetailPageProps> = ({
                     <Building2 className="w-4 h-4 text-gray-400 shrink-0" />
                     <span>{cleanMinistry}</span>
                   </div>
+
+                  {/* Processing Time Estimate Badge */}
+                  {(scheme.processing_time_hi || scheme.processing_time_en) && (
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-bold bg-amber-50 text-amber-900 border border-amber-200/80 mt-1">
+                      <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                      <span>
+                        {isHindi ? "⏳ अनुमानित समय:" : "⏳ Estimated Timeline:"}{" "}
+                        {isHindi ? scheme.processing_time_hi : scheme.processing_time_en}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
 

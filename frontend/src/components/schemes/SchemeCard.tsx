@@ -11,6 +11,7 @@ import {
   Users,
   Coins,
   ArrowRight,
+  Clock,
 } from "lucide-react";
 import { getLocalizedBenefit } from "@/utils/schemeLocalization";
 
@@ -226,6 +227,16 @@ export const SchemeCard: React.FC<SchemeCardProps> = ({
         <p className="text-xs sm:text-[13px] text-gray-500 line-clamp-1 leading-relaxed mt-1.5 font-medium">
           {getDisplayDescription()}
         </p>
+
+        {/* Processing Time Estimate */}
+        {(scheme.processing_time_hi || scheme.processing_time_en) && (
+          <div className="flex items-center gap-1.5 text-[11px] font-medium text-amber-900 bg-amber-50/80 border border-amber-200/60 px-2.5 py-1 rounded-xl w-fit mt-2.5">
+            <Clock className="w-3 h-3 text-amber-600 shrink-0" />
+            <span>
+              {isHindi ? scheme.processing_time_hi : scheme.processing_time_en}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Bottom: Benefit + Action Arrow */}

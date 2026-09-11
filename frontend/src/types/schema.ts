@@ -114,6 +114,9 @@ export interface Scheme {
   benefit_amount_text: string;
   benefit_type: BenefitType;
   official_portal_url: string;
+  processing_time_days?: number;
+  processing_time_hi?: string;
+  processing_time_en?: string;
   rules: Rule[];
   documents: DocumentRequirement[];
   application_steps_hi: string[];
@@ -141,6 +144,9 @@ export interface EligibilityResult {
   benefit_amount_text: string;
   benefit_type: string;
   official_portal_url: string;
+  processing_time_days?: number;
+  processing_time_hi?: string;
+  processing_time_en?: string;
   is_eligible: boolean;
   match_percentage: number;
   matched_rules: RuleMatchEvidence[];
