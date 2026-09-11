@@ -2,7 +2,7 @@
 Pydantic Schemas for Authentication, Registration, and User Profile
 """
 
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from pydantic import BaseModel, Field
 
 
@@ -31,6 +31,7 @@ class UserResponse(BaseModel):
     full_name: str
     phone: Optional[str] = None
     state: Optional[str] = None
+    citizen_details: Optional[Dict[str, Any]] = None
     created_at: str
 
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useApp } from "@/context/AppContext";
+import { useAuth } from "@/context/AuthContext";
 import { CitizenProfile } from "@/types/schema";
 import { api, EligibilityResponse } from "@/services/api";
 import { WizardStep1, Step1Data } from "./WizardStep1";
@@ -126,13 +127,24 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   onViewSchemeDetail = () => {},
 }) => {
   const { language } = useApp();
+  const { user, isAuthenticated, saveCitizenDetails } = useAuth();
   const isHindi = language === "hi";
 
   const [currentStep, setCurrentStep] = useState<number>(1);
-  const [formData, setFormData] = useState<CitizenProfile>({
+  const [formData, setFormData] = useState<CitizenProfile>(() => ({
     ...DEFAULT_PROFILE,
+    ...(user?.citizen_details || {}),
     ...initialData,
-  });
+  }));
+
+  useEffect(() => {
+    if (user?.citizen_details && !initialData) {
+      setFormData((prev) => ({
+        ...prev,
+        ...user.citizen_details,
+      }));
+    }
+  }, [user?.citizen_details, initialData]);
   const [availableStates, setAvailableStates] = useState<string[]>(getAllIndianStates());
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [evaluationResult, setEvaluationResult] = useState<EligibilityResponse | null>(null);
@@ -197,6 +209,10 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
+      if (isAuthenticated) {
+        // Automatically save citizen profile under "My Details" in their account!
+        await saveCitizenDetails(formData).catch(() => {});
+      }
       const res = await api.checkEligibility(formData);
       setEvaluationResult(res);
       onSubmit(formData);

@@ -2,12 +2,15 @@
  * Authentication and User Profile Types
  */
 
+import { CitizenProfile } from "./schema";
+
 export interface User {
   id: string;
   email: string;
   full_name: string;
   phone?: string;
   state?: string;
+  citizen_details?: Partial<CitizenProfile> | null;
   created_at: string;
 }
 

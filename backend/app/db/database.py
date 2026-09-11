@@ -3,6 +3,7 @@ SQLite Database Layer for YojanaSetu User Authentication & Saved Schemes
 Provides lightweight, reliable local SQLite persistence with zero external service dependencies.
 """
 
+import json
 import sqlite3
 import uuid
 from datetime import datetime, timezone
@@ -36,11 +37,18 @@ def init_db() -> None:
                 hashed_password TEXT NOT NULL,
                 phone TEXT,
                 state TEXT,
+                citizen_details TEXT,
                 created_at TEXT NOT NULL,
                 updated_at TEXT NOT NULL
             );
         """)
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);")
+
+        # Migrate existing users table if citizen_details column is missing
+        cursor.execute("PRAGMA table_info(users);")
+        columns = [col[1] for col in cursor.fetchall()]
+        if "citizen_details" not in columns:
+            cursor.execute("ALTER TABLE users ADD COLUMN citizen_details TEXT;")
 
         # 2. Saved schemes bookmark table
         cursor.execute("""
@@ -56,6 +64,19 @@ def init_db() -> None:
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_saved_schemes_user ON saved_schemes(user_id);")
 
         conn.commit()
+
+
+def _format_user_row(row: sqlite3.Row) -> Dict[str, Any]:
+    """Parse citizen_details JSON and format user dictionary."""
+    d = dict(row)
+    if "citizen_details" in d and d["citizen_details"]:
+        try:
+            d["citizen_details"] = json.loads(d["citizen_details"])
+        except Exception:
+            d["citizen_details"] = None
+    else:
+        d["citizen_details"] = None
+    return d
 
 
 def create_user(
@@ -90,6 +111,7 @@ def create_user(
         "full_name": full_name.strip(),
         "phone": phone,
         "state": state,
+        "citizen_details": None,
         "created_at": now,
         "updated_at": now,
     }
@@ -103,7 +125,7 @@ def get_user_by_email(email: str) -> Optional[Dict[str, Any]]:
         cursor.execute("SELECT * FROM users WHERE email = ?", (clean_email,))
         row = cursor.fetchone()
         if row:
-            return dict(row)
+            return _format_user_row(row)
     return None
 
 
@@ -114,8 +136,32 @@ def get_user_by_id(user_id: str) -> Optional[Dict[str, Any]]:
         cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
         row = cursor.fetchone()
         if row:
-            return dict(row)
+            return _format_user_row(row)
     return None
+
+
+def save_citizen_details(user_id: str, details: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """Save or update citizen questionnaire profile details (My Details)."""
+    user = get_user_by_id(user_id)
+    if not user:
+        return None
+
+    details_json = json.dumps(details, ensure_ascii=False)
+    now = datetime.now(timezone.utc).isoformat()
+
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            UPDATE users
+            SET citizen_details = ?, updated_at = ?
+            WHERE id = ?
+            """,
+            (details_json, now, user_id),
+        )
+        conn.commit()
+
+    return get_user_by_id(user_id)
 
 
 def update_user_profile(

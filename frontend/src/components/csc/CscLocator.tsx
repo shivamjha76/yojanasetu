@@ -649,7 +649,7 @@ export const CscLocator: React.FC<CscLocatorProps> = () => {
         <div className="lg:col-span-6 sticky top-24">
           <CscInteractiveMap
             centers={displayedCenters}
-            activeCenterId={selectedCenterId || activeCenter.id}
+            activeCenterId={activeCenter?.id || ""}
             onSelectCenter={(id) => setSelectedCenterId(id)}
             showOnlyOpen={showOnlyOpen}
             onToggleShowOnlyOpen={() => setShowOnlyOpen(!showOnlyOpen)}

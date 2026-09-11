@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { User, LoginCredentials, RegisterData } from "@/types/auth";
+import { CitizenProfile } from "@/types/schema";
 import { api } from "@/services/api";
 
 interface AuthContextType {
@@ -17,6 +18,7 @@ interface AuthContextType {
   logout: () => void;
   toggleSaveScheme: (schemeId: string) => Promise<boolean>;
   isSchemeSaved: (schemeId: string) => boolean;
+  saveCitizenDetails: (details: Partial<CitizenProfile>) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -124,6 +126,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return savedSchemeIds.includes(schemeId);
   };
 
+  const saveCitizenDetails = async (details: Partial<CitizenProfile>) => {
+    if (!token) return;
+    try {
+      const updatedUser = await api.saveCitizenDetails(token, details);
+      setUser(updatedUser);
+    } catch (err) {
+      console.error("Failed to save citizen details:", err);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -141,6 +153,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         logout,
         toggleSaveScheme,
         isSchemeSaved,
+        saveCitizenDetails,
       }}
     >
       {children}

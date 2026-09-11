@@ -585,6 +585,38 @@ export const api = {
     return updated;
   },
 
+  /** Save or update citizen questionnaire details (My Details) */
+  async saveCitizenDetails(token: string, details: Partial<CitizenProfile>): Promise<User> {
+    if (canUseBackend()) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/auth/citizen-details`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(details),
+        });
+        if (res.ok) {
+          const user = await res.json();
+          localStorage.setItem(LOCAL_STORAGE_USER_KEY, JSON.stringify(user));
+          return user;
+        }
+      } catch {
+        // Fallback
+      }
+    }
+
+    const stored = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
+    const existing = stored ? JSON.parse(stored) : {};
+    const updated = {
+      ...existing,
+      citizen_details: { ...(existing.citizen_details || {}), ...details },
+    };
+    localStorage.setItem(LOCAL_STORAGE_USER_KEY, JSON.stringify(updated));
+    return updated;
+  },
+
   /** Get list of saved scheme IDs */
   async getSavedSchemes(token: string): Promise<SavedSchemesResponse> {
     if (canUseBackend()) {

@@ -103,3 +103,34 @@ def test_register_and_login_flow():
         headers={"Authorization": f"Bearer {token}"},
     )
     assert "pm-kisan" not in after_del.json()["scheme_ids"]
+
+    # 9. Save and retrieve citizen questionnaire details (My Details)
+    details_payload = {
+        "age": 28,
+        "gender": "female",
+        "state": "Uttar Pradesh",
+        "district": "Varanasi",
+        "occupation": "farmer",
+        "category": "obc",
+        "annual_income": 180000.0,
+        "marital_status": "married",
+        "is_differently_abled": False,
+        "ration_card_type": "bpl",
+        "land_holding_acres": 1.5,
+    }
+    save_details_res = client.put(
+        "/api/auth/citizen-details",
+        json=details_payload,
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert save_details_res.status_code == 200
+    user_after_details = save_details_res.json()
+    assert user_after_details["citizen_details"] is not None
+    assert user_after_details["citizen_details"]["annual_income"] == 180000.0
+    assert user_after_details["citizen_details"]["occupation"] == "farmer"
+
+    # 10. Verify /me also returns citizen_details
+    me_res = client.get("/api/auth/me", headers={"Authorization": f"Bearer {token}"})
+    assert me_res.status_code == 200
+    me_data = me_res.json()
+    assert me_data["citizen_details"]["district"] == "Varanasi"

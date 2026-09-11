@@ -24,6 +24,7 @@ from app.db.database import (
     get_user_by_email,
     get_user_by_id,
     update_user_profile,
+    save_citizen_details,
     save_scheme_for_user,
     remove_saved_scheme,
     get_saved_schemes,
@@ -147,6 +148,22 @@ def update_profile(
         phone=request.phone,
         state=request.state,
     )
+    if not updated:
+        raise HTTPException(status_code=404, detail="User not found")
+    return UserResponse(**updated)
+
+
+@router.put(
+    "/citizen-details",
+    response_model=UserResponse,
+    summary="Save or update citizen questionnaire details (My Details)",
+)
+def save_user_citizen_details(
+    details: Dict[str, Any],
+    current_user: Dict[str, Any] = Depends(get_current_user),
+):
+    """Saves citizen eligibility questionnaire details (My Details) to the user's account."""
+    updated = save_citizen_details(current_user["id"], details)
     if not updated:
         raise HTTPException(status_code=404, detail="User not found")
     return UserResponse(**updated)

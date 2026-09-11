@@ -12,6 +12,7 @@ import {
   Check,
   Sparkles,
 } from "lucide-react";
+import { MyDetailsModal } from "../profile/MyDetailsModal";
 
 interface HeaderProps {
   currentView?: string;
@@ -36,6 +37,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  const [isMyDetailsOpen, setIsMyDetailsOpen] = useState(false);
   const [showMoreLanguages, setShowMoreLanguages] = useState(false);
   const [selectedOtherLang, setSelectedOtherLang] = useState<string | null>(null);
   const [langToast, setLangToast] = useState<string | null>(null);
@@ -300,6 +302,29 @@ export const Header: React.FC<HeaderProps> = ({
                     )}
                   </div>
                   
+                  {/* My Details Link */}
+                  <button
+                    onClick={() => {
+                      setIsUserDropdownOpen(false);
+                      setIsMyDetailsOpen(true);
+                    }}
+                    className="w-full text-left px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 flex items-center justify-between cursor-pointer"
+                  >
+                    <span className="flex items-center gap-2">
+                      <UserIcon className="w-3.5 h-3.5 text-[#1D5F49]" />
+                      <span>{isHindi ? "मेरे विवरण (My Details)" : "My Details"}</span>
+                    </span>
+                    {user.citizen_details ? (
+                      <span className="px-1.5 py-0.5 rounded-full bg-emerald-100 text-[10px] font-bold text-emerald-800">
+                        {isHindi ? "सहेजे गए" : "Saved"}
+                      </span>
+                    ) : (
+                      <span className="px-1.5 py-0.5 rounded-full bg-amber-100 text-[10px] font-bold text-amber-800">
+                        {isHindi ? "भरें" : "New"}
+                      </span>
+                    )}
+                  </button>
+
                   <button
                     onClick={() => {
                       setIsUserDropdownOpen(false);
@@ -505,6 +530,56 @@ export const Header: React.FC<HeaderProps> = ({
           </nav>
 
           <div className="pt-2 border-t border-gray-100 space-y-2">
+            {isAuthenticated && user && (
+              <div className="space-y-1 pb-2 border-b border-gray-100">
+                <div className="px-2 py-1 text-xs font-bold text-gray-900 truncate">
+                  👤 {user.full_name}
+                </div>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    setIsMyDetailsOpen(true);
+                  }}
+                  className="w-full text-left py-2 px-2 text-xs font-semibold text-[#1D5F49] hover:bg-emerald-50 rounded-lg flex items-center justify-between cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    <UserIcon className="w-3.5 h-3.5" />
+                    <span>{isHindi ? "मेरे विवरण (My Details)" : "My Details"}</span>
+                  </span>
+                  {user.citizen_details ? (
+                    <span className="px-1.5 py-0.5 rounded-full bg-emerald-100 text-[10px] font-bold text-emerald-800">
+                      {isHindi ? "सहेजे गए" : "Saved"}
+                    </span>
+                  ) : null}
+                </button>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    onNavigate("schemes");
+                  }}
+                  className="w-full text-left py-2 px-2 text-xs font-medium text-gray-700 hover:bg-gray-50 rounded-lg flex items-center justify-between cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    <Bookmark className="w-3.5 h-3.5 text-[#1D5F49]" />
+                    <span>{isHindi ? "सहेजी गई योजनाएं" : "Saved Schemes"}</span>
+                  </span>
+                  <span className="px-1.5 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold text-gray-600">
+                    {savedSchemeIds.length}
+                  </span>
+                </button>
+                <button
+                  onClick={() => {
+                    logout();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="w-full text-left py-2 px-2 text-xs font-medium text-rose-600 hover:bg-rose-50 rounded-lg flex items-center gap-2 cursor-pointer"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span>{isHindi ? "लॉग आउट" : "Sign Out"}</span>
+                </button>
+              </div>
+            )}
+
             {!isAuthenticated && (
               <button
                 onClick={() => {
@@ -548,6 +623,20 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </div>
       )}
+
+      {/* Citizen My Details Modal */}
+      <MyDetailsModal
+        isOpen={isMyDetailsOpen}
+        onClose={() => setIsMyDetailsOpen(false)}
+        onEditDetails={() => {
+          setIsMyDetailsOpen(false);
+          onNavigate("wizard");
+        }}
+        onCheckEligibility={() => {
+          setIsMyDetailsOpen(false);
+          onNavigate("wizard");
+        }}
+      />
     </header>
   );
 };
