@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/setu-logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-    <meta name="theme-color" content="#2563eb" />
+    <meta name="theme-color" content="#1D5F49" />
+    <link rel="manifest" href="/manifest.json" />
     <meta name="description" content="योजनासेतु (YojanaSetu) - 100% प्रत्यक्ष नागरिक डिजिटल वेलफेयर सेतु। 15+ केंद्रीय और राज्य सरकारी योजनाओं की सटीक पात्रता जानें, आवश्यक दस्तावेज देखें और बिना किसी बिचौलिए के सीधे आवेदन करें।" />
     <meta name="keywords" content="योजनासेतु, YojanaSetu, सरकारी योजनाएं, PM Kisan, Ayushman Bharat, पात्रता, Government Schemes, Direct Benefit Transfer" />
     
@@ -29,5 +30,12 @@
     
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
   </body>
 </html>

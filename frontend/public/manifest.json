@@ -1,0 +1,18 @@
+﻿{
+  "name": "योजनासेतु (YojanaSetu) - Citizen Welfare Bridge",
+  "short_name": "YojanaSetu",
+  "description": "Deterministic welfare discovery and offline-first citizen eligibility platform for Indian Government Schemes.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FEFEFD",
+  "theme_color": "#1D5F49",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/setu-logo.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

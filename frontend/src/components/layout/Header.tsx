@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useApp } from "@/context/AppContext";
 import { useAuth } from "@/context/AuthContext";
 import {
@@ -11,6 +11,7 @@ import {
   LogOut,
   Bookmark,
   Building,
+  WifiOff,
 } from "lucide-react";
 import { MyDetailsModal } from "../profile/MyDetailsModal";
 
@@ -29,8 +30,18 @@ export const Header: React.FC<HeaderProps> = ({
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isMyDetailsOpen, setIsMyDetailsOpen] = useState(false);
   const [myDetailsTab, setMyDetailsTab] = useState<"profile" | "members">("profile");
+  const [isOnline, setIsOnline] = useState<boolean>(typeof navigator !== "undefined" ? navigator.onLine : true);
 
-
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
 
   const isHindi = language === "hi";
 
@@ -156,6 +167,17 @@ export const Header: React.FC<HeaderProps> = ({
               हिन्दी
             </button>
           </div>
+
+          {/* Rural Offline-Ready Status Indicator */}
+          {!isOnline && (
+            <div
+              className="flex items-center space-x-1.5 px-2.5 py-1 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-800 text-[11px] font-bold animate-pulse"
+              title={isHindi ? "ऑफ़लाइन मोड सक्रिय: सभी पात्रता व योजनाएं स्थानीय मेमोरी से कार्य कर रही हैं" : "Offline Mode Active: All eligibility and schemes working from local memory"}
+            >
+              <WifiOff className="w-3.5 h-3.5 text-amber-600" />
+              <span>{isHindi ? "ऑफ़लाइन मोड" : "Offline Mode"}</span>
+            </div>
+          )}
 
           {/* Authentication Action: User Profile Dropdown or Sign In */}
           {isAuthenticated && user ? (
