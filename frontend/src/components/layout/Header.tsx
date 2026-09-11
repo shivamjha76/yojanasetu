@@ -12,6 +12,7 @@ import {
   Bookmark,
   Check,
   Sparkles,
+  Building,
 } from "lucide-react";
 import { MyDetailsModal } from "../profile/MyDetailsModal";
 
@@ -125,6 +126,21 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <span>{isHindi ? "सेवा केंद्र (CSC)" : "CSC Centers"}</span>
             {currentView === "csc" && (
+              <span className="absolute -bottom-1.5 left-0 right-0 h-[2.5px] bg-[#1D5F49] rounded-full" />
+            )}
+          </button>
+
+          <button
+            onClick={() => onNavigate("assisted")}
+            className={`relative py-1 text-[15px] transition-colors flex items-center space-x-1.5 ${
+              currentView === "assisted"
+                ? "font-bold text-[#1D5F49]"
+                : "font-medium text-[#4B5563] hover:text-[#111827]"
+            }`}
+          >
+            <Building className="w-4 h-4 text-[#1D5F49]" />
+            <span>{isHindi ? "सहायक मोड" : "Assisted Mode"}</span>
+            {currentView === "assisted" && (
               <span className="absolute -bottom-1.5 left-0 right-0 h-[2.5px] bg-[#1D5F49] rounded-full" />
             )}
           </button>
@@ -584,6 +600,17 @@ export const Header: React.FC<HeaderProps> = ({
               className="text-left py-2 font-medium text-gray-700"
             >
               {isHindi ? "सेवा केंद्र (CSC)" : "CSC Centers"}
+            </button>
+
+            <button
+              onClick={() => {
+                onNavigate("assisted");
+                setIsMobileMenuOpen(false);
+              }}
+              className="text-left py-2 font-medium text-[#1D5F49] flex items-center gap-2"
+            >
+              <Building className="w-4 h-4" />
+              <span>{isHindi ? "सहायक मोड (CSC ऑपरेटर)" : "Assisted Mode (CSC / NGO)"}</span>
             </button>
           </nav>
 

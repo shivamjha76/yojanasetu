@@ -15,6 +15,13 @@ import {
   FamilyMember,
   FamilyMemberInput,
 } from "@/types/auth";
+import {
+  AssistedCitizen,
+  AssistedCitizenInput,
+  AssistedCitizenEligibility,
+  OperatorSummary,
+  ApplicationStatus,
+} from "@/types/operator";
 import { ALL_SCHEMES, evaluateAllSchemes } from "./ruleEngine";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api";
@@ -1440,6 +1447,206 @@ export const api = {
         suggestion_en: "Document validated, you can now proceed with application.",
       };
     }
+  },
+
+  // -------------------------------------------------------------
+  // Operator / Assisted Mode Endpoints (CSC & NGO Field Worker)
+  // -------------------------------------------------------------
+  async getAssistedCitizens(operatorId = "default_operator", search?: string): Promise<AssistedCitizen[]> {
+    if (canUseBackend()) {
+      try {
+        const url = new URL(`${API_BASE_URL}/operator/citizens`);
+        url.searchParams.append("operator_id", operatorId);
+        if (search) url.searchParams.append("search", search);
+        const res = await fetch(url.toString());
+        if (res.ok) {
+          const data = await res.json();
+          localStorage.setItem("yojanasetu_assisted_citizens", JSON.stringify(data));
+          return data;
+        }
+      } catch {}
+    }
+    // Offline local fallback
+    try {
+      const raw = localStorage.getItem("yojanasetu_assisted_citizens");
+      if (raw) {
+        let list: AssistedCitizen[] = JSON.parse(raw);
+        if (search && search.trim()) {
+          const q = search.toLowerCase().trim();
+          list = list.filter(
+            (c) =>
+              c.full_name.toLowerCase().includes(q) ||
+              (c.phone && c.phone.includes(q)) ||
+              (c.village_ward && c.village_ward.toLowerCase().includes(q)) ||
+              (c.district && c.district.toLowerCase().includes(q))
+          );
+        }
+        return list;
+      }
+    } catch {}
+    return [];
+  },
+
+  async createAssistedCitizen(input: AssistedCitizenInput): Promise<AssistedCitizen> {
+    if (canUseBackend()) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/operator/citizens`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+        });
+        if (res.ok) {
+          const created = await res.json();
+          const existing = await this.getAssistedCitizens(input.operator_id);
+          localStorage.setItem("yojanasetu_assisted_citizens", JSON.stringify([created, ...existing.filter((x: AssistedCitizen) => x.id !== created.id)]));
+          return created;
+        }
+      } catch {}
+    }
+    // Offline local creation
+    const newCitizen: AssistedCitizen = {
+      id: "local-" + Date.now(),
+      operator_id: input.operator_id || "default_operator",
+      full_name: input.full_name,
+      phone: input.phone,
+      village_ward: input.village_ward,
+      district: input.district || input.profile.district,
+      state: input.state || input.profile.state,
+      profile_data: input.profile,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      application_count: 0,
+    };
+    try {
+      const existing = JSON.parse(localStorage.getItem("yojanasetu_assisted_citizens") || "[]");
+      localStorage.setItem("yojanasetu_assisted_citizens", JSON.stringify([newCitizen, ...existing]));
+    } catch {}
+    return newCitizen;
+  },
+
+  async updateAssistedCitizen(citizenId: string, updates: Partial<AssistedCitizenInput>): Promise<AssistedCitizen | null> {
+    if (canUseBackend()) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/operator/citizens/${citizenId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updates),
+        });
+        if (res.ok) {
+          return await res.json();
+        }
+      } catch {}
+    }
+    return null;
+  },
+
+  async deleteAssistedCitizen(citizenId: string): Promise<boolean> {
+    if (canUseBackend()) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/operator/citizens/${citizenId}`, {
+          method: "DELETE",
+        });
+        if (res.ok) {
+          const existing = JSON.parse(localStorage.getItem("yojanasetu_assisted_citizens") || "[]");
+          localStorage.setItem("yojanasetu_assisted_citizens", JSON.stringify(existing.filter((x: any) => x.id !== citizenId)));
+          return true;
+        }
+      } catch {}
+    }
+    const existing = JSON.parse(localStorage.getItem("yojanasetu_assisted_citizens") || "[]");
+    localStorage.setItem("yojanasetu_assisted_citizens", JSON.stringify(existing.filter((x: any) => x.id !== citizenId)));
+    return true;
+  },
+
+  async getAssistedCitizenEligibility(citizenId: string, profileFallback?: CitizenProfile): Promise<AssistedCitizenEligibility> {
+    if (canUseBackend()) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/operator/citizens/${citizenId}/eligibility`);
+        if (res.ok) {
+          return await res.json();
+        }
+      } catch {}
+    }
+    // Client-side fallback using ruleEngine.ts
+    const existing = JSON.parse(localStorage.getItem("yojanasetu_assisted_citizens") || "[]");
+    const found = existing.find((c: any) => c.id === citizenId);
+    const profile = profileFallback || found?.profile_data;
+    const evalRes = profile
+      ? evaluateAllSchemes(profile)
+      : { eligible_schemes: [], total_schemes_evaluated: ALL_SCHEMES.length, eligible_count: 0 };
+    const apps = JSON.parse(localStorage.getItem(`yojanasetu_apps_${citizenId}`) || "[]");
+    const count = (evalRes as any).eligible_count ?? (evalRes as any).eligible_schemes_count ?? evalRes.eligible_schemes.length;
+    return {
+      citizen: found || { id: citizenId, full_name: "Citizen", profile_data: profile },
+      total_schemes_evaluated: evalRes.total_schemes_evaluated,
+      eligible_schemes_count: count,
+      eligible_schemes: evalRes.eligible_schemes,
+      applications: apps,
+    };
+  },
+
+  async updateApplicationStatus(data: {
+    citizen_id: string;
+    scheme_id: string;
+    scheme_name: string;
+    status: ApplicationStatus;
+    ref_number?: string;
+    notes?: string;
+    benefit_amount?: string;
+  }): Promise<boolean> {
+    if (canUseBackend()) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/operator/applications`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        if (res.ok) return true;
+      } catch {}
+    }
+    // Local storage fallback
+    try {
+      const key = `yojanasetu_apps_${data.citizen_id}`;
+      const existing = JSON.parse(localStorage.getItem(key) || "[]");
+      const idx = existing.findIndex((a: any) => a.scheme_id === data.scheme_id);
+      const updatedItem = {
+        id: "app-" + Date.now(),
+        ...data,
+        updated_at: new Date().toISOString(),
+      };
+      if (idx >= 0) {
+        existing[idx] = { ...existing[idx], ...updatedItem };
+      } else {
+        existing.push(updatedItem);
+      }
+      localStorage.setItem(key, JSON.stringify(existing));
+      return true;
+    } catch {
+      return false;
+    }
+  },
+
+  async getOperatorSummary(operatorId = "default_operator"): Promise<OperatorSummary> {
+    if (canUseBackend()) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/operator/summary?operator_id=${operatorId}`);
+        if (res.ok) return await res.json();
+      } catch {}
+    }
+    const citizens: AssistedCitizen[] = JSON.parse(localStorage.getItem("yojanasetu_assisted_citizens") || "[]");
+    return {
+      total_citizens: citizens.length,
+      total_applications: 0,
+      status_counts: {
+        documents_pending: 0,
+        ready_to_apply: 0,
+        submitted: 0,
+        verified: 0,
+        approved: 0,
+        rejected: 0,
+      },
+      districts_covered: Array.from(new Set(citizens.map((c) => c.district).filter(Boolean))) as string[],
+    };
   },
 };
 

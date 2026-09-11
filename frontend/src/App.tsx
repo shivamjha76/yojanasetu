@@ -11,6 +11,7 @@ import { SchemesExplorePage } from "@/components/schemes/SchemesExplorePage";
 import { SchemeDetailPage } from "@/components/schemes/SchemeDetailPage";
 import { SetuSahayakDrawer } from "@/components/assistant/SetuSahayakDrawer";
 import { CscLocator } from "@/components/csc/CscLocator";
+import { AssistedDashboard } from "@/components/assisted/AssistedDashboard";
 import { Scheme, CitizenProfile } from "@/types/schema";
 import { api } from "@/services/api";
 import { ALL_SCHEMES } from "@/services/ruleEngine";
@@ -87,6 +88,7 @@ const getViewFromLocation = (): { view: string; schemeId?: string } => {
   // 3. Match pathname directly
   if (path === "/schemes") return { view: "schemes" };
   if (path === "/csc") return { view: "csc" };
+  if (path === "/assisted") return { view: "assisted" };
   if (path === "/wizard") return { view: "wizard" };
   if (path === "/login") return { view: "login" };
   if (path === "/register") return { view: "register" };
@@ -94,6 +96,7 @@ const getViewFromLocation = (): { view: string; schemeId?: string } => {
   // 4. Match hash if present
   if (hash === "schemes") return { view: "schemes" };
   if (hash === "csc") return { view: "csc" };
+  if (hash === "assisted") return { view: "assisted" };
   if (hash === "wizard") return { view: "wizard" };
   if (hash === "login") return { view: "login" };
   if (hash === "register") return { view: "register" };
@@ -102,7 +105,7 @@ const getViewFromLocation = (): { view: string; schemeId?: string } => {
   try {
     const savedView = sessionStorage.getItem("yojanasetu_current_view");
     const savedSchemeId = sessionStorage.getItem("yojanasetu_selected_scheme_id");
-    if (savedView && ["schemes", "csc", "wizard", "login", "register", "scheme_detail"].includes(savedView)) {
+    if (savedView && ["schemes", "csc", "assisted", "wizard", "login", "register", "scheme_detail"].includes(savedView)) {
       if (savedView === "scheme_detail" && savedSchemeId) {
         return { view: "scheme_detail", schemeId: savedSchemeId };
       }
@@ -119,6 +122,8 @@ const getPathForView = (view: string, schemeId?: string): string => {
       return "/schemes";
     case "csc":
       return "/csc";
+    case "assisted":
+      return "/assisted";
     case "wizard":
       return "/wizard";
     case "login":
@@ -314,6 +319,13 @@ const MainContent: React.FC = () => {
           <CscLocator
             onSelectScheme={handleOpenSchemeDetail}
             onCheckEligibility={handleGetStarted}
+          />
+        </main>
+      ) : currentView === "assisted" ? (
+        <main id="main-content" className="flex-1">
+          <AssistedDashboard
+            onSwitchToCitizenMode={() => navigateTo("home")}
+            onViewSchemeDetail={handleOpenSchemeDetail}
           />
         </main>
       ) : (
