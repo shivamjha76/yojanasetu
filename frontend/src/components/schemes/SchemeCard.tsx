@@ -1,17 +1,16 @@
 import React from "react";
 import { useApp } from "@/context/AppContext";
 import { Scheme } from "@/types/schema";
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
-  ExternalLink,
-  ChevronRight,
-  Building2,
+  GraduationCap,
+  Heart,
+  Briefcase,
+  Home,
+  Sprout,
+  Shield,
+  Users,
   Coins,
-  ShieldCheck,
-  CheckCircle2,
-  AlertCircle,
+  ArrowRight,
 } from "lucide-react";
 
 interface SchemeCardProps {
@@ -22,177 +21,134 @@ interface SchemeCardProps {
   onCheckEligibility?: (id: string) => void;
 }
 
-const CATEGORY_STYLES: Record<string, { labelHi: string; labelEn: string; color: string }> = {
-  agriculture: {
-    labelHi: "कृषि एवं किसान",
-    labelEn: "Agriculture",
-    color: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-300/40",
-  },
-  education_scholarships: {
-    labelHi: "शिक्षा एवं छात्रवृत्ति",
-    labelEn: "Education",
-    color: "bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300 border-blue-300/40",
-  },
-  healthcare: {
-    labelHi: "स्वास्थ्य एवं चिकित्सा",
-    labelEn: "Healthcare",
-    color: "bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border-rose-300/40",
-  },
-  women_child: {
-    labelHi: "महिला एवं बाल कल्याण",
-    labelEn: "Women & Child",
-    color: "bg-pink-100 text-pink-800 dark:bg-pink-950/60 dark:text-pink-300 border-pink-300/40",
-  },
-  housing_urban: {
-    labelHi: "आवास एवं बुनियादी ढांचा",
-    labelEn: "Housing & Shelter",
-    color: "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border-amber-300/40",
-  },
-  business_msme_loans: {
-    labelHi: "व्यापार एवं मुद्रा ऋण",
-    labelEn: "Business & MSME",
-    color: "bg-cyan-100 text-cyan-800 dark:bg-cyan-950/60 dark:text-cyan-300 border-cyan-300/40",
-  },
-  skills_employment: {
-    labelHi: "कौशल एवं रोजगार",
-    labelEn: "Skills & Jobs",
-    color: "bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300 border-purple-300/40",
-  },
-  social_security_pensions: {
-    labelHi: "सामाजिक सुरक्षा व पेंशन",
-    labelEn: "Social Security",
-    color: "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300 border-slate-300/40",
-  },
-};
-
 export const SchemeCard: React.FC<SchemeCardProps> = ({
   scheme,
-  matchPercentage,
-  isEligible,
-  onViewDetails,
+  onViewDetails = () => {},
 }) => {
   const { language } = useApp();
   const isHindi = language === "hi";
 
-  const catMeta = CATEGORY_STYLES[scheme.category] || {
-    labelHi: scheme.category,
-    labelEn: scheme.category,
-    color: "bg-muted text-muted-foreground",
+  // Category styling helper matching reference screenshot
+  const getCategoryTheme = (category: string) => {
+    switch (category) {
+      case "education_scholarships":
+        return {
+          icon: <GraduationCap className="w-6 h-6 text-[#2563EB]" />,
+          iconBg: "bg-[#EBF3FF]",
+          pillBg: "bg-[#EBF3FF] text-[#2563EB]",
+          labelEn: "Education",
+          labelHi: "शिक्षा",
+        };
+      case "healthcare":
+        return {
+          icon: <Heart className="w-6 h-6 text-[#E11D48] fill-current" />,
+          iconBg: "bg-[#FDF2F4]",
+          pillBg: "bg-[#FDF2F4] text-[#E11D48]",
+          labelEn: "Healthcare",
+          labelHi: "स्वास्थ्य",
+        };
+      case "skills_employment":
+        return {
+          icon: <Briefcase className="w-6 h-6 text-[#7C3AED]" />,
+          iconBg: "bg-[#F3E8FF]",
+          pillBg: "bg-[#F3E8FF] text-[#7C3AED]",
+          labelEn: "Skill Development",
+          labelHi: "कौशल विकास",
+        };
+      case "housing_urban":
+        return {
+          icon: <Home className="w-6 h-6 text-[#D97706]" />,
+          iconBg: "bg-[#FEF3E8]",
+          pillBg: "bg-[#FEF3E8] text-[#D97706]",
+          labelEn: "Housing",
+          labelHi: "आवास",
+        };
+      case "agriculture":
+        return {
+          icon: <Sprout className="w-6 h-6 text-[#165D51]" />,
+          iconBg: "bg-[#EAF7EE]",
+          pillBg: "bg-[#EAF7EE] text-[#165D51]",
+          labelEn: "Agriculture",
+          labelHi: "कृषि",
+        };
+      case "social_security_pensions":
+        return {
+          icon: <Shield className="w-6 h-6 text-[#6366F1]" />,
+          iconBg: "bg-[#EDE9FE]",
+          pillBg: "bg-[#EDE9FE] text-[#6366F1]",
+          labelEn: "Social Security",
+          labelHi: "सामाजिक सुरक्षा",
+        };
+      case "women_child":
+        return {
+          icon: <Users className="w-6 h-6 text-[#DB2777]" />,
+          iconBg: "bg-[#FDF2F8]",
+          pillBg: "bg-[#FDF2F8] text-[#DB2777]",
+          labelEn: "Women & Child",
+          labelHi: "महिला एवं बाल",
+        };
+      default:
+        return {
+          icon: <Coins className="w-6 h-6 text-[#4F46E5]" />,
+          iconBg: "bg-[#EEF2FF]",
+          pillBg: "bg-[#EEF2FF] text-[#4F46E5]",
+          labelEn: "Financial Support",
+          labelHi: "वित्तीय सहायता",
+        };
+    }
   };
 
-  const isStateLevel = scheme.level === "state" && scheme.applicable_state;
+  const theme = getCategoryTheme(scheme.category);
 
   return (
-    <Card className="card-interactive flex flex-col justify-between overflow-hidden border border-border/90 bg-card hover:border-primary/50">
+    <div className="bg-white rounded-3xl border border-gray-200/80 hover:border-[#165D51]/30 hover:shadow-md transition-all p-6 flex flex-col justify-between min-h-[255px] space-y-4 group">
       <div>
-        {/* Top Badges Strip */}
-        <div className="p-5 pb-0 flex flex-wrap items-center justify-between gap-2">
-          <div className="flex flex-wrap items-center gap-1.5">
-            {/* Category Pill */}
-            <span
-              className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${catMeta.color}`}
-            >
-              {isHindi ? catMeta.labelHi : catMeta.labelEn}
-            </span>
-
-            {/* Level Tag (Central or State) */}
-            <Badge variant="outline" className="text-[10px] font-medium text-muted-foreground">
-              {isStateLevel ? `State: ${scheme.applicable_state}` : "Central Govt"}
-            </Badge>
+        {/* Top: Icon + Category Badge */}
+        <div className="flex items-center justify-between gap-2">
+          <div className={`w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center shrink-0 ${theme.iconBg}`}>
+            {theme.icon}
           </div>
-
-          {/* Match Score (when displayed in eligibility results) */}
-          {typeof matchPercentage === "number" && (
-            <div>
-              {isEligible ? (
-                <Badge variant="success" className="flex items-center space-x-1 font-bold text-xs">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                  <span>
-                    {isHindi
-                      ? `${matchPercentage}% पात्र`
-                      : `${matchPercentage}% Eligible`}
-                  </span>
-                </Badge>
-              ) : (
-                <Badge variant="destructive" className="flex items-center space-x-1 text-xs">
-                  <AlertCircle className="w-3 h-3" />
-                  <span>{isHindi ? "अपात्र" : "Ineligible"}</span>
-                </Badge>
-              )}
-            </div>
-          )}
+          <span className={`text-xs font-semibold px-3 py-1 rounded-full ${theme.pillBg}`}>
+            {isHindi ? theme.labelHi : theme.labelEn}
+          </span>
         </div>
 
-        {/* Card Header & Titles */}
-        <CardHeader className="pt-3 pb-2">
-          <CardTitle className="text-base sm:text-lg font-bold text-foreground leading-snug line-clamp-2">
-            {isHindi ? scheme.name_hi : scheme.name_en}
-          </CardTitle>
-          <div className="flex items-center text-xs text-muted-foreground mt-1 line-clamp-1">
-            <Building2 className="w-3.5 h-3.5 mr-1 shrink-0 text-primary/70" />
-            <span className="truncate">{scheme.ministry}</span>
-          </div>
-        </CardHeader>
+        {/* Title */}
+        <h3
+          onClick={() => onViewDetails(scheme.id)}
+          className="text-base sm:text-[17px] font-bold text-gray-900 leading-snug line-clamp-2 hover:text-[#165D51] transition-colors cursor-pointer mt-4"
+        >
+          {isHindi ? scheme.name_hi : scheme.name_en}
+        </h3>
 
-        {/* Card Content & Benefit Amount Highlight */}
-        <CardContent className="space-y-3 pb-3">
-          {/* High-Impact Benefit Amount Pill */}
-          <div className="rounded-lg bg-primary/5 border border-primary/15 p-2.5 flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-md bg-primary/10 text-primary flex items-center justify-center shrink-0">
-              <Coins className="w-4 h-4 text-primary" />
-            </div>
-            <div>
-              <div className="text-[11px] font-medium text-muted-foreground">
-                {isHindi ? "योजना का मुख्य लाभ" : "Key Benefit Amount"}
-              </div>
-              <div className="text-sm font-bold text-primary">
-                {scheme.benefit_amount_text}
-              </div>
-            </div>
-          </div>
-
-          {/* Short Summary Description */}
-          <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-            {isHindi ? scheme.short_summary_hi : scheme.short_summary_en}
-          </p>
-
-          {/* Documents Count indicator */}
-          <div className="flex items-center space-x-1.5 text-[11px] text-muted-foreground pt-1">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-            <span>
-              {isHindi
-                ? `${scheme.documents.length} आवश्यक दस्तावेज`
-                : `${scheme.documents.length} required documents`}
-            </span>
-          </div>
-        </CardContent>
+        {/* Description */}
+        <p className="text-xs sm:text-[13px] text-gray-500 line-clamp-2 leading-relaxed mt-1.5">
+          {isHindi ? scheme.short_summary_hi : scheme.short_summary_en}
+        </p>
       </div>
 
-      {/* Card Action Buttons */}
-      <CardFooter className="pt-2 pb-4 flex items-center justify-between gap-2 border-t border-border/50 bg-muted/20">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => onViewDetails && onViewDetails(scheme.id)}
-          className="text-xs flex-1 hover:border-primary/40 font-medium"
-        >
-          <span>{isHindi ? "विस्तार से देखें" : "View Details"}</span>
-          <ChevronRight className="w-3.5 h-3.5 ml-1" />
-        </Button>
+      {/* Bottom: Benefit + Action Arrow */}
+      <div className="flex items-end justify-between pt-2 border-t border-gray-100/80 gap-3">
+        <div>
+          <div className="text-[11px] font-medium text-gray-400 uppercase tracking-wide">
+            {isHindi ? "लाभ" : "Benefit"}
+          </div>
+          <div className="text-sm sm:text-[15px] font-bold text-[#165D51] mt-0.5">
+            {scheme.benefit_amount_text}
+          </div>
+        </div>
 
-        <a
-          href={scheme.official_portal_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center justify-center h-9 px-3 rounded-md text-xs font-medium bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors border border-border shrink-0"
-          title={isHindi ? "आधिकारिक सरकारी पोर्टल खोलें" : "Open official portal"}
+        <button
+          type="button"
+          onClick={() => onViewDetails(scheme.id)}
+          aria-label={isHindi ? "योजना विवरण देखें" : "View scheme details"}
+          className="w-10 h-10 rounded-full bg-[#EAF7EE] text-[#165D51] hover:bg-[#165D51] hover:text-white flex items-center justify-center transition-all cursor-pointer shrink-0 shadow-2xs group-hover:scale-105"
         >
-          <span className="hidden sm:inline mr-1">
-            {isHindi ? "आधिकारिक पोर्टल" : "Portal"}
-          </span>
-          <ExternalLink className="w-3.5 h-3.5 text-primary" />
-        </a>
-      </CardFooter>
-    </Card>
+          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+        </button>
+      </div>
+    </div>
   );
 };
+
+export default SchemeCard;

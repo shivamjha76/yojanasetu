@@ -3,16 +3,19 @@ import { useApp } from "@/context/AppContext";
 import { Scheme } from "@/types/schema";
 import { api } from "@/services/api";
 import { SchemeCard } from "./SchemeCard";
-import { Button } from "@/components/ui/button";
 import {
   Search,
-  Filter,
-  X,
-  SlidersHorizontal,
-  Compass,
-  Building2,
-  RefreshCw,
-  ArrowUpDown,
+  LayoutGrid,
+  GraduationCap,
+  Heart,
+  Briefcase,
+  Home,
+  Sprout,
+  Users,
+  Shield,
+  MoreHorizontal,
+  ChevronDown,
+  RotateCcw,
 } from "lucide-react";
 
 interface SchemesExplorePageProps {
@@ -21,103 +24,144 @@ interface SchemesExplorePageProps {
   initialCategory?: string;
 }
 
+interface SidebarCategory {
+  id: string;
+  labelEn: string;
+  labelHi: string;
+  icon: React.ReactNode;
+}
+
 export const SchemesExplorePage: React.FC<SchemesExplorePageProps> = ({
   onSelectScheme = () => {},
-  onStartWizard = () => {},
   initialCategory = "all",
 }) => {
   const { language } = useApp();
   const isHindi = language === "hi";
 
   const [schemes, setSchemes] = useState<Scheme[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [, setIsLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [submittedSearch, setSubmittedSearch] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
-  const [selectedState, setSelectedState] = useState<string>("all");
-  const [selectedBenefitType, setSelectedBenefitType] = useState<string>("all");
-  const [sortBy, setSortBy] = useState<"featured" | "name">("featured");
-  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState<boolean>(false);
+  const [sortBy, setSortBy] = useState<"relevant" | "alpha">("relevant");
 
-  // Categories list
-  const categoryFilters = [
-    { id: "all", labelHi: "सभी श्रेणियां", labelEn: "All Categories" },
-    { id: "agriculture", labelHi: "कृषि एवं किसान कल्याण", labelEn: "Agriculture & Farming" },
-    { id: "education_scholarships", labelHi: "शिक्षा एवं छात्रवृत्ति", labelEn: "Education & Scholarships" },
-    { id: "healthcare", labelHi: "स्वास्थ्य एवं चिकित्सा", labelEn: "Healthcare & Wellness" },
-    { id: "women_child", labelHi: "महिला एवं बाल विकास", labelEn: "Women & Child Care" },
-    { id: "housing_urban", labelHi: "आवास एवं बुनियादी सुविधाएं", labelEn: "Housing & Shelter" },
-    { id: "business_msme_loans", labelHi: "व्यापार एवं मुद्रा लोन", labelEn: "Business & MSME Loans" },
-    { id: "skills_employment", labelHi: "कौशल विकास एवं रोजगार", labelEn: "Skills & Employment" },
-    { id: "social_security_pensions", labelHi: "सामाजिक सुरक्षा व पेंशन", labelEn: "Social Security & Pensions" },
+  // Category sidebar definitions matching reference mockup
+  const SIDEBAR_CATEGORIES: SidebarCategory[] = [
+    {
+      id: "all",
+      labelEn: "All Schemes",
+      labelHi: "सभी योजनाएं",
+      icon: <LayoutGrid className="w-4 h-4" />,
+    },
+    {
+      id: "education",
+      labelEn: "Education",
+      labelHi: "शिक्षा",
+      icon: <GraduationCap className="w-4 h-4" />,
+    },
+    {
+      id: "health",
+      labelEn: "Health",
+      labelHi: "स्वास्थ्य",
+      icon: <Heart className="w-4 h-4" />,
+    },
+    {
+      id: "employment",
+      labelEn: "Employment",
+      labelHi: "रोजगार व कौशल",
+      icon: <Briefcase className="w-4 h-4" />,
+    },
+    {
+      id: "housing",
+      labelEn: "Housing",
+      labelHi: "आवास",
+      icon: <Home className="w-4 h-4" />,
+    },
+    {
+      id: "agriculture",
+      labelEn: "Agriculture",
+      labelHi: "कृषि",
+      icon: <Sprout className="w-4 h-4" />,
+    },
+    {
+      id: "women_child",
+      labelEn: "Women & Child",
+      labelHi: "महिला एवं बाल",
+      icon: <Users className="w-4 h-4" />,
+    },
+    {
+      id: "social_security",
+      labelEn: "Social Security",
+      labelHi: "सामाजिक सुरक्षा",
+      icon: <Shield className="w-4 h-4" />,
+    },
+    {
+      id: "others",
+      labelEn: "Others",
+      labelHi: "अन्य",
+      icon: <MoreHorizontal className="w-4 h-4" />,
+    },
   ];
 
-  const stateFilters = [
-    { id: "all", labelHi: "अखिल भारतीय / सभी राज्य", labelEn: "All India / All States" },
-    { id: "Madhya Pradesh", labelHi: "मध्य प्रदेश (MP)", labelEn: "Madhya Pradesh" },
-    { id: "Uttar Pradesh", labelHi: "उत्तर प्रदेश (UP)", labelEn: "Uttar Pradesh" },
-    { id: "Bihar", labelHi: "बिहार (Bihar)", labelEn: "Bihar" },
-    { id: "Rajasthan", labelHi: "राजस्थान (Rajasthan)", labelEn: "Rajasthan" },
-    { id: "Maharashtra", labelHi: "महाराष्ट्र (Maharashtra)", labelEn: "Maharashtra" },
-    { id: "Delhi", labelHi: "दिल्ली (Delhi)", labelEn: "Delhi" },
-  ];
-
-  // Fetch schemes from API on load
+  // Fetch schemes from API / bundled store
   useEffect(() => {
-    async function loadAllSchemes() {
+    async function loadSchemes() {
       try {
         setIsLoading(true);
         const res = await api.getSchemes({ limit: 50 });
-        if (res.schemes) {
+        if (res && res.schemes) {
           setSchemes(res.schemes);
         }
       } catch (err) {
-        console.warn("Failed to fetch schemes for explore page:", err);
+        console.warn("Failed to load schemes:", err);
       } finally {
         setIsLoading(false);
       }
     }
-    loadAllSchemes();
+    loadSchemes();
   }, []);
 
-  // Filtered and sorted schemes
+  // Filter schemes based on sidebar category & search
   const filteredSchemes = useMemo(() => {
     return schemes.filter((s) => {
-      // 1. Search filter
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
-        const matchesName =
-          s.name_hi.toLowerCase().includes(q) ||
-          s.name_en.toLowerCase().includes(q) ||
-          s.ministry.toLowerCase().includes(q) ||
-          s.benefit_amount_text.toLowerCase().includes(q);
-        if (!matchesName) return false;
-      }
-
-      // 2. Category filter
-      if (selectedCategory !== "all" && s.category !== selectedCategory) {
-        return false;
-      }
-
-      // 3. State filter
-      if (selectedState !== "all") {
-        if (s.level === "state" && s.applicable_state && s.applicable_state !== selectedState) {
+      // 1. Search query filter
+      const query = submittedSearch.trim().toLowerCase();
+      if (query) {
+        const matchTitle =
+          s.name_en.toLowerCase().includes(query) ||
+          s.name_hi.toLowerCase().includes(query);
+        const matchMinistry = s.ministry?.toLowerCase().includes(query);
+        const matchSummary =
+          s.short_summary_en.toLowerCase().includes(query) ||
+          s.short_summary_hi.toLowerCase().includes(query);
+        const matchCategory = s.category.toLowerCase().includes(query);
+        if (!matchTitle && !matchMinistry && !matchSummary && !matchCategory) {
           return false;
         }
       }
 
-      // 4. Benefit type filter
-      if (selectedBenefitType !== "all" && s.benefit_type !== selectedBenefitType) {
-        return false;
+      // 2. Sidebar category filter
+      if (selectedCategory !== "all") {
+        if (selectedCategory === "education" && s.category !== "education_scholarships") return false;
+        if (selectedCategory === "health" && s.category !== "healthcare") return false;
+        if (selectedCategory === "employment" && s.category !== "skills_employment") return false;
+        if (selectedCategory === "housing" && s.category !== "housing_urban") return false;
+        if (selectedCategory === "agriculture" && s.category !== "agriculture") return false;
+        if (selectedCategory === "women_child" && s.category !== "women_child") return false;
+        if (selectedCategory === "social_security" && s.category !== "social_security_pensions") return false;
+        if (selectedCategory === "others" && !["business_msme_loans", "other"].includes(s.category)) {
+          return false;
+        }
       }
 
       return true;
     });
-  }, [schemes, searchQuery, selectedCategory, selectedState, selectedBenefitType]);
+  }, [schemes, submittedSearch, selectedCategory]);
 
   // Sort schemes
   const sortedSchemes = useMemo(() => {
     const list = [...filteredSchemes];
-    if (sortBy === "name") {
+    if (sortBy === "alpha") {
       list.sort((a, b) =>
         isHindi ? a.name_hi.localeCompare(b.name_hi) : a.name_en.localeCompare(b.name_en)
       );
@@ -125,286 +169,242 @@ export const SchemesExplorePage: React.FC<SchemesExplorePageProps> = ({
     return list;
   }, [filteredSchemes, sortBy, isHindi]);
 
-  const resetFilters = () => {
-    setSearchQuery("");
-    setSelectedCategory("all");
-    setSelectedState("all");
-    setSelectedBenefitType("all");
-    setSortBy("featured");
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmittedSearch(searchQuery);
   };
 
-  const hasActiveFilters =
-    searchQuery.trim() !== "" ||
-    selectedCategory !== "all" ||
-    selectedState !== "all" ||
-    selectedBenefitType !== "all";
+  const handleReset = () => {
+    setSearchQuery("");
+    setSubmittedSearch("");
+    setSelectedCategory("all");
+    setSortBy("relevant");
+  };
 
   return (
-    <div className="min-h-screen bg-background text-foreground py-8">
+    <div className="min-h-screen bg-[#F8FAF9] text-foreground py-6 sm:py-10">
       <div className="container mx-auto px-4 sm:px-8 max-w-7xl">
-        {/* Page Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-8 border-b border-border/60">
-          <div className="space-y-1.5">
-            <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold">
-              <Compass className="w-3.5 h-3.5 shrink-0" />
-              <span>{isHindi ? "योजना निर्देशिका" : "Schemes Catalog"}</span>
-            </div>
-            <h1 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
-              {isHindi ? "सभी सरकारी योजनाएं खोजें" : "Explore Government Welfare Schemes"}
-            </h1>
-            <p className="text-xs sm:text-sm text-muted-foreground">
-              {isHindi
-                ? "15+ सत्यापित केंद्रीय एवं राज्य योजनाएं। बिना किसी बिचौलिये के सीधे आवेदन करें।"
-                : "Browse verified central and state welfare initiatives with transparent criteria."}
-            </p>
-          </div>
+        
+        {/* ======================================================== */}
+        {/* 1. TOP HERO BANNER: "Schemes for You"                    */}
+        {/* ======================================================== */}
+        <div className="relative rounded-3xl bg-[#F4F9F5] border border-[#E0ECE3] p-6 sm:p-8 lg:p-10 overflow-hidden shadow-xs mb-8 sm:mb-10">
+          
+          {/* Subtle background circles */}
+          <div className="absolute -top-12 -right-12 w-64 h-64 rounded-full bg-[#EAF4ED]/60 pointer-events-none blur-xl" />
+          <div className="absolute -bottom-16 left-1/3 w-80 h-48 rounded-full bg-[#EBF5EE]/50 pointer-events-none blur-2xl" />
 
-          <Button
-            onClick={onStartWizard}
-            className="self-start md:self-auto rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold text-xs h-11 px-5 shadow-md shadow-primary/20"
-          >
-            <span>{isHindi ? "अपनी व्यक्तिगत पात्रता जांचें (2 मिनट)" : "Check Your Eligibility (2 min)"}</span>
-          </Button>
-        </div>
-
-        {/* Main Search & Layout */}
-        <div className="py-6 flex flex-col lg:flex-row gap-8">
-          {/* Left Filter Sidebar (Desktop) */}
-          <aside className="hidden lg:block w-72 shrink-0 space-y-6">
-            <div className="p-5 rounded-2xl border border-border bg-card shadow-subtle space-y-6 sticky top-24">
-              <div className="flex items-center justify-between border-b border-border/60 pb-3">
-                <span className="font-bold text-sm text-foreground flex items-center gap-1.5">
-                  <Filter className="w-4 h-4 text-primary" />
-                  <span>{isHindi ? "फ़िल्टर विकल्प" : "Filter Schemes"}</span>
-                </span>
-                {hasActiveFilters && (
-                  <button
-                    onClick={resetFilters}
-                    className="text-[11px] text-destructive hover:underline font-semibold"
-                  >
-                    {isHindi ? "सभी हटाएं" : "Clear All"}
-                  </button>
+          <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-6">
+            
+            {/* Left: Heading & Subtitle */}
+            <div className="space-y-2 w-full lg:max-w-xl text-left">
+              <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-gray-900 tracking-tight leading-tight">
+                {isHindi ? (
+                  <>
+                    योजनाएं <span className="text-[#165D51]">आपके लिए</span>
+                  </>
+                ) : (
+                  <>
+                    Schemes <span className="text-[#165D51]">for You</span>
+                  </>
                 )}
+              </h1>
+
+              <p className="text-sm sm:text-base text-gray-500 font-normal leading-relaxed">
+                {isHindi
+                  ? "उन सरकारी योजनाओं को खोजें जिनके आप पात्र हो सकते हैं।"
+                  : "Explore government schemes that you may be eligible for."}
+              </p>
+            </div>
+
+            {/* Right: Boy Illustration + Thought Callout + Slogan */}
+            <div className="relative hidden md:flex items-center justify-end shrink-0 select-none space-x-2">
+              
+              {/* Thought Bubble */}
+              <div className="relative bg-white/95 backdrop-blur-xs border border-gray-200/80 rounded-2xl px-4 py-2.5 shadow-xs max-w-[190px] text-left">
+                <p className="text-[11.5px] font-semibold text-gray-800 leading-snug">
+                  {isHindi
+                    ? "यहाँ कुछ योजनाएं हैं जो आपकी प्रोफाइल से मेल खाती हैं।"
+                    : "Here are some schemes that match your profile."}
+                </p>
+                <div className="absolute -top-1 -right-1 text-emerald-500 font-bold text-xs">✦</div>
+                <div className="absolute top-1/2 -right-2 -translate-y-1/2 w-0 h-0 border-y-6 border-y-transparent border-l-6 border-l-white" />
               </div>
 
-              {/* Category Filter */}
-              <div className="space-y-2.5">
-                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">
-                  {isHindi ? "श्रेणी (Category)" : "Category"}
-                </label>
-                <div className="space-y-1">
-                  {categoryFilters.map((cat) => (
-                    <button
-                      key={cat.id}
-                      onClick={() => setSelectedCategory(cat.id)}
-                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium transition-all ${
-                        selectedCategory === cat.id
-                          ? "bg-primary text-primary-foreground font-bold shadow-sm"
-                          : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
-                      }`}
-                    >
-                      {isHindi ? cat.labelHi : cat.labelEn}
-                    </button>
-                  ))}
+              {/* Boy in Green Hoodie Illustration */}
+              <div className="w-32 h-32 sm:w-36 sm:h-36 flex items-center justify-center">
+                <img
+                  src="/images/results_boy_transparent.png"
+                  alt="Citizen"
+                  className="w-full h-full object-contain drop-shadow-xs"
+                />
+              </div>
+
+              {/* Slogan with Tricolor Underline */}
+              <div className="hidden lg:flex flex-col items-center justify-center pl-2">
+                <div className="text-center font-serif italic text-base font-bold text-[#165D51] leading-tight">
+                  Sarkari Yojana,
+                  <br />
+                  <span className="font-sans font-semibold text-sm text-[#165D51]">Ab Sabke Liye</span>
+                </div>
+                <div className="mt-1.5 flex flex-col items-center gap-0.5">
+                  <svg viewBox="0 0 80 8" className="w-20 h-2" fill="none">
+                    <path d="M 4 3 C 25 1, 55 6, 76 2" stroke="#FF9933" strokeWidth="2.5" strokeLinecap="round" />
+                    <path d="M 10 6 C 30 4, 60 7.5, 72 5" stroke="#138808" strokeWidth="2.5" strokeLinecap="round" />
+                  </svg>
                 </div>
               </div>
 
-              {/* State Filter */}
-              <div className="space-y-2.5 pt-2 border-t border-border/60">
-                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">
-                  {isHindi ? "राज्य (State)" : "State Level"}
-                </label>
-                <select
-                  value={selectedState}
-                  onChange={(e) => setSelectedState(e.target.value)}
-                  className="w-full h-10 px-3 rounded-xl border border-border bg-card text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                >
-                  {stateFilters.map((st) => (
-                    <option key={st.id} value={st.id}>
-                      {isHindi ? st.labelHi : st.labelEn}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Benefit Type Filter */}
-              <div className="space-y-2.5 pt-2 border-t border-border/60">
-                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">
-                  {isHindi ? "लाभ का प्रकार" : "Benefit Type"}
-                </label>
-                <select
-                  value={selectedBenefitType}
-                  onChange={(e) => setSelectedBenefitType(e.target.value)}
-                  className="w-full h-10 px-3 rounded-xl border border-border bg-card text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                >
-                  <option value="all">{isHindi ? "सभी प्रकार" : "All Types"}</option>
-                  <option value="direct_benefit_transfer">{isHindi ? "DBT प्रत्यक्ष नकद लाभ" : "Direct Benefit Transfer (DBT)"}</option>
-                  <option value="health_insurance">{isHindi ? "कैशलेस स्वास्थ्य बीमा" : "Cashless Health Insurance"}</option>
-                  <option value="loan_subsidy">{isHindi ? "मुद्रा / व्यापार ऋण सब्सिडी" : "Loan Subsidy"}</option>
-                </select>
-              </div>
             </div>
-          </aside>
 
-          {/* Right Content Area */}
-          <div className="flex-1 space-y-6">
-            {/* Search Input and Sort Row */}
-            <div className="flex flex-col sm:flex-row items-center gap-3">
-              {/* Search Bar */}
-              <div className="relative flex-1 w-full">
-                <Search className="w-4 h-4 text-muted-foreground absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={
-                    isHindi
-                      ? "योजना, मंत्रालय, या लाभ खोजें (उदा. किसान, आयुष्मान, आवास, मुद्रा)..."
-                      : "Search scheme name, ministry, or benefit..."
-                  }
-                  className="w-full h-11 pl-10 pr-10 rounded-2xl border border-border bg-card text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                />
-                {searchQuery && (
+          </div>
+        </div>
+
+        {/* ======================================================== */}
+        {/* 2. BODY LAYOUT: LEFT SIDEBAR + RIGHT SCHEMES GRID        */}
+        {/* ======================================================== */}
+        <div className="flex flex-col lg:flex-row items-start gap-8">
+          
+          {/* ====================================================== */}
+          {/* LEFT SIDEBAR: Category Pill Buttons                    */}
+          {/* ====================================================== */}
+          <div className="w-full lg:w-56 shrink-0">
+            {/* Desktop Vertical Menu / Mobile Horizontal Scroll */}
+            <div className="flex lg:flex-col gap-1.5 overflow-x-auto pb-2 lg:pb-0 scrollbar-none">
+              {SIDEBAR_CATEGORIES.map((cat) => {
+                const isActive = selectedCategory === cat.id;
+
+                return (
                   <button
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`w-full text-left px-4 py-3 rounded-2xl flex items-center space-x-3 transition-all text-xs sm:text-sm shrink-0 cursor-pointer ${
+                      isActive
+                        ? "bg-[#E5F2E9] text-[#165D51] font-bold shadow-2xs"
+                        : "text-[#4A5568] hover:bg-white/80 hover:text-gray-900 font-medium"
+                    }`}
                   >
-                    <X className="w-4 h-4" />
+                    <span className={isActive ? "text-[#165D51]" : "text-gray-500"}>
+                      {cat.icon}
+                    </span>
+                    <span>{isHindi ? cat.labelHi : cat.labelEn}</span>
                   </button>
-                )}
-              </div>
+                );
+              })}
+            </div>
+          </div>
 
-              {/* Mobile Filter Toggle Button */}
-              <Button
-                variant="outline"
-                onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
-                className="lg:hidden h-11 px-4 rounded-2xl text-xs font-semibold flex items-center space-x-1.5 shrink-0"
-              >
-                <SlidersHorizontal className="w-4 h-4" />
-                <span>{isHindi ? "फ़िल्टर" : "Filters"}</span>
-              </Button>
+          {/* ====================================================== */}
+          {/* RIGHT CONTENT: Search Bar + Sort + Schemes Grid        */}
+          {/* ====================================================== */}
+          <div className="flex-1 w-full space-y-6">
+            
+            {/* Top Row: Search Box + Sort Dropdown */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              
+              {/* Search Form */}
+              <form onSubmit={handleSearchSubmit} className="w-full flex-1">
+                <div className="relative flex items-center bg-white border border-gray-200/90 rounded-2xl p-1 shadow-2xs focus-within:ring-2 focus-within:ring-[#165D51]/20 focus-within:border-[#165D51] transition-all">
+                  <Search className="w-4 h-4 text-gray-400 ml-3.5 shrink-0" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder={
+                      isHindi
+                        ? "योजनाएं खोजें... (उदा: छात्रवृत्ति, स्वास्थ्य, आवास)"
+                        : "Search schemes... (e.g. scholarship, health, PMAY)"
+                    }
+                    className="w-full bg-transparent border-none text-xs sm:text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none px-3 py-1.5"
+                  />
+                  <button
+                    type="submit"
+                    className="bg-[#165D51] hover:bg-[#124E43] text-white font-semibold text-xs sm:text-sm px-6 py-2.5 rounded-xl transition-colors cursor-pointer shrink-0 shadow-2xs"
+                  >
+                    {isHindi ? "खोजें" : "Search"}
+                  </button>
+                </div>
+              </form>
 
               {/* Sort By Dropdown */}
               <div className="flex items-center space-x-2 shrink-0 self-end sm:self-auto">
-                <ArrowUpDown className="w-3.5 h-3.5 text-muted-foreground" />
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as "featured" | "name")}
-                  className="h-11 px-3 rounded-2xl border border-border bg-card text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
-                >
-                  <option value="featured">{isHindi ? "प्रमुख योजनाएं" : "Featured First"}</option>
-                  <option value="name">{isHindi ? "नाम अनुसार (A-Z)" : "Alphabetical (A-Z)"}</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Mobile Filter Drawer / Collapse */}
-            {isMobileFiltersOpen && (
-              <div className="lg:hidden p-4 rounded-2xl border border-border bg-card space-y-4 animate-in fade-in duration-150">
-                <div className="flex items-center justify-between pb-2 border-b border-border/60">
-                  <span className="font-bold text-xs text-foreground">
-                    {isHindi ? "फ़िल्टर चुनें" : "Select Filters"}
-                  </span>
-                  <button
-                    onClick={() => setIsMobileFiltersOpen(false)}
-                    className="text-xs text-muted-foreground hover:text-foreground"
+                <span className="text-xs sm:text-sm font-medium text-gray-500">
+                  {isHindi ? "क्रमबद्ध करें" : "Sort by"}
+                </span>
+                <div className="relative">
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value as any)}
+                    aria-label={isHindi ? "योजनाओं को क्रमबद्ध करें" : "Sort schemes by"}
+                    className="appearance-none bg-white border border-gray-200/90 rounded-2xl pl-4 pr-9 py-2.5 text-xs sm:text-sm font-semibold text-gray-800 shadow-2xs focus:outline-none focus:ring-2 focus:ring-[#165D51]/20 cursor-pointer"
                   >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-
-                <div className="space-y-3 text-xs">
-                  <div>
-                    <label className="font-semibold block mb-1">
-                      {isHindi ? "श्रेणी" : "Category"}
-                    </label>
-                    <select
-                      value={selectedCategory}
-                      onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="w-full h-9 px-2 rounded-xl border border-border bg-card"
-                    >
-                      {categoryFilters.map((cat) => (
-                        <option key={cat.id} value={cat.id}>
-                          {isHindi ? cat.labelHi : cat.labelEn}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="font-semibold block mb-1">
-                      {isHindi ? "राज्य" : "State"}
-                    </label>
-                    <select
-                      value={selectedState}
-                      onChange={(e) => setSelectedState(e.target.value)}
-                      className="w-full h-9 px-2 rounded-xl border border-border bg-card"
-                    >
-                      {stateFilters.map((st) => (
-                        <option key={st.id} value={st.id}>
-                          {isHindi ? st.labelHi : st.labelEn}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                    <option value="relevant">{isHindi ? "सबसे प्रासंगिक" : "Most Relevant"}</option>
+                    <option value="alpha">{isHindi ? "वर्णमाला अनुसार" : "Alphabetical"}</option>
+                  </select>
+                  <ChevronDown className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
               </div>
-            )}
 
-            {/* Count & Status Row */}
-            <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span>
-                {isHindi
-                  ? `${sortedSchemes.length} योजनाएं उपलब्ध`
-                  : `Showing ${sortedSchemes.length} schemes`}
-              </span>
-              {hasActiveFilters && (
-                <button
-                  onClick={resetFilters}
-                  className="text-primary hover:underline font-semibold flex items-center space-x-1"
-                >
-                  <RefreshCw className="w-3 h-3 mr-1" />
-                  <span>{isHindi ? "फ़िल्टर रीसेट करें" : "Reset Filters"}</span>
-                </button>
-              )}
             </div>
 
-            {/* Schemes Cards Grid */}
-            {isLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-pulse">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="h-64 rounded-2xl bg-muted/60 border border-border p-6" />
-                ))}
-              </div>
-            ) : sortedSchemes.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* 3-Column Scheme Cards Grid */}
+            {sortedSchemes.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 pt-1">
                 {sortedSchemes.map((scheme) => (
                   <SchemeCard
                     key={scheme.id}
                     scheme={scheme}
-                    onViewDetails={onSelectScheme}
+                    onViewDetails={() => onSelectScheme(scheme.id)}
                   />
                 ))}
               </div>
             ) : (
-              <div className="py-16 text-center bg-card border border-dashed border-border rounded-3xl p-8 max-w-md mx-auto space-y-3">
-                <Building2 className="w-10 h-10 text-muted-foreground mx-auto opacity-50" />
-                <h3 className="font-bold text-base text-foreground">
-                  {isHindi ? "कोई योजना नहीं मिली" : "No Schemes Found"}
-                </h3>
-                <p className="text-xs text-muted-foreground">
-                  {isHindi
-                    ? "आपके द्वारा चुने गए फ़िल्टर से कोई योजना मेल नहीं खाती। कृपया फ़िल्टर रीसेट करें।"
-                    : "No welfare schemes match the selected filters. Try clearing your search or filters."}
-                </p>
-                <Button size="sm" variant="outline" onClick={resetFilters} className="rounded-xl text-xs">
-                  {isHindi ? "फ़िल्टर रीसेट करें" : "Clear All Filters"}
-                </Button>
+              /* Empty State */
+              <div className="bg-white rounded-3xl border border-gray-200 p-12 text-center space-y-4">
+                <div className="w-12 h-12 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center mx-auto">
+                  <Search className="w-6 h-6" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-base font-bold text-gray-900">
+                    {isHindi ? "कोई योजना नहीं मिली" : "No schemes found"}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-gray-500 max-w-sm mx-auto">
+                    {isHindi
+                      ? "आपके द्वारा खोजे गए शब्दों के लिए कोई योजना नहीं मिली। कृपया अन्य श्रेणी या शब्द चुनें।"
+                      : "We couldn't find any schemes matching your criteria. Try adjusting your search."}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleReset}
+                  className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl border border-gray-200 text-xs font-semibold text-gray-700 hover:bg-gray-50 cursor-pointer shadow-2xs"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>{isHindi ? "फ़िल्टर रीसेट करें" : "Reset Filters"}</span>
+                </button>
               </div>
             )}
+
           </div>
+
         </div>
+
+        {/* ======================================================== */}
+        {/* 3. BOTTOM MOTTO DIVIDER                                  */}
+        {/* ======================================================== */}
+        <div className="mt-16 sm:mt-20 pt-8 pb-4 flex items-center justify-center">
+          <div className="w-16 sm:w-32 h-[1px] bg-[#E2E8F0]" />
+          <span className="px-4 sm:px-6 text-[10px] sm:text-[11px] font-semibold tracking-[0.25em] text-[#64748B] uppercase text-center select-none">
+            {isHindi
+              ? "अधिक जागरूक नागरिक • सशक्त भारत"
+              : "A MORE INFORMED CITIZEN. A STRONGER INDIA."}
+          </span>
+          <div className="w-16 sm:w-32 h-[1px] bg-[#E2E8F0]" />
+        </div>
+
       </div>
     </div>
   );
 };
+
+export default SchemesExplorePage;

@@ -1449,5 +1449,62 @@
         "answer_en": "Yes, registered lease agreement for a minimum of 7-10 years is fully eligible."
       }
     ]
+  },
+  {
+    "id": "atal-pension-yojana",
+    "name_hi": "अटल पेंशन योजना (APY)",
+    "name_en": "Atal Pension Yojana (APY)",
+    "short_summary_hi": "60 वर्ष की आयु के बाद ₹1,000 से ₹5,000 तक की निश्चित मासिक पेंशन।",
+    "short_summary_en": "Secure your future with a guaranteed pension after 60 years of age.",
+    "detailed_description_hi": "अटल पेंशन योजना (APY) असंगठित क्षेत्र के श्रमिकों के लिए एक सामाजिक सुरक्षा योजना है जो 60 वर्ष की आयु के बाद गारंटीकृत मासिक पेंशन प्रदान करती है।",
+    "detailed_description_en": "Atal Pension Yojana (APY) is a government-backed pension scheme in India targeted at the unorganized sector, providing a guaranteed monthly pension ranging from ₹1,000 to ₹5,000 upon reaching the age of 60.",
+    "ministry": "वित्त मंत्रालय (Ministry of Finance)",
+    "level": "central",
+    "applicable_state": null,
+    "category": "social_security_pensions",
+    "benefit_amount_text": "Up to ₹5,000 per month",
+    "benefit_type": "direct_benefit_transfer",
+    "official_portal_url": "https://www.npscra.nsdl.co.in/scheme-details.php",
+    "rules": [
+      {
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "description_hi": "आयु 18 से 40 वर्ष के बीच होनी चाहिए",
+        "description_en": "Age must be between 18 and 40 years"
+      },
+      {
+        "field": "age",
+        "operator": "<=",
+        "value": 40,
+        "description_hi": "आयु 40 वर्ष से अधिक नहीं होनी चाहिए",
+        "description_en": "Age must not exceed 40 years"
+      }
+    ],
+    "documents": [
+      {
+        "id": "aadhaar",
+        "name_hi": "आधार कार्ड",
+        "name_en": "Aadhaar Card",
+        "is_mandatory": true,
+        "issuing_authority": "UIDAI"
+      },
+      {
+        "id": "bank_account",
+        "name_hi": "बचत बैंक खाता पासबुक",
+        "name_en": "Savings Bank Account Passbook",
+        "is_mandatory": true,
+        "issuing_authority": "बैंक"
+      }
+    ],
+    "application_steps_hi": [
+      "1. अपने बैंक खाते की शाखा में जाएं",
+      "2. APY फॉर्म भरें और ऑटो-डेबिट शुरू करें"
+    ],
+    "application_steps_en": [
+      "1. Visit your bank branch",
+      "2. Fill APY registration form"
+    ],
+    "faqs": []
   }
 ]
