@@ -26,7 +26,7 @@ class Settings(BaseModel):
 
     # LLM Assistant Configuration
     llm_provider: str = os.getenv("LLM_PROVIDER", "gemini").lower()
-    llm_model: str = os.getenv("LLM_MODEL", "gemini-1.5-flash")
+    llm_model: str = os.getenv("LLM_MODEL", "gemini-3.5-flash-lite")
     gemini_api_key: str = os.getenv("GEMINI_API_KEY", "")
     openai_api_key: str = os.getenv("OPENAI_API_KEY", "")
     llm_timeout_seconds: float = float(os.getenv("LLM_TIMEOUT_SECONDS", "30.0"))
