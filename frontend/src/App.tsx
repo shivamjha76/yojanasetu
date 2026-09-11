@@ -4,9 +4,6 @@ import { AuthProvider } from "@/context/AuthContext";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/home/HeroSection";
-import { CategoryGrid } from "@/components/home/CategoryGrid";
-import { TrendingSchemes } from "@/components/home/TrendingSchemes";
-import { HowItWorks } from "@/components/home/HowItWorks";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { LoginPage } from "@/components/auth/LoginPage";
 import { WizardContainer } from "@/components/wizard/WizardContainer";
@@ -105,23 +102,6 @@ const MainContent: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Handle category card click from CategoryGrid: sets category filter and navigates to explore page
-  const handleSelectCategory = (categoryId: string) => {
-    const categoryMapping: Record<string, string> = {
-      agriculture: "agriculture",
-      education_scholarships: "education",
-      healthcare: "health",
-      women_child: "women_child",
-      housing_urban: "housing",
-      business_msme_loans: "others",
-      skills_employment: "employment",
-      social_security_pensions: "social_security",
-    };
-    setSelectedCategoryFilter(categoryMapping[categoryId] || categoryId);
-    setCurrentView("schemes");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
   // When clicking Get Started: directly open Wizard for 100% friction-free citizen access
   const handleGetStarted = () => {
     setCurrentView("wizard");
@@ -211,22 +191,6 @@ const MainContent: React.FC = () => {
             onSearch={handleSearch}
             onSelectScheme={handleOpenSchemeDetail}
           />
-
-          {/* 8 Welfare Categories Grid */}
-          <CategoryGrid onSelectCategory={handleSelectCategory} />
-
-          {/* Trending & Flagship Schemes Showcase */}
-          <TrendingSchemes
-            onViewDetails={handleOpenSchemeDetail}
-            onExploreAll={() => {
-              setSelectedCategoryFilter("all");
-              setCurrentView("schemes");
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-          />
-
-          {/* 3-Step "How YojanaSetu Works" Process */}
-          <HowItWorks onStartWizard={handleGetStarted} />
         </main>
       )}
 
